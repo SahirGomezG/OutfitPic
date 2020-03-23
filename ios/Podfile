@@ -36,6 +36,8 @@ target 'OutfitPic' do
   pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
   
   pod 'Firebase/Analytics'
+  pod 'Firebase/Core'
+  pod 'Firebase/Messaging'
 
   pod 'react-native-camera', path: '../node_modules/react-native-camera'
 
