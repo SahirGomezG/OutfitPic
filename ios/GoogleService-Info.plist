@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>1082830494457-1hkpslbgtc262j836pbr8ibf8mjs729e.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.1082830494457-1hkpslbgtc262j836pbr8ibf8mjs729e</string>
+	<key>API_KEY</key>
+	<string>AIzaSyDD02D-YckrZZ47fX4cI5KeJOIltJ_zDdE</string>
+	<key>GCM_SENDER_ID</key>
+	<string>1082830494457</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>sahir.outfitpic</string>
+	<key>PROJECT_ID</key>
+	<string>react-native-app1-71a26</string>
+	<key>STORAGE_BUCKET</key>
+	<string>react-native-app1-71a26.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:1082830494457:ios:197b425c1d7b9904d8a028</string>
+	<key>DATABASE_URL</key>
+	<string>https://react-native-app1-71a26.firebaseio.com</string>
+</dict>
+</plist>
