@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, StyleSheet, Image, TextInput, TouchableWi
 import Fire from "../../Fire";
 import Icon from 'react-native-ionicons';
 import StatsElement from '../presentation/StatsElement';
-import {  Form, Item, Picker, Input } from 'native-base';
+import { Item, Picker, Input } from 'native-base';
 
 import Constants from "expo-constants";
 import * as Permissions from "expo-permissions";
@@ -221,8 +221,7 @@ class ProfileSettings extends Component {
                             <Text style={styles.userData}>Gender:</Text>
                         </View>
 
-                        <View style={{ marginTop:-5, marginLeft:-16 }}>    
-                           
+                        <View style={{ marginTop:-5, marginLeft:-16 }}>                               
                             <Item picker>
                                 <Picker
                                     mode="dropdown"
@@ -240,8 +239,7 @@ class ProfileSettings extends Component {
                                     <Picker.Item label="Other" value="other" />
                                     <Picker.Item label="Prefer Not to Say" value="prefer not to say" />
                                 </Picker>
-                            </Item>
-                            
+                            </Item>       
                         </View>    
                     </View>
             

@@ -113,6 +113,7 @@
 		D37EC779242020ED00B1A2CD /* OutfitPic.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = OutfitPic.entitlements; sourceTree = "<group>"; };
 		D37EC77A242020ED00B1A2CD /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
 		D3E467DA2428FEDC0016F995 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		D3E467DC242934C20016F995 /* OutfitPicRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = OutfitPicRelease.entitlements; sourceTree = "<group>"; };
 		DF6B29A733CC492A9B09C222 /* Feather.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Feather.ttf; path = "../node_modules/native-base/Fonts/Feather.ttf"; sourceTree = "<group>"; };
 		E4F22857E722427DB10449DA /* Roboto_medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Roboto_medium.ttf; path = "../node_modules/native-base/Fonts/Roboto_medium.ttf"; sourceTree = "<group>"; };
 		EAF1F4A72C4146419F7A969E /* rubicon-icon-font.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "rubicon-icon-font.ttf"; path = "../node_modules/native-base/Fonts/rubicon-icon-font.ttf"; sourceTree = "<group>"; };
@@ -242,6 +243,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				D3E467DC242934C20016F995 /* OutfitPicRelease.entitlements */,
 				D37EC779242020ED00B1A2CD /* OutfitPic.entitlements */,
 				13B07FAE1A68108700A75B9A /* instaClone */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
@@ -796,7 +798,7 @@
 			baseConfigurationReference = 3A86C35AF9E7875D7C6AA2EE /* Pods-OutfitPic.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = OutfitPic.entitlements;
+				CODE_SIGN_ENTITLEMENTS = OutfitPicRelease.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
