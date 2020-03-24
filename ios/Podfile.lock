@@ -1,5 +1,7 @@
 PODS:
   - boost-for-react-native (1.63.0)
+  - Crashlytics (3.14.0):
+    - Fabric (~> 1.10.2)
   - DoubleConversion (1.1.6)
   - EXAppLoaderProvider (8.0.0)
   - EXConstants (8.0.0):
@@ -14,6 +16,7 @@ PODS:
   - EXPermissions (8.0.0):
     - UMCore
     - UMPermissionsInterface
+  - Fabric (1.10.2)
   - FBLazyVector (0.61.1)
   - FBReactNativeSpec (0.61.1):
     - Folly (= 2018.10.22.00)
@@ -334,6 +337,15 @@ PODS:
     - React
   - RNCPushNotificationIOS (1.1.0):
     - React
+  - RNFirebase (5.6.0):
+    - Firebase/Core
+    - React
+    - RNFirebase/Crashlytics (= 5.6.0)
+  - RNFirebase/Crashlytics (5.6.0):
+    - Crashlytics
+    - Fabric
+    - Firebase/Core
+    - React
   - RNGestureHandler (1.6.0):
     - React
   - RNImageCropPicker (0.27.0):
@@ -408,6 +420,7 @@ DEPENDENCIES:
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
   - "RNCMaskedView (from `../node_modules/@react-native-community/masked-view`)"
   - "RNCPushNotificationIOS (from `../node_modules/@react-native-community/push-notification-ios`)"
+  - RNFirebase (from `../node_modules/react-native-firebase/ios`)
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler/RNGestureHandler.podspec`)
   - RNImageCropPicker (from `../node_modules/react-native-image-crop-picker`)
   - RNReanimated (from `../node_modules/react-native-reanimated/RNReanimated.podspec`)
@@ -430,6 +443,8 @@ DEPENDENCIES:
 SPEC REPOS:
   trunk:
     - boost-for-react-native
+    - Crashlytics
+    - Fabric
     - Firebase
     - FirebaseAnalytics
     - FirebaseAnalyticsInterop
@@ -526,6 +541,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-community/masked-view"
   RNCPushNotificationIOS:
     :path: "../node_modules/@react-native-community/push-notification-ios"
+  RNFirebase:
+    :path: "../node_modules/react-native-firebase/ios"
   RNGestureHandler:
     :podspec: "../node_modules/react-native-gesture-handler/RNGestureHandler.podspec"
   RNImageCropPicker:
@@ -577,12 +594,14 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
+  Crashlytics: 540b7e5f5da5a042647227a5e3ac51d85eed06df
   DoubleConversion: 5805e889d232975c086db112ece9ed034df7a0b2
   EXAppLoaderProvider: f6aeb45ee81887811b34eee5c5f235a6111d58d0
   EXConstants: e287774d0d32634ddaef614f2e488c550c6deefc
   EXFileSystem: fa8ecad925ad984681910a2273930f7255a0a9b5
   EXImagePicker: 1c6408e04cd8b2a7bc5f4cc9a23fb47dc2c15ce2
   EXPermissions: 3e58e0fbb2e9539ad1ef5617ff02c2356447421e
+  Fabric: 706c8b8098fff96c33c0db69cbf81f9c551d0d74
   FBLazyVector: 0846affdb2924b01093eb696766ecb0104e409e0
   FBReactNativeSpec: c4cf958af1b97799b524f63a26a1c509c0295b04
   Firebase: fe7f74012742ab403451dd283e6909b8f1fb348a
@@ -629,6 +648,7 @@ SPEC CHECKSUMS:
   ReactCommon: 4fba5be89efdf0b5720e0adb3d8d7edf6e532db0
   RNCMaskedView: 90dd32f5b786bd562e876e1421ea77c700cbf71e
   RNCPushNotificationIOS: de54f074e577e684c0619d4271a5b451e8a37ee1
+  RNFirebase: 37daa9a346d070f9f6ee1f3b4aaf4c8e3b1d5d1c
   RNGestureHandler: dde546180bf24af0b5f737c8ad04b6f3fa51609a
   RNImageCropPicker: fcdbbbef2f0ea869c6d9ce39b8e4fd67e94009f4
   RNReanimated: 031fe8d9ea93c2bd689a40f05320ef9d96f74d7f
@@ -649,6 +669,6 @@ SPEC CHECKSUMS:
   UMTaskManagerInterface: ee5b1ee1056eb338ff2d521ba79460d8cd0bae7d
   Yoga: d8c572ddec8d05b7dba08e4e5f1924004a177078
 
-PODFILE CHECKSUM: 4f21e02e578f92fbd4f248d55324c4eb44bf1997
+PODFILE CHECKSUM: 4c8fe13513c2728f1e936c3b8fb96dc4053a58a1
 
 COCOAPODS: 1.8.4

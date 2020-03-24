@@ -47,6 +47,8 @@ target 'OutfitPic' do
   pod 'react-native-safe-area-context', :path => '../node_modules/react-native-safe-area-context'
   pod 'QBImagePickerController', :path => '../node_modules/react-native-image-crop-picker/ios/QBImagePicker/QBImagePickerController.podspec'
 
+  pod 'RNFirebase', :path => '../node_modules/react-native-firebase/ios'
+
   target 'OutfitPicTests' do
     inherit! :search_paths
     # Pods for testing

@@ -35,6 +35,7 @@
 		BFD46713343845C4965C58CA /* FontAwesome5_Solid.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9DB60FDF55174BAB8E5F556D /* FontAwesome5_Solid.ttf */; };
 		C90290C31B2649CEA1D833B4 /* MaterialIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AD826449585C48D0B4BFA98C /* MaterialIcons.ttf */; };
 		D37EC77B242020ED00B1A2CD /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D37EC77A242020ED00B1A2CD /* HealthKit.framework */; };
+		D3E311CB242A7424000D928B /* libRNFirebase.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D3E311CA242A7424000D928B /* libRNFirebase.a */; };
 		D3E467DB2428FEDC0016F995 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D3E467DA2428FEDC0016F995 /* GoogleService-Info.plist */; };
 		D7CF2D22F4044B76A9EA6D89 /* SimpleLineIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 61E05A4297C04CBC8E18A1CF /* SimpleLineIcons.ttf */; };
 		DB8B6A93D1CC4D3097157E82 /* EvilIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0ECC790A461C4448959BEA15 /* EvilIcons.ttf */; };
@@ -112,6 +113,7 @@
 		D18F77CD4F2EDE51BDBE635C /* libPods-OutfitPicTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-OutfitPicTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D37EC779242020ED00B1A2CD /* OutfitPic.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = OutfitPic.entitlements; sourceTree = "<group>"; };
 		D37EC77A242020ED00B1A2CD /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
+		D3E311CA242A7424000D928B /* libRNFirebase.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libRNFirebase.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		D3E467DA2428FEDC0016F995 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		D3E467DC242934C20016F995 /* OutfitPicRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = OutfitPicRelease.entitlements; sourceTree = "<group>"; };
 		DF6B29A733CC492A9B09C222 /* Feather.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Feather.ttf; path = "../node_modules/native-base/Fonts/Feather.ttf"; sourceTree = "<group>"; };
@@ -136,6 +138,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D3E311CB242A7424000D928B /* libRNFirebase.a in Frameworks */,
 				5714376746CB70EFDA857E96 /* libPods-OutfitPic.a in Frameworks */,
 				D37EC77B242020ED00B1A2CD /* HealthKit.framework in Frameworks */,
 			);
@@ -222,6 +225,7 @@
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				D3E311CA242A7424000D928B /* libRNFirebase.a */,
 				D37EC77A242020ED00B1A2CD /* HealthKit.framework */,
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
 				ED2971642150620600B7C4FE /* JavaScriptCore.framework */,

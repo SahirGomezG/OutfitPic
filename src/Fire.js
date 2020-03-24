@@ -1,5 +1,6 @@
 import config from "./config";
 import firebase from 'firebase';
+import * as firebasenative from 'react-native-firebase';
 require("firebase/firestore");
 
 class Fire {
@@ -76,7 +77,6 @@ class Fire {
         });
     }
 
-
     // Function to login anonymously
     checkAuth = () => {
         firebase.auth().onAuthStateChanged(user => {
@@ -115,6 +115,7 @@ class Fire {
     createUser = async (user) => {
         let remoteUri= null;
         let userName = user.name.toLowerCase();
+        const FCM = firebasenative.messaging();
 
         try { 
             await firebase.auth().createUserWithEmailAndPassword(user.email, user.password); 
@@ -125,14 +126,16 @@ class Fire {
                 joined: this.creationTime,
                 avatar: null
             });
+            FCM.getToken()
+                .then(token => { db.update({ pushToken: token })})
+                .catch(error => { 'Error:', error });
             if (user.avatar) {
                 remoteUri = await this.uploadPhotoAsync(user.avatar, `avatars/${this.uid}`);
-
                 db.set({ avatar: remoteUri }, { merge: true });
             }
-            } catch (error) {
-                alert("Error: ", error);
-            }
+        } catch (error) {
+            alert("Error: ", error);
+        }
     };
     
     updateAvatar = async (photoUri) => {

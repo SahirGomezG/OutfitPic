@@ -1,6 +1,7 @@
 import PushNotification from 'react-native-push-notification';
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import {Platform} from 'react-native'
+//import firebase from 'react-native-firebase';
 //import { openDrawer } from 'react-navigation-drawer/lib/typescript/src/routers/DrawerActions';
 
 

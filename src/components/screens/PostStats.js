@@ -67,7 +67,6 @@ class PostStats extends Component{
               this.setState({ photos: doc.data().images });
               var votes = this.state.poll.votes;
               var result = Object.keys(votes).map(key => ({id: Number(key), votes: votes[key]}));
-
               this.setState({ votes: result });
             });
 
@@ -103,20 +102,20 @@ class PostStats extends Component{
     renderGraphItem =({item, index}) => {
         const percentage = (item.votes/this.state.numParticipants*100).toFixed(0);
         return (
-            <View style={styles.mediaGraphContainer}>
-                <ProgressCircle
-                    percent={percentage}
-                    radius={60}
-                    borderWidth={20}
-                    color='#b53f45'
-                    shadowColor='#c7bacc'
-                    bgColor="#fff">
-                        <Text style={{ fontSize: 16, color: "#4F566D",fontFamily: "HelveticaNeue" }}>{percentage} %</Text>
-                </ProgressCircle>
-                <TouchableWithoutFeedback key={index} onPress={() => {this.openListVoters(index.toString())}}>
-                    <Icon name="md-people" size={24} color="#4F566D"/>
-                </TouchableWithoutFeedback>    
-            </View>
+            <TouchableWithoutFeedback key={index} onPress={() => {this.openListVoters(index.toString())}}>
+                <View style={styles.mediaGraphContainer}>     
+                    <ProgressCircle
+                        percent={percentage}
+                        radius={60}
+                        borderWidth={20}
+                        color='#b53f45'
+                        shadowColor='#c7bacc'
+                        bgColor="#fff">
+                            <Text style={{ fontSize: 16, color: "#4F566D",fontFamily: "HelveticaNeue" }}>{percentage} %</Text>
+                    </ProgressCircle>
+                    <Icon name="md-people" size={24} color="#4F566D"/>   
+                </View>
+            </TouchableWithoutFeedback> 
         )
     }  
 

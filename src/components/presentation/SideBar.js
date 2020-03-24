@@ -11,6 +11,7 @@ class SideBar extends Component {
     super(props);
     this.state = {
       user:{},
+      followers:0
     };
   };
 
@@ -56,7 +57,9 @@ class SideBar extends Component {
                 <Text style={styles.name}>Hi, {this.state.user.name}</Text>
 
                 <View style={{ flexDirection: "row" }}>
-                  <Text style={styles.followers}>{this.state.user.numFollowers} Followers</Text>
+                  {this.state.user.numFollowers 
+                  ? <Text style={styles.followers}>{this.state.user.numFollowers} Followers</Text> 
+                  : <Text style={styles.followers}>0 Followers</Text> } 
                   <Icon name="ios-people" size={16} color="rgba(255, 255, 255, 0.8)" />
                 </View>
               </View>  

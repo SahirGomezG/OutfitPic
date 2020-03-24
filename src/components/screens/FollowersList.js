@@ -46,9 +46,6 @@ class FollowersList extends Component {
             .collection('followers').limit(15)
             .onSnapshot(snapshot => {
               var people = [];
-              /*snapshot.forEach(doc => {
-                  people = [ doc.id, ...people];       
-              });*/
               snapshot.forEach(doc => {
                 people = [({
                   id: doc.id,

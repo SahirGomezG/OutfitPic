@@ -6,6 +6,7 @@ import Icon from 'react-native-ionicons';
 import HeartButton from '../presentation/HeartButton';
 import { Tab, Tabs, Container, TabHeading } from 'native-base';
 import { notificationManager } from '../../NotificationManager';
+import firebase from 'react-native-firebase';
 
 class Feed extends Component {
     static navigationOptions = {
@@ -27,9 +28,23 @@ class Feed extends Component {
     };    
 
     unsubscribe = null;
-    unsubscribe2 = null;
+    unsubscribe2 = null;    
 
     componentDidMount(){
+        const FCM = firebase.messaging();
+        FCM.hasPermission().then((enabled) => {
+            if (enabled) {
+                FCM.getToken()
+                    .then(token => { console.log(token) })
+                    .catch(error => { /* handle error*/  });
+            } else {
+                FCM.requestPermission()
+                    .then(() => { /* got permission*/  })
+                    .catch(error => { /* handle error*/  });
+            }
+        })
+        .catch(error => { /* handle error*/  });
+        
         const user = this.props.uid || Fire.shared.uid;
         let pollsRef = Fire.shared.firestore.collection("outfitPolls");
         let currentuserRef = Fire.shared.firestore.collection("users").doc(user);
@@ -98,7 +113,7 @@ class Feed extends Component {
 
     onOpenNotification(notify) {
         console.log("[Notification] onOpenNotification: ", notify)
-        alert('This is a new notification from OutfitPic')
+        //alert('This is a new notification from OutfitPic')
     }
 
     get user() {

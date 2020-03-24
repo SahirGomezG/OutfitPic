@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import { View, Text, TouchableOpacity, TextInput, Button, StyleSheet, StatusBar, Image, KeyboardAvoidingView, ImageBackground, TouchableWithoutFeedback, Keyboard} from 'react-native';
-import config from '../../config';
-import * as firebase from 'firebase';
 import Icon from 'react-native-ionicons';
 import * as ImagePicker from "expo-image-picker";
 
@@ -56,18 +54,6 @@ class Register extends Component {
   handleSignUp = () => {
     Fire.shared.createUser(this.state.user)
   }
-
-  handleSignUp2 = () => {
-    firebase
-      .auth()
-      .createUserWithEmailAndPassword(this.state.email, this.state.password)
-      .then(userCredentials => {
-        return userCredentials.user.updateProfile({
-          displayName: this.state.name
-        });
-      })
-      .catch(error => this.setState({ errorMessage : error.message }));
-  };
 
     render() {
         return (
