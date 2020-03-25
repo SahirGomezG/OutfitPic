@@ -44,6 +44,12 @@ class NotificationManager {
                     notification.finish('UIBackgroundFetchResultNoData');
                 }           
             },
+            permissions: {
+                alert: true,
+                badge: true,
+                sound: true
+            },
+            popInitialNotification: true,
             // ANDROID ONLY: GCM or FCM Sender ID (product_number) (optional - not required for local notifications, but is need to receive remote push notifications)
             senderID: senderID,
         })
@@ -85,7 +91,7 @@ class NotificationManager {
             /* iOS and Android properties */
             title: title || '',
             message: message || '',
-            playSound: options.playSound || false,
+            playSound: options.playSound || true,
             soundName: options.soundName || 'default',
             userInteraction: false //if the notification was opened  by the user from the notification area or not
         })

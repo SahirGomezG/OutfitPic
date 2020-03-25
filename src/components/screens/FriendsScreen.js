@@ -130,7 +130,7 @@ class FriendsScreen extends Component {
                 <View style={styles.circle} />
 
                 <View style={styles.header}>
-                    <Text style={styles.headerTitle}>Friends</Text> 
+                    <Text style={styles.headerTitle}>People</Text> 
                     <View style={styles.menu}>
                         <TouchableOpacity onPress={this.props.navigation.openDrawer}>
                             <Icon name="ios-menu" style={{fontSize: 25, color: 'white'}}></Icon>
