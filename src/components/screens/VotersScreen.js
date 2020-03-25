@@ -109,7 +109,7 @@ class VotersScreen extends Component {
                 <TouchableOpacity>
                   <Left>
                     <TouchableOpacity underlayColor="#fff" onPress={() => this.openPublicProfile(item)}>
-                       <Thumbnail style={styles.avatar} source={{ uri: item.avatar }} />  
+                      <Thumbnail style={styles.avatar} source={{ uri: item.avatar }} />  
                     </TouchableOpacity>              
                   </Left>
                 </TouchableOpacity>

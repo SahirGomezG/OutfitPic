@@ -1,8 +1,22 @@
 import PushNotification from 'react-native-push-notification';
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import {Platform} from 'react-native'
-//import firebase from 'react-native-firebase';
+import firebase from 'react-native-firebase';
 //import { openDrawer } from 'react-navigation-drawer/lib/typescript/src/routers/DrawerActions';
+
+const FCM = firebase.messaging();
+        FCM.hasPermission().then((enabled) => {
+            if (enabled) {
+                FCM.getToken()
+                    .then(token => { console.log(token) })
+                    .catch(error => { 'Error:', error  });
+            } else {
+                FCM.requestPermission()
+                    .then(() => { /* got permission*/  })
+                    .catch(error => { 'Error:', error  });
+            }
+        })
+        .catch(error => { 'Error:', error  });
 
 
 class NotificationManager {
@@ -33,9 +47,8 @@ class NotificationManager {
                 if (Platform.OS === 'android') {
                     notification.userInteraction = true 
                 } 
-            
-                // process the notification
 
+                // process the notification
                 if (Platform.OS === 'ios') {
                     if (!notification.data.openedInForeground) {
                         notification.finish('UIBackgroundFetchResultNoData')

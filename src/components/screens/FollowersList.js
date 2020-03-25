@@ -76,13 +76,9 @@ class FollowersList extends Component {
         this.unsubscribe2();
     }
 
-    openPublicProfile1(id, name){
-      this.props.navigation.navigate('publicProfile', { profileId: id, profileOwner: name });
+    openPublicProfile(item){
+      this.props.navigation.push('publicProfile', { profileId: item.id, profileOwner: item.name });
     };
-
-    openPublicProfile(){
-        this.props.navigation.navigate('default');
-    }
 
     handleSearch(text){
         const formatQuery = text.toLowerCase();
@@ -96,19 +92,18 @@ class FollowersList extends Component {
       this.setState({ query: formatQuery, data2 }); 
   }
 
-    renderItem({item, index}){
+    _renderItem = ({item, index}) => {
         //return <UserItemList userId={item.id} name={item.name}/>
         return (
-            <ListItem avatar>
-      
+            <ListItem avatar>   
                 <Left>
-                    <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
-                       <Thumbnail style={styles.avatar} source={{ uri: item.avatar }} />  
-                    </TouchableOpacity>              
+                  <TouchableOpacity underlayColor="#fff" onPress={() => this.openPublicProfile(item)}>
+                      <Thumbnail style={styles.avatar} source={{ uri: item.avatar }} />  
+                  </TouchableOpacity>               
                 </Left>
 
                 <Body>
-                  <TouchableOpacity>
+                  <TouchableOpacity >
                     <Text style={styles.nameText}>{item.name}</Text>
                   </TouchableOpacity>
                     <Text style={styles.emailText} note>...</Text>
@@ -124,7 +119,6 @@ class FollowersList extends Component {
     render() {
         return (          
               <Container style={styles.container}>
-                <View style={styles.circle} />
 
                   <View style={styles.header}>
                     <Text style={styles.headerTitle}>{this.state.userName}</Text> 
@@ -152,7 +146,7 @@ class FollowersList extends Component {
                               </Header>
                               <FlatList
                               data={this.state.data}
-                              renderItem={this.renderItem}
+                              renderItem={this._renderItem}
                               keyExtractor={(item,index) => index.toString()}
                               />         
                           </List>
@@ -171,7 +165,7 @@ class FollowersList extends Component {
                               </Header>
                               <FlatList
                               data={this.state.data2}
-                              renderItem={this.renderItem}
+                              renderItem={this._renderItem}
                               keyExtractor={(item,index) => index.toString()}
                               />
                           </List>

@@ -83,6 +83,10 @@ class PostStats extends Component{
     openListVoters(photoId){
         this.props.navigation.navigate('votersScreen', { pollId: this.state.pollId, photoId: photoId});
     }
+    
+    openComments(){
+        this.props.navigation.navigate('comments', { pollId: this.state.pollId });
+    }
 
     setModalVisible(visible,imageKey) {
         this.setState({modalImage: this.state.poll.images[imageKey].url});
@@ -133,7 +137,7 @@ class PostStats extends Component{
                     </TouchableOpacity> 
                 </View>
                 <View style={{alignItems:'center'}} >
-                    <Text style={{color: "#4F566D",fontFamily: "HelveticaNeue"}}> Poll Insights</Text>
+                    <Text style={{color: "#4F566D",fontFamily: "HelveticaNeue", fontWeight: '200'}}> Poll Insights</Text>
                 </View>
                 <View style={styles.statsContainer}>
                     <View style={styles.stat}>
@@ -142,7 +146,9 @@ class PostStats extends Component{
                     </View>
                     <View style={[styles.stat, { borderColor: "#DFD8C8", borderLeftWidth: 1, borderRightWidth: 1 }]}>
                         <Text style={styles.statTitle}><Icon name="chatboxes"/></Text>
-                        <Text style={styles.statAmount}>{this.state.poll.numComments}</Text>            
+                        <TouchableOpacity onPress={() => this.openComments()}>
+                            <Text style={styles.statAmount}>{this.state.poll.numComments}</Text>
+                        </TouchableOpacity>            
                     </View>
                     <View style={styles.stat}>
                         <Text style={styles.statTitle}><Icon name="heart"/></Text>

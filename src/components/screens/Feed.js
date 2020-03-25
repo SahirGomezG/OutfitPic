@@ -31,20 +31,9 @@ class Feed extends Component {
     unsubscribe2 = null;    
 
     componentDidMount(){
-        const FCM = firebase.messaging();
-        FCM.hasPermission().then((enabled) => {
-            if (enabled) {
-                FCM.getToken()
-                    .then(token => { console.log(token) })
-                    .catch(error => { /* handle error*/  });
-            } else {
-                FCM.requestPermission()
-                    .then(() => { /* got permission*/  })
-                    .catch(error => { /* handle error*/  });
-            }
-        })
-        .catch(error => { /* handle error*/  });
-        
+        FCM = firebase.messaging();
+        FCM.requestPermission();
+    
         const user = this.props.uid || Fire.shared.uid;
         let pollsRef = Fire.shared.firestore.collection("outfitPolls");
         let currentuserRef = Fire.shared.firestore.collection("users").doc(user);
@@ -54,6 +43,11 @@ class Feed extends Component {
         currentuserRef.get()
         .then(doc => {
             this.setState({ user: doc.data() });
+        });
+
+        FCM.getToken()
+        .then(token => {
+            currentuserRef.update({ pushToken: token });
         });
 
         let query1 = pollsRef.where('privatePoll','==', false).orderBy('timestamp','desc').limit(10);
@@ -154,7 +148,7 @@ class Feed extends Component {
         this.localNotify.showNotification(
             1,
             'App Notification',
-            'Local Notification',
+            'Post Reported',
             {}, //data
             options //options
         )
@@ -400,10 +394,3 @@ const styles = StyleSheet.create({
 
 export default Feed;
 
-/*{!this.state.liked ? 
-                        (<TouchableOpacity onPress={() => this.like(item)}> 
-                            <Icon name="ios-heart-empty" size={20} color="#73788B" style={{ marginRight: 16 }} />
-                        </TouchableOpacity>) : 
-                        (<TouchableOpacity onPress={() => {this.likedToggled()}}> 
-                            <Icon name="ios-heart" size={20} color="#FF2D42" style={{ marginRight: 16 }} />
-                        </TouchableOpacity>)}*/

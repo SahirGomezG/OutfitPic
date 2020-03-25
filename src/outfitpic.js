@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import { View, Text, StyleSheet, Button, ImageBackground, Image, ScrollView} from 'react-native';
 import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
@@ -30,30 +29,33 @@ import Icon from 'react-native-ionicons';
 import { Dimensions } from "react-native";
 import { SideBar } from './components/presentation';
 
-const PollStack = createStackNavigator(
+const PostStack = createStackNavigator(
   {
     feed : Feed,
     poll : PollBoard,
     comments: Comments,
   },
   {
-    initialRouteName:'poll',
+    initialRouteName:'feed',
+    mode: "modal",
+    headerMode: "none",
   }
 )
 
 const DrawerNavigator = createDrawerNavigator(
   {
       Home: {
-          screen: Feed,
+          screen: PostStack,
           navigationOptions: {
+              title: "Home",
               drawerIcon: ({ tintColor }) => <Icon name="home" size={16} color={tintColor} />
           }
       },
       Add: {
-        screen: OutfitPostScreen,
-        navigationOptions: {
-            title: "Add",
-            drawerIcon: ({ tintColor }) => <Icon name="ios-add-circle" size={16} color={tintColor} />
+          screen: OutfitPostScreen,
+          navigationOptions: {
+              title: "Add",
+              drawerIcon: ({ tintColor }) => <Icon name="ios-add-circle" size={16} color={tintColor} />
         }
       },
       Search: {
@@ -71,10 +73,10 @@ const DrawerNavigator = createDrawerNavigator(
           }
       },
       Notifications: {
-        screen: Feed,
-        navigationOptions: {
-            title: "Notifications",
-            drawerIcon: ({ tintColor }) => <Icon name="ios-notifications" size={16} color={tintColor} />
+          screen: Feed,
+          navigationOptions: {
+              title: "Notifications",
+              drawerIcon: ({ tintColor }) => <Icon name="ios-notifications" size={16} color={tintColor} />
         }
       },
       Settings: {
@@ -106,70 +108,12 @@ const DrawerNavigator = createDrawerNavigator(
 );
 
 
-
-const ChatStack = createStackNavigator(
-  {
-    friendsList: FriendsScreen,
-    rooms: Rooms,
-  },
-  {
-    initialRouteName:'friendsList',
-  }
-);
-
-const TabNavigator = createBottomTabNavigator({
-  Feed: { 
-    screen: PollStack, 
-    navigationOptions: {
-    tabBarIcon: ({ tintColor }) => <Icon name="ios-paper" size={24} color={tintColor} />
-  }},
-  Poll: { 
-    screen: PostStats,
-    navigationOptions: {
-    tabBarIcon: ({ tintColor }) => <Icon name="ios-archive" size={24} color={tintColor} />
-  }},
-  PostScreen: { 
-    screen: OutfitPostScreen, 
-    navigationOptions: {
-    tabBarIcon: <AddButton/>  
-  }},
-  Friends: {
-    screen: ChatStack, 
-    navigationOptions: {
-    tabBarIcon: ({ tintColor }) => <Icon name="ios-contacts" size={24} color={tintColor} />
-  }},
-  Profile: { 
-    screen: ProfileSettings, 
-    navigationOptions: {
-    tabBarIcon: ({ tintColor }) => <Icon name="ios-person" size={24} color={tintColor} />
-  }},
-},
-{ defaultNavigationOptions: {
-    tabBarOnPress: ({ navigation, defaultHandler }) => {
-        if (navigation.state.key === "PostScreen") {
-            navigation.navigate("postModal");
-        }
-        else {
-            defaultHandler();
-        }
-      }
-    },
-  tabBarOptions: {
-      activeTintColor: "#161F3D",
-      inactiveTintColor: "#B8BBC4",
-      showLabel: false
-  }
-});  
-
 const AppContainer = createStackNavigator(
   {
     //default: TabNavigator,
     default: DrawerNavigator,
     chat:ChatScreen,
     privateChat: PrivateChatScreen,
-    poll: PollBoard,
-    comments: Comments,
-    //publicProfile: PublicProfile,
     pollStats: PostStats,
     votersScreen: VotersScreen,
     followersList: FollowersList,
@@ -213,3 +157,50 @@ class OutfitPic extends Component {
 }
 
 export default OutfitPic;
+
+
+
+
+/*const TabNavigator = createBottomTabNavigator({
+  Feed: { 
+    screen: PollStack, 
+    navigationOptions: {
+    tabBarIcon: ({ tintColor }) => <Icon name="ios-paper" size={24} color={tintColor} />
+  }},
+  Poll: { 
+    screen: PostStats,
+    navigationOptions: {
+    tabBarIcon: ({ tintColor }) => <Icon name="ios-archive" size={24} color={tintColor} />
+  }},
+  PostScreen: { 
+    screen: OutfitPostScreen, 
+    navigationOptions: {
+    tabBarIcon: <AddButton/>  
+  }},
+  Friends: {
+    screen: ChatStack, 
+    navigationOptions: {
+    tabBarIcon: ({ tintColor }) => <Icon name="ios-contacts" size={24} color={tintColor} />
+  }},
+  Profile: { 
+    screen: ProfileSettings, 
+    navigationOptions: {
+    tabBarIcon: ({ tintColor }) => <Icon name="ios-person" size={24} color={tintColor} />
+  }},
+},
+{ defaultNavigationOptions: {
+    tabBarOnPress: ({ navigation, defaultHandler }) => {
+        if (navigation.state.key === "PostScreen") {
+            navigation.navigate("postModal");
+        }
+        else {
+            defaultHandler();
+        }
+      }
+    },
+  tabBarOptions: {
+      activeTintColor: "#161F3D",
+      inactiveTintColor: "#B8BBC4",
+      showLabel: false
+  }
+});  */

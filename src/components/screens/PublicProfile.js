@@ -110,7 +110,7 @@ class PublicProfile extends Component {
     };
 
     openFollowersList(userId, i) {
-      this.props.navigation.navigate('followersList', {userId: userId, friendName: this.state.profileOwner, tabIndex: i});
+      this.props.navigation.push('followersList', {userId: userId, friendName: this.state.profileOwner, tabIndex: i});
     };
 
     emptyComponent = () => {

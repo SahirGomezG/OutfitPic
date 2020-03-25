@@ -148,10 +148,11 @@ class FriendsScreen extends Component {
                        <Text>Search</Text>
                     </Button>
                   </Header>
-                  <List>
+                  <List>         
                     <FlatList
                       data={this.state.data}
                       renderItem={this._renderItem}
+                      style={styles.feedFlatlist}
                       keyExtractor={(item,index) => index.toString()}
                       renderFooter={this.renderFooter}
                     />
@@ -236,6 +237,9 @@ const styles = StyleSheet.create({
       height: 28,
       alignItems: "center",
       justifyContent: "center"
+    },
+    feedFlatlist: {
+      marginBottom: 140,
     },
 });
 

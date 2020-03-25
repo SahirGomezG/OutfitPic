@@ -138,7 +138,7 @@ class PollBoard extends Component {
         return (
             <SafeAreaView style={styles.container}>
               <View style={{ alignItems: "center" }}>
-                  <TouchableOpacity style={styles.back} onPress={() => this.props.navigation.navigate('default')}>
+                  <TouchableOpacity style={styles.back} onPress={() => this.props.navigation.goBack()}>
                       <Icon name="arrow-round-back"></Icon>
                   </TouchableOpacity>
 
