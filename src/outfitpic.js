@@ -3,7 +3,6 @@ import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
 import { createDrawerNavigator } from 'react-navigation-drawer';
-
 import { 
   Loading, 
   MainFeed, //not used here
@@ -23,6 +22,7 @@ import {
   Profile, 
   ProfileSettings,
   VotersScreen,
+  Likes,
   FollowersList } from './components/screens';
 import { AddButton } from './components/presentation';
 import Icon from 'react-native-ionicons';
@@ -116,6 +116,7 @@ const AppContainer = createStackNavigator(
     privateChat: PrivateChatScreen,
     pollStats: PostStats,
     votersScreen: VotersScreen,
+    likesScreen: Likes,
     followersList: FollowersList,
     publicProfile: PublicProfile,
     postModal: {

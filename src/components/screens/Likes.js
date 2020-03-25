@@ -7,9 +7,9 @@ import _ from 'lodash';
 import { diffClamp } from 'react-native-reanimated';
 import FollowingButton from "../presentation/FollowingButton";
 
-class VotersScreen extends Component {
+class Likes extends Component {
     static navigationOptions = {
-      title: 'Voters',
+      title: 'Likes',
       header: null
     };
 
@@ -17,7 +17,6 @@ class VotersScreen extends Component {
         super(props);
         this.state = {
             pollId: this.props.navigation.state.params.pollId,
-            photoId: this.props.navigation.state.params.photoId,
             loading: false,
             data:[],
             fullData: [],
@@ -28,29 +27,22 @@ class VotersScreen extends Component {
     unsubscribe = null;
 
     componentDidMount(){
-        const user = this.props.uid || Fire.shared.uid;
         const pollId = this.state.pollId;
         let outfitPollRef = Fire.shared.firestore.collection("outfitPolls").doc(pollId);
-        let currentuserRef = Fire.shared.firestore.collection("users").doc(user);
-
-        currentuserRef.get()
-        .then(doc => {
-            this.setState({ myName: doc.data().name });
-        });
 
         this.unsubscribe = outfitPollRef
-            .collection(this.state.photoId)
+            .collection('likes')
             .onSnapshot(snapshot => {
-              var friends = [];
+              var likedBy = [];
               snapshot.forEach(doc => {
-                  friends = [({
+                  likedBy = [({
                     id: doc.data().user._id,
                     name: doc.data().user.name,
                     avatar: doc.data().user.avatar,
-                  }), ...friends];       
+                  }), ...likedBy];       
               });
-              this.setState({ fullData: friends });
-              this.setState({ data: friends });
+              this.setState({ fullData: likedBy });
+              this.setState({ data: likedBy });
             });     
     }
 
@@ -88,33 +80,32 @@ class VotersScreen extends Component {
 
     _renderItem = ({item, index}) => {
         return (
-            <ListItem avatar>       
+            <ListItem avatar>
                 <Left>
                     <TouchableOpacity underlayColor="#fff" onPress={() => this.openPublicProfile(item)}>
                       <Thumbnail style={styles.avatar} source={{ uri: item.avatar }} />  
                     </TouchableOpacity>              
                 </Left>
 
-                <Body>
+                <Body style={{height: 60}}>
                   <TouchableOpacity >
                     <Text style={styles.nameText}>{item.name}</Text>
                   </TouchableOpacity>
                     <Text style={styles.emailText} note>  ...</Text>
                 </Body>
-    
-                <FollowingButton followerId={item.id} followerName={item.name} />
+                
+                <FollowingButton followerId={item.id} followerName={item.name} />          
             </ListItem>
         )
     }
 
     render() {
-        return (
-            
+        return (  
               <Container style={styles.container}>
                 <View style={styles.circle} />
 
                   <View style={styles.header}>
-                    <Text style={styles.headerTitle}>Voters</Text> 
+                    <Text style={styles.headerTitle}>Liked by</Text> 
                       <View style={styles.menu}>
                           <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
                               <Icon name="ios-arrow-back" style={{fontSize: 25, color: 'white'}}></Icon>
@@ -222,4 +213,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default VotersScreen;
+export default Likes;

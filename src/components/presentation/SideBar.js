@@ -11,7 +11,7 @@ class SideBar extends Component {
     super(props);
     this.state = {
       user:{},
-      followers:0
+      followers:0,
     };
   };
 
@@ -38,11 +38,12 @@ class SideBar extends Component {
   }
 
   render(){
+    //source={require("../../../assets/drawerBackground.jpg")}
     return(
-      <ScrollView>
+      <ScrollView style={{backgroundColor:'rgba(0,0,0,0.20)'}}>
             <SafeAreaView>
             <ImageBackground
-                source={require("../../../assets/drawerBackground.jpg")}
+                source={require('../../../assets/3545766.jpg')}       
                 style={{ width: undefined, paddingBottom: 40, paddingTop: 100, marginTop:-80 }}
             >
               <View style={{ alignItems: 'center'}}>

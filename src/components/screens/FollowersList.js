@@ -109,9 +109,7 @@ class FollowersList extends Component {
                     <Text style={styles.emailText} note>...</Text>
                 </Body>
 
-                <Right>
-                    <FollowingButton followerId={item.id} followerName={item.name} />
-                </Right>
+                <FollowingButton followerId={item.id} followerName={item.name} />
             </ListItem>
         )
     }
@@ -207,9 +205,9 @@ const styles = StyleSheet.create({
       fontFamily: "HelveticaNeue",
     },
     avatar: {
-      width: 41,
-      height: 41,
-      borderRadius: 24,
+      width: 54,
+      height: 54,
+      borderRadius: 27,
       marginRight: 8,
       marginLeft: 8
     },

@@ -19,5 +19,6 @@ import PublicProfile from './PublicProfile';
 import Profile from './Profile';
 import VotersScreen from './VotersScreen';
 import FollowersList from './FollowersList';
+import Likes from './Likes';
 
-export { MainFeed, Login, ProfileSettings, Camera, Register, Loading, PostStats, FriendsScreen, PostScreen, Home, Feed, ChatScreen, Rooms, PrivateChatScreen, OutfitPostScreen, PollBoard, Comments, PublicProfile, Profile, VotersScreen, FollowersList };
+export { MainFeed, Login, ProfileSettings, Camera, Register, Loading, PostStats, FriendsScreen, PostScreen, Home, Feed, ChatScreen, Rooms, PrivateChatScreen, OutfitPostScreen, PollBoard, Comments, PublicProfile, Profile, VotersScreen, FollowersList, Likes };

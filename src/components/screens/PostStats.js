@@ -88,6 +88,10 @@ class PostStats extends Component{
         this.props.navigation.navigate('comments', { pollId: this.state.pollId });
     }
 
+    openLikes(){
+        this.props.navigation.navigate('likesScreen', { pollId: this.state.pollId });
+    }
+
     setModalVisible(visible,imageKey) {
         this.setState({modalImage: this.state.poll.images[imageKey].url});
         this.setState({modalVisible: visible});
@@ -141,18 +145,26 @@ class PostStats extends Component{
                 </View>
                 <View style={styles.statsContainer}>
                     <View style={styles.stat}>
-                        <Text style={styles.statTitle}><Icon name="person"/></Text>
+                        {this.state.numParticipants
+                        ? <Text style={styles.statTitle}><Icon name="person" color="#E27128"/></Text>
+                        : <Text style={styles.statTitle}><Icon name="person"/></Text>}
                         <Text style={styles.statAmount}>{this.state.numParticipants}</Text>
                     </View>
                     <View style={[styles.stat, { borderColor: "#DFD8C8", borderLeftWidth: 1, borderRightWidth: 1 }]}>
-                        <Text style={styles.statTitle}><Icon name="chatboxes"/></Text>
+                        {this.state.poll.numComments 
+                        ? <Text style={styles.statTitle}><Icon name="chatboxes" color="#E27128"/></Text> 
+                        : <Text style={styles.statTitle}><Icon name="chatboxes"/></Text>}
                         <TouchableOpacity onPress={() => this.openComments()}>
                             <Text style={styles.statAmount}>{this.state.poll.numComments}</Text>
                         </TouchableOpacity>            
                     </View>
                     <View style={styles.stat}>
-                        <Text style={styles.statTitle}><Icon name="heart"/></Text>
-                        <Text style={styles.statAmount}>{this.state.poll.likesCount}</Text>
+                        {this.state.poll.likesCount
+                        ? <Text style={styles.statTitle}><Icon name="heart" color="#E27128"/></Text>
+                        : <Text style={styles.statTitle}><Icon name="heart"/></Text>}
+                        <TouchableOpacity onPress={() => this.openLikes()}>
+                            <Text style={styles.statAmount}>{this.state.poll.likesCount}</Text>
+                        </TouchableOpacity>
                     </View>
                 </View>
                 
@@ -251,7 +263,10 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         justifyContent: "space-between",
         alignItems:'center',
-        margin: 5
+        margin: 5,
+        backgroundColor: '#fff',
+        borderRadius: 20,
+        padding: 8
     },
     stat: {
         alignItems: "center",

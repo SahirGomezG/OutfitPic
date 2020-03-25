@@ -93,7 +93,8 @@ const styles = StyleSheet.create({
     container:{
         justifyContent: 'center', 
         alignContent:'center', 
-        padding: 6
+        padding: 10,
+        marginBottom: 5
     },
     followingButton: {
         borderRadius: 5,

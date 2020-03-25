@@ -141,7 +141,7 @@ class PublicProfile extends Component {
         <SafeAreaView style={styles.container}>
             <ScrollView showsVerticalScrollIndicator={false}>
                 <View style={styles.titleBar}>
-                  <TouchableOpacity style={styles.back} onPress={() => this.props.navigation.navigate('default')}>
+                  <TouchableOpacity style={styles.back} onPress={() => this.props.navigation.goBack()}>
                     <Icon name="arrow-round-back"></Icon>
                   </TouchableOpacity> 
                   <TouchableOpacity onPress={() => this.setModalVisible(true)}>  
