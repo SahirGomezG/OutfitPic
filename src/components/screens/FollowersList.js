@@ -2,9 +2,8 @@
 import React, { Component } from 'react';
 import {View, Text, StyleSheet, FlatList, TouchableOpacity, ActivityIndicator} from 'react-native';
 import Fire from "../../Fire";
-import { Container, Header, Item, Input, Icon, Button, List, Tab, Tabs, ListItem, Left, Body, Right, Thumbnail } from 'native-base';
+import { Container, Header, Item, Input, Icon, Button, List, Tab, Tabs, ListItem, Left, Body, Thumbnail } from 'native-base';
 import _ from 'lodash';
-import UserItemList from "../presentation/UserItemList";
 import FollowingButton from "../presentation/FollowingButton";
 
 class FollowersList extends Component {
@@ -93,7 +92,6 @@ class FollowersList extends Component {
   }
 
     _renderItem = ({item, index}) => {
-        //return <UserItemList userId={item.id} name={item.name}/>
         return (
             <ListItem avatar>   
                 <Left>

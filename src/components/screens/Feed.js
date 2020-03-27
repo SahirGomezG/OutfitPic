@@ -44,7 +44,7 @@ class Feed extends Component {
         .then(doc => {
             this.setState({ user: doc.data() });
         });
-
+        // should be deprecated later
         FCM.getToken()
         .then(token => {
             currentuserRef.update({ pushToken: token });

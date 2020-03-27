@@ -185,7 +185,7 @@ class Fire {
                     rej(error);
                 });
         });
-		};
+	};
 		
 	followUser = async ( targetUserId, targetName, myName, targetAvatar, myAvatar ) => {  
 		return new Promise((res, rej) => {
@@ -261,6 +261,22 @@ class Fire {
               });
           });
     };
+
+    DeletePost = async ( pollId ) => {
+        return new Promise((res, rej) => {
+            let userRef = this.firestore.collection("users").doc(this.uid);
+            let pollRef = this.firestore.collection("outfitPolls").doc(pollId);       
+            const decrement = firebase.firestore.FieldValue.increment(-1);
+            pollRef.delete()
+            .then(ref => {
+                userRef.update({ numPosts: decrement });
+				res(ref);
+            })
+            .catch(error => {
+                rej(error);
+            });
+        });
+    }
 
     LikePoll = async ( outfitPic, user ) => {
         // Create a reference for a new like, for use inside the transaction

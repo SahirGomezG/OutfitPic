@@ -3,7 +3,6 @@ import { StyleSheet, Text, TouchableOpacity, View, Image, FlatList } from 'react
 import Fire from "../../Fire";
 import Icon from 'react-native-ionicons';
 import StatsElement from '../presentation/StatsElement';
-import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 
 class Profile extends Component {
   static navigationOptions = {
@@ -87,7 +86,7 @@ class Profile extends Component {
         return (
           <View style={styles.container}>
             <View style={styles.header}>
-                    <Text style={styles.headerTitle}>Profile</Text> 
+                    <Text style={styles.headerTitle}>My Polls</Text> 
                     <View style={styles.menu}>
                         <TouchableOpacity onPress={this.props.navigation.openDrawer}>
                             <Icon name="ios-menu" size={24} color="#FFF"></Icon>
@@ -101,7 +100,7 @@ class Profile extends Component {
             </View>
             <View style={styles.container3}>
                 <Text style={styles.name}>{name}</Text>
-                <Text style={{color:'black', fontSize: 12, marginLeft: 14, fontFamily: "HelveticaNeue", color: '#41444B', textTransform: "uppercase"}}><Icon name="ios-calendar" size={16}/>  Joined in {joined}</Text>
+                <Text style={{color:'#DFD8C8', fontSize: 12, marginLeft: 14, fontFamily: "HelveticaNeue", textTransform: "uppercase"}}><Icon name="ios-calendar" size={16}/>  Joined in {joined}</Text>
             </View>
             <View style={styles.postsContainer}>
                     <FlatList
@@ -173,7 +172,7 @@ class Profile extends Component {
       borderColor: "#FFF"
     },
     name: {
-      color: "#41444B",
+      color: "#DFD8C8",
       fontSize: 15,
       fontWeight: "800",
       marginVertical: 8,
@@ -183,7 +182,7 @@ class Profile extends Component {
     container3: {
       flexDirection:'column',
       paddingBottom: 10,
-      backgroundColor: "#E8EDF2",
+      backgroundColor:'#252B3B',
       borderBottomColor: "#EAEAED",
       borderBottomWidth: 1,
     },
@@ -196,7 +195,7 @@ class Profile extends Component {
     },
     feedFlatlist: {
       marginBottom: 300,
-      marginHorizontal: 16,
+      marginHorizontal: 5,
       marginTop: 10,
     },
     image: {
@@ -206,7 +205,7 @@ class Profile extends Component {
     },
     mediaImageContainer: {
         //width: 90,
-        width: 105,
+        width: 108,
         //height: 110,
         height: 120,
         borderRadius: 8,

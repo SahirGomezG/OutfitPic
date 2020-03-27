@@ -120,25 +120,25 @@ class ProfileSettings extends Component {
                       </View>     
                   </View>
 
-                <View style={{marginTop: 80, alignItems: "center"}}>
+                <View style={{marginTop: 70, alignItems: "center"}}>
                    <Text style={{color:'black'}}>OutfitPic</Text>
                 </View>
             
                  
                 <View style={{marginTop: 40, alignItems: "center"}}>
                     <View style={styles.avatarContainer}>
-                          <Image
-                              source={this.state.newAvatar
-                                  ? { uri: this.state.newAvatar }
-                                  : require("../../../assets/default.png")
-                              }
-                              style={styles.avatar}
-                          />
-                          <View style={styles.add}>
-                            <TouchableOpacity onPress={this.handlePickAvatar}>
+                        <Image
+                            source={this.state.newAvatar
+                                ? { uri: this.state.newAvatar }
+                                : require("../../../assets/default.png")} 
+                            style={styles.avatar}
+                        />         
+                        <TouchableOpacity style={styles.add} onPress={this.handlePickAvatar}>
+                            <View>
                                 <Icon name="ios-add" size={24} color="#DFD8C8" style={{ marginTop: 0.5, marginLeft: 0.5 }}></Icon>
-                            </TouchableOpacity>
-                          </View>
+                            </View>
+                        </TouchableOpacity>
+                          
                     </View>
                     <View>
                       <TouchableOpacity onPress={this.showDialog}>
@@ -153,7 +153,7 @@ class ProfileSettings extends Component {
                 <View style={{marginBottom: 20}}>
 
                     <View style={{marginBottom: 20, alignItems: "center"}}>
-                        <Text>Personal Information</Text>
+                        <Text style={{fontWeight:'500', fontFamily: "HelveticaNeue"}}>Personal Information</Text>
                     </View>
                           
                     <View style={styles.menuContainer}>
@@ -242,15 +242,11 @@ class ProfileSettings extends Component {
                             </Item>       
                         </View>    
                     </View>
-            
-
-                <View style={styles.rowSection}>
-                  <TouchableOpacity onPress={this.handleUpdateInfo}>
-                      <Text style={styles.save}>Save Changes</Text>
+                  <View style={{alignItems:'center'}}>            
+                  <TouchableOpacity style={styles.saveButton} onPress={this.handleUpdateInfo}>
+                      <Text style={styles.saveText}>Save Changes</Text>
                   </TouchableOpacity>
-                  <Icon name="ios-cloud-upload" size={15} color="#4F566D" style={{  marginLeft: 2 }} ></Icon>
-                </View>  
-
+                  </View>  
                 </View>
 
                 <View style = {styles.lineStyle} />   
@@ -310,9 +306,9 @@ const styles = StyleSheet.create({
         fontFamily: "HelveticaNeue",
     },
     avatar: {
-        width: 100,
-        height: 100,
-        borderRadius: 50
+        width: 112,
+        height: 112,
+        borderRadius: 56,
     },
     name: {
         marginTop: 24,
@@ -329,7 +325,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
     },
     add: {
-        backgroundColor: "#41444B",
+        backgroundColor: "#b53f45",
         position: "absolute",
         bottom: 0,
         right: 0,
@@ -339,18 +335,25 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "center"
     },
-    save:{
-        height: 20,
-        width: 100,
-        paddingHorizontal: 10,
-        marginHorizontal: 10,
-        marginTop: 20,
-        marginBottom:20,
-        alignItems:'center',
-        justifyContent: 'center',
-        fontSize: 13,
-        fontWeight: "600",
+    saveText:{
+        color: '#FFF',
+        fontSize: 14,
+        fontWeight: "200",
         fontFamily: "HelveticaNeue"
+    },
+    saveButton: {
+        marginHorizontal: 30,
+        marginTop:20,
+        width: 70+'%',
+        backgroundColor: "#252B3B",
+        borderRadius: 10,
+        height: 50,
+        alignItems: 'center',
+        justifyContent: 'center',
+        shadowColor: "#5D3F6A",
+        shadowOffset: { height: 5 },
+        shadowRadius: 5,
+        shadowOpacity: 0.5
     }, 
     signOut:{
         margin:24,
@@ -395,11 +398,6 @@ const styles = StyleSheet.create({
       borderWidth: 0.5,
       borderColor:'#C3C5CD',
       margin:10,
-    },
-    rowSection: {
-        marginBottom: 10,
-        flexDirection: "row",
-        alignItems: "center"
     },
     menu: {
         position: "absolute",

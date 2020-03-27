@@ -125,3 +125,20 @@ class NotificationManager {
 } 
 
 export const notificationManager = new NotificationManager()
+
+
+/*exports.sendPushNotification = functions.firestore
+	.document('outfitPolls')
+	.onCreate(event => {
+    const writeData = event.data.data();
+    let payload = {
+      notification: {
+          title: 'New Poll from: Sahir',
+          body: 'Check it out!',
+          sound: 'default',
+          badge: '', 
+      }
+    };
+    var pushToken = 'eBxLg61a3UFBmvOT9mA-MK:APA91bFJoeCUGODczo7b-KtIKcHOHYP-E4ecM7h5juKztjvW77L2fSUD-TKK_34nriiS9AcTqKTkaxJCOeU9PHfh0nr9eMPCbutNQ0rFVZzellT1EiDbbeerrO2ux9DdT7yYBiS1Iuxq';
+    admin.messaging().sendToDevice(pushToken, payload);
+  });*/

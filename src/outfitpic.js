@@ -21,6 +21,7 @@ import {
   PublicProfile,
   Profile, 
   ProfileSettings,
+  NotificationsSettings,
   VotersScreen,
   Likes,
   FollowersList } from './components/screens';
@@ -73,7 +74,7 @@ const DrawerNavigator = createDrawerNavigator(
           }
       },
       Notifications: {
-          screen: Feed,
+          screen: NotificationsSettings,
           navigationOptions: {
               title: "Notifications",
               drawerIcon: ({ tintColor }) => <Icon name="ios-notifications" size={16} color={tintColor} />
@@ -101,7 +102,7 @@ const DrawerNavigator = createDrawerNavigator(
               marginHorizontal: 8
           },
           itemStyle: {
-              borderRadius: 4
+              borderRadius: 20
           }
       }
   }

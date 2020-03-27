@@ -5,6 +5,7 @@ import Fire from "../../Fire";
 import {LineChart, ProgressChart, BarChart, PieChart} from "react-native-chart-kit";
 import ImageZoom from 'react-native-image-pan-zoom';
 import ProgressCircle from 'react-native-progress-circle';
+import Dialog from "react-native-dialog";
 
 const width = Dimensions.get('window').width;
 
@@ -50,7 +51,8 @@ class PostStats extends Component{
             numParticipants: 0,
             votes: [],
             modalVisible: false,
-            modalImage: ''
+            modalImage: '',
+            dialogVisible: false
         }
     }
 
@@ -97,6 +99,29 @@ class PostStats extends Component{
         this.setState({modalVisible: visible});
     };
 
+    showDialog = () => {
+        this.setState({ dialogVisible: true });
+    };
+     
+    handleCancel = () => {
+        this.setState({ dialogVisible: false });
+    };
+
+    deletePost = () => {
+        const user = Fire.shared.uid;
+        if ( user === this.state.poll.uid){
+            Fire.shared.DeletePost(this.state.pollId)
+            .then(ref => {
+                this.props.navigation.goBack();
+            })
+            .catch(error => {
+                alert(error);
+            });
+        } else {
+            alert ('Not authorized to perfom this action')
+        }
+    } 
+
     renderItem = ({item,index}) => {
         return (
           <View style={styles.mediaImageContainer}> 
@@ -136,13 +161,15 @@ class PostStats extends Component{
                     <TouchableOpacity style={styles.back} onPress={() => this.props.navigation.goBack()}>
                         <Icon name="arrow-round-back"></Icon>
                     </TouchableOpacity>
-                    <TouchableOpacity >   
-                        <Icon name="md-more" size={24} color="#52575D"></Icon>
+                    <TouchableOpacity style={styles.back} onPress={this.showDialog}>  
+                        <Icon name="md-trash" size={24} color="#52575D"></Icon>
                     </TouchableOpacity> 
                 </View>
+
                 <View style={{alignItems:'center'}} >
-                    <Text style={{color: "#4F566D",fontFamily: "HelveticaNeue", fontWeight: '200'}}> Poll Insights</Text>
+                    <Text style={styles.title}> Poll Insights</Text>
                 </View>
+               
                 <View style={styles.statsContainer}>
                     <View style={styles.stat}>
                         {this.state.numParticipants
@@ -152,7 +179,7 @@ class PostStats extends Component{
                     </View>
                     <View style={[styles.stat, { borderColor: "#DFD8C8", borderLeftWidth: 1, borderRightWidth: 1 }]}>
                         {this.state.poll.numComments 
-                        ? <Text style={styles.statTitle}><Icon name="chatboxes" color="#E27128"/></Text> 
+                        ? <TouchableOpacity onPress={() => this.openComments()}><Text style={styles.statTitle}><Icon name="chatboxes" color="#E27128"/></Text></TouchableOpacity>
                         : <Text style={styles.statTitle}><Icon name="chatboxes"/></Text>}
                         <TouchableOpacity onPress={() => this.openComments()}>
                             <Text style={styles.statAmount}>{this.state.poll.numComments}</Text>
@@ -160,7 +187,7 @@ class PostStats extends Component{
                     </View>
                     <View style={styles.stat}>
                         {this.state.poll.likesCount
-                        ? <Text style={styles.statTitle}><Icon name="heart" color="#E27128"/></Text>
+                        ? <TouchableOpacity onPress={() => this.openLikes()}><Text style={styles.statTitle}><Icon name="heart" color="#E27128"/></Text></TouchableOpacity>
                         : <Text style={styles.statTitle}><Icon name="heart"/></Text>}
                         <TouchableOpacity onPress={() => this.openLikes()}>
                             <Text style={styles.statAmount}>{this.state.poll.likesCount}</Text>
@@ -189,20 +216,19 @@ class PostStats extends Component{
                         ></FlatList>
                     </View>
                 </View>
-
+        
                 <View style={{marginTop: 22}}>
-                      <Modal
+                    <Modal
                         style={styles.modal}
                         animationType="slide"
                         transparent={true}
                         visible={this.state.modalVisible}
                         onRequestClose={() => {Alert.alert('Modal has been closed.');
-                      }}>
+                    }}>
                         <View style={styles.modal}>
                             <TouchableHighlight onPress={() => { this.setModalVisible(!this.state.modalVisible,0)}}>
                               <Icon name="ios-close-circle" size={45} color="#fff" />
-                            </TouchableHighlight>
-                            
+                            </TouchableHighlight>                          
                             <ImageZoom cropWidth={Dimensions.get('window').width}
                                       cropHeight={Dimensions.get('window').height-200}
                                       imageWidth={400}
@@ -211,10 +237,17 @@ class PostStats extends Component{
                                       source={{ uri:this.state.modalImage }}/>
                             </ImageZoom> 
                         </View>
-                      </Modal>
-                </View>
+                    </Modal>
+                </View> 
 
-                    
+                <View>
+                    <Dialog.Container visible={this.state.dialogVisible}>
+                        <Dialog.Title>Delete Post?</Dialog.Title>
+                        <Dialog.Button label="Cancel" onPress={this.handleCancel} />
+                        <Dialog.Button label="Delete" onPress={this.deletePost} />
+                    </Dialog.Container>
+                </View> 
+
                 </View>
             </SafeAreaView>
         );
@@ -234,17 +267,16 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         backgroundColor: 'rgba(0,0,0,0.9)',
     },
-    /*back: {
-        position: "absolute",
-        top: 50,
-        left: 30,
-        width: 32,
-        height: 32,
-        borderRadius: 16,
-        backgroundColor: "rgba(21, 22, 48, 0.1)",
-        alignItems: "center",
-        justifyContent: "center"
-    },*/
+    modalDelete:{
+        flexDirection:'column',
+        width: 300, 
+        height: 150,
+        padding: 26,
+        justifyContent:"center",
+        alignItems:'center',
+        borderRadius: 12,
+        backgroundColor:'#FBFBFB'
+    },
     back: {
         width: 32,
         height: 32,
@@ -259,14 +291,23 @@ const styles = StyleSheet.create({
         //marginTop: 24,
         marginHorizontal: 16
     },
+    title:{
+        color: "#4F566D",
+        fontFamily: "HelveticaNeue", 
+        fontWeight: '200',
+        fontSize:16,
+    },
     statsContainer: {
         flexDirection: "row",
         justifyContent: "space-between",
         alignItems:'center',
-        margin: 5,
+        margin: 14,
         backgroundColor: '#fff',
         borderRadius: 20,
-        padding: 8
+        padding: 8,
+        shadowColor: "#5D3F6A",
+        shadowOffset: { height: 5 },
+        shadowOpacity: 0.2
     },
     stat: {
         alignItems: "center",
@@ -300,7 +341,6 @@ const styles = StyleSheet.create({
         margin:10,
         alignItems: 'center',
         shadowColor: "#5D3F6A",
-        //shadowOffset: { height: 5 },
         shadowRadius: 8,
         shadowOpacity: 0.2
     },
