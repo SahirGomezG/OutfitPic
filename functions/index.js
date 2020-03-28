@@ -32,40 +32,40 @@ exports.sendPushNotification = functions.firestore
   });
 
 exports.pushNotificationChat = functions.database
-  .ref('/messages/{pushId}')
-  .onCreate((snapshot, context) => {
-    // Grab the current value of what was written to the Realtime Database.
-    const message = snapshot.val();
+  .ref('/messages/{roomId}/{pushId}')
+  .onCreate((snap, context) => {
+    const message = snap.val();
+    const name = snap.val().user.name;
     const myId = context.auth.uid;
-    let nodeId = context.params.pushId;
-    let uid = nodeId.slice(28);
-    console.log(
-      'Message ID:',
-      nodeId,
-      'myId:',
-      myId,
-      'targetId:',
-      uid,
-      'Message Data:',
-      message,
-    );
+    let nodeId = context.params.roomId;
+    let uid1 = nodeId.slice(0, 28);
+    let uid2 = nodeId.slice(28);
+    function target() {
+      if (myId === uid1) {
+        const target = uid2;
+        return target;
+      } else {
+        const target = uid1;
+        return target;
+      }
+    }
+    let targetId = target();
+    console.log('Node ID:', nodeId, 'myId:', myId, 'targetId:', targetId);
     let payload = {
       notification: {
         title: 'OutfitPic Chat',
-        body: 'New message from your friend ',
+        body: `New message from ${name}.`,
         sound: 'default',
       },
     };
-    let pushToken =
-      'c6vZv4DeKU0msgx5oHII_g:APA91bH29ui97WbqtHhDCnYo7iIOf8iQChLJZZfdLsxka8EqjUsnbCqdLMcnOvT5Uir4SfEPPKZ5o6_sNSegj3lcx6l9GHbNhV062_47G9P3Gc7VagaYfQ66hirBHn9QaTyNRkPCVSbI';
     return admin
-      .messaging()
-      .sendToDevice(pushToken, payload)
-      .then(response => {
-        return console.log('Successfully sent message:', response);
-      })
-      .catch(error => {
-        return console.log('Error sending message:', error);
+      .firestore()
+      .collection('users')
+      .doc(targetId)
+      .get()
+      .then(doc => {
+        pushToken = doc.data().pushToken;
+        return admin.messaging().sendToDevice(pushToken, payload);
       });
   });
 
@@ -74,8 +74,9 @@ exports.sendNewFollowerNotification = functions.firestore
   .onCreate((snap, context) => {
     const followerData = snap.data();
     let myId = context.params.uid;
-    //let followerId = context.params.followerId;
+    let followerId = context.params.followerId;
     const followerName = followerData.name;
+    console.log('followerId:', followerId, 'follows:', myId);
     let payload = {
       notification: {
         title: 'Hey! You have a new follower',
@@ -83,7 +84,6 @@ exports.sendNewFollowerNotification = functions.firestore
         sound: 'default',
       },
     };
-    console.log(payload);
     return admin
       .firestore()
       .collection('users')
