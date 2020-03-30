@@ -44,7 +44,6 @@ class Fire {
             const remoteUri1 = await this.uploadPhotoAsync(images[i].url, path);
             let item = {
               id: i,
-              //votes: 0,
               url: remoteUri1,
              };
             fireArray.push(item); 
@@ -116,6 +115,7 @@ class Fire {
         let remoteUri= null;
         let userName = user.name.toLowerCase();
         const FCM = firebasenative.messaging();
+        let notificationSettings = {option1: true, option2: true, option3: true, option4: true, option5: true};
 
         try { 
             await firebase.auth().createUserWithEmailAndPassword(user.email, user.password); 
@@ -124,7 +124,8 @@ class Fire {
                 name: userName,
                 email: user.email,
                 joined: this.creationTime,
-                avatar: null
+                avatar: null,
+                notificationSettings: notificationSettings,
             });
             FCM.getToken()
                 .then(token => { db.update({ pushToken: token })})
@@ -141,7 +142,6 @@ class Fire {
     updateAvatar = async (photoUri) => {
         const path = `avatars/${this.uid}/${Date.now()}`;
         const remoteUri = await this.uploadPhotoAsync(photoUri, path);
-        //let remoteUri= null;
         try { 
             let db = this.firestore.collection("users").doc(this.uid);
             db.update({ avatar: remoteUri });
@@ -165,7 +165,23 @@ class Fire {
 		catch (error) {
             alert("Error: Please fill out all the fields ", error);
         }
-    }    
+    }
+    
+    updateNotificationSettins =  async (option1, option2, option3, option4, option5) => {
+        try { 
+            let db = this.firestore.collection("users").doc(this.uid);
+            db.update({
+                'notificationSettings.option1':option1,
+                'notificationSettings.option2':option2,
+                'notificationSettings.option3':option3,
+                'notificationSettings.option4':option4,
+                'notificationSettings.option5':option5,
+            });    
+		} 
+		catch (error) {
+            alert("Error: Please try later. ", error);
+        }
+    }
 		
 	addComment = async ( outfitPic, text, user ) => {
         return new Promise((res, rej) => {
