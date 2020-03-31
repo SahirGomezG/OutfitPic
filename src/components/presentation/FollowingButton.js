@@ -9,8 +9,10 @@ class FollowingButton extends Component {
         this.state = {
           targetName:'',
           targetAvatar: '',  
+          targetToken: '',
           myName: '',
           myAvatar: '', 
+          myToken: '',
           following: false,
         };
       };
@@ -20,19 +22,21 @@ class FollowingButton extends Component {
     componentDidMount(){
         const user = this.props.uid || Fire.shared.uid;
         const followerId = this.props.followerId;
-        let currentuserRef = Fire.shared.firestore.collection("users").doc(user);
+        const currentuserRef = Fire.shared.firestore.collection("users").doc(user);
         const followingRef = currentuserRef.collection('following');
     
         currentuserRef.get()
         .then(doc => {
             this.setState({ myName: doc.data().name });
-            this.setState({ myAvatar: doc.data().avatar})
+            this.setState({ myAvatar: doc.data().avatar});
+            this.setState({ myToken: doc.data().pushToken})
         });
 
         const userRef = Fire.shared.firestore.collection('users').doc(followerId);
         userRef.get().then(doc => {
             this.setState({ targetName: doc.data().name })
             this.setState({ targetAvatar: doc.data().avatar })
+            this.setState({ targetToken: doc.data().pushToken})
         });
 
         let query = followingRef.where('id', '==', followerId);       
@@ -50,7 +54,7 @@ class FollowingButton extends Component {
     }
 
     toFollow(){
-      Fire.shared.followUser(this.props.followerId, this.props.followerName, this.state.myName, this.state.targetAvatar, this.state.myAvatar)
+      Fire.shared.followUser(this.props.followerId, this.props.followerName, this.state.myName, this.state.targetAvatar, this.state.myAvatar, this.state.targetToken, this.state.myToken)
         .then(ref => { 
           //alert (`You are now following ${this.state.userProfile.name}.`);
         })

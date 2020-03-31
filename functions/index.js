@@ -5,12 +5,172 @@ const admin = require('firebase-admin');
 // initializes your application
 admin.initializeApp(functions.config().firebase);
 
-exports.sendPushNotification = functions.firestore
+/*
+exports.sendPushToFollowers = functions.firestore
   .document('outfitPolls/{pollId}')
   .onCreate((snap, context) => {
-    const postData = snap.data();
-    const author = postData.user.name;
-    console.log('PollId:', context.params.pushId, 'Data:', postData);
+		const postData = snap.data();
+		const uid = postData.uid;
+		const author = postData.user.name;
+		const registrationTokens = postData.pushTokens;
+		console.log(
+      'PollId:',
+      context.params.pollId,
+      'tokens:',
+      registrationTokens,
+		);
+		let payload = {
+      notification: {
+        title: 'New OutfitPic Post',
+        body: `Hey! new Poll from ${author}, check it out.`,
+        sound: 'default',
+      },
+    };
+    return admin
+      .messaging()
+      .sendToDevice(registrationTokens, payload)
+      .catch(console.error);
+  });
+		
+ */
+
+// ------ When someone starts following me: Option 1
+exports.sendNewFollowerNotification = functions.firestore
+  .document('users/{uid}/followers/{followerId}')
+  .onCreate((snap, context) => {
+    const followerData = snap.data();
+    let myId = context.params.uid;
+    let followerId = context.params.followerId;
+    const followerName = followerData.name;
+    console.log('followerId:', followerId, 'follows:', myId);
+    let payload = {
+      notification: {
+        title: 'Hey! You have a new follower',
+        body: `${followerName} started following you`,
+        sound: 'default',
+      },
+    };
+    return admin
+      .firestore()
+      .collection('users')
+      .doc(myId)
+      .get()
+      .then(doc => {
+        pushToken = doc.data().pushToken;
+        option1 = doc.data().notificationSettings.option1;
+        if (option1 === true) {
+          return admin.messaging().sendToDevice(pushToken, payload);
+        } else {
+          return null;
+        }
+      });
+  });
+
+// ------ When someone leaves a comment in my posts: Option 2
+exports.sendNewCommentNotification = functions.firestore
+  .document('outfitPolls/{pollId}/comments/{commentId}')
+  .onCreate((snap, context) => {
+    const commentData = snap.data();
+    const commentText = commentData.text;
+    let pollId = context.params.pollId;
+    let payload = {
+      notification: {
+        title: 'Your post has a new comment.',
+        body: commentText,
+        sound: 'default',
+      },
+    };
+    return admin
+      .firestore()
+      .collection('outfitPolls')
+      .doc(pollId)
+      .get()
+      .then(doc => {
+        const authorId = doc.data().uid;
+        console.log('PollId:', pollId, 'newComment:', commentText);
+        return admin
+          .firestore()
+          .collection('users')
+          .doc(authorId)
+          .get();
+      })
+      .then(doc => {
+        pushToken = doc.data().pushToken;
+        option2 = doc.data().notificationSettings.option2;
+        if (option2 === true) {
+          return admin.messaging().sendToDevice(pushToken, payload);
+        } else {
+          return null;
+        }
+      });
+  });
+
+// ------ When someone likes my posts: Option 3
+exports.sendNewLikeNotification = functions.firestore
+  .document('outfitPolls/{pollId}/likes/{likedBy}')
+  .onCreate((snap, context) => {
+    const like = snap.data();
+    const likedBy = like.user.name;
+    let pollId = context.params.pollId;
+    let payload = {
+      notification: {
+        title: 'New like! 😀',
+        body: `${likedBy} likes your outfits.`,
+        sound: 'default',
+      },
+    };
+    return admin
+      .firestore()
+      .collection('outfitPolls')
+      .doc(pollId)
+      .get()
+      .then(doc => {
+        const authorId = doc.data().uid;
+        console.log('PollId:', pollId, 'liked by:', context.params.likedBy);
+        return admin
+          .firestore()
+          .collection('users')
+          .doc(authorId)
+          .get();
+      })
+      .then(doc => {
+        pushToken = doc.data().pushToken;
+        option3 = doc.data().notificationSettings.option3;
+        if (option3 === true) {
+          return admin.messaging().sendToDevice(pushToken, payload);
+        } else {
+          return null;
+        }
+      });
+  });
+
+// ------ When someone I follow makes a new post: Option 4
+exports.sendPushToFollowers = functions.firestore
+  .document('outfitPolls/{pollId}')
+  .onCreate((snap, context) => {
+		const postData = snap.data();
+		const uid = postData.uid;
+		const author = postData.user.name;
+		const registrationTokens = postData.pushTokens;
+		console.log(
+      'PollId:',
+      context.params.pollId,
+      'tokens:',
+      registrationTokens,
+    );
+		
+		const getTokens = admin.firestore().collection('users').doc(uid).collection('followers').get()
+      .then(snapshot => {
+        const tokens = [];
+        snapshot.forEach(doc => {
+					const followerKey = doc.id;
+          const token = doc.data().pushToken;
+					// get other user tokens except the sender
+					if (followerKey !== uid) tokens.push(token);
+        });
+        return Promise.all(tokens)                
+      })
+
     let payload = {
       notification: {
         title: 'New OutfitPic Post',
@@ -18,19 +178,13 @@ exports.sendPushNotification = functions.firestore
         sound: 'default',
       },
     };
-    let pushToken =
-      'eBxLg61a3UFBmvOT9mA-MK:APA91bFJoeCUGODczo7b-KtIKcHOHYP-E4ecM7h5juKztjvW77L2fSUD-TKK_34nriiS9AcTqKTkaxJCOeU9PHfh0nr9eMPCbutNQ0rFVZzellT1EiDbbeerrO2ux9DdT7yYBiS1Iuxq';
     return admin
       .messaging()
-      .sendToDevice(pushToken, payload)
-      .then(response => {
-        return console.log('Successfully sent message:', response);
-      })
-      .catch(error => {
-        return console.log('Error sending message:', error);
-      });
+      .sendToDevice(registrationTokens, payload)
+      .catch(console.error);
   });
 
+// ------ When I receive a new private chat message: Option 5
 exports.pushNotificationChat = functions.database
   .ref('/messages/{roomId}/{pushId}')
   .onCreate((snap, context) => {
@@ -65,32 +219,11 @@ exports.pushNotificationChat = functions.database
       .get()
       .then(doc => {
         pushToken = doc.data().pushToken;
-        return admin.messaging().sendToDevice(pushToken, payload);
-      });
-  });
-
-exports.sendNewFollowerNotification = functions.firestore
-  .document('users/{uid}/followers/{followerId}')
-  .onCreate((snap, context) => {
-    const followerData = snap.data();
-    let myId = context.params.uid;
-    let followerId = context.params.followerId;
-    const followerName = followerData.name;
-    console.log('followerId:', followerId, 'follows:', myId);
-    let payload = {
-      notification: {
-        title: 'Hey! You have a new follower',
-        body: `${followerName} started following you`,
-        sound: 'default',
-      },
-    };
-    return admin
-      .firestore()
-      .collection('users')
-      .doc(myId)
-      .get()
-      .then(doc => {
-        pushToken = doc.data().pushToken;
-        return admin.messaging().sendToDevice(pushToken, payload);
+        option5 = doc.data().notificationSettings.option5;
+        if (option5 === true) {
+          return admin.messaging().sendToDevice(pushToken, payload);
+        } else {
+          return null;
+        }
       });
   });

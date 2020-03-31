@@ -17,12 +17,14 @@ class PublicProfile extends Component {
             profileId: this.props.navigation.state.params.profileId,
             myName: '',
             myAvatar: '',
+            myToken: '',
             userProfile: {},
             following: false,
             followingNumber: 0,
             followersNumber: 0,
             lastPoll: [],
-            modalVisible: false,       
+            modalVisible: false,
+            targetToken: ''       
         };
     }  
 
@@ -38,6 +40,7 @@ class PublicProfile extends Component {
         .then(doc => {
             this.setState({ myName: doc.data().name });
             this.setState({ myAvatar: doc.data().avatar });
+            this.setState({ myToken: doc.data().pushToken})
       });
 
       this.unsubscribe = Fire.shared.firestore
@@ -47,6 +50,7 @@ class PublicProfile extends Component {
               this.setState({ userProfile: doc.data() });
               this.setState({ followingNumber: doc.data().numFollowing });
               this.setState({ followersNumber: doc.data().numFollowers });
+              this.setState({ targetToken: doc.data().pushToken})
           });
       const postsRef = Fire.shared.firestore.collection('outfitPolls').where('uid', '==', profileId).orderBy('timestamp','desc').limit(1); 
       let observer1 = postsRef.get()
@@ -74,7 +78,7 @@ class PublicProfile extends Component {
     };
 
     toFollow(){
-        Fire.shared.followUser(this.state.profileId, this.state.profileOwner, this.state.myName, this.state.userProfile.avatar, this.state.myAvatar)
+        Fire.shared.followUser(this.state.profileId, this.state.profileOwner, this.state.myName, this.state.userProfile.avatar, this.state.myAvatar, this.state.targetToken, this.state.myToken)
           .then(ref => { 
             alert (`You are now following ${this.state.userProfile.name}.`);
           })

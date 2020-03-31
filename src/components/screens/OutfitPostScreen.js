@@ -27,7 +27,8 @@ class OutfitPostScreen extends Component {
             privatePoll: false,
             comments: false,
             modalVisible: false,
-            followers: []
+            followers: [],
+            pushTokens: [],
         };
     }  
 
@@ -58,13 +59,16 @@ class OutfitPostScreen extends Component {
             .onSnapshot(doc => {
                 this.setState({ user: doc.data() });
             });
-        const followingRef = currentuserRef.collection('followers').get()
+        const followingRef = currentuserRef.collection('followers').limit(50).get()
             .then(snapshot => {
-                var followersFB = [ user ];       
+                var followersFB = [ user ];  
+                var pushTokensFB = [];     
                 snapshot.forEach(doc => {
                     followersFB = [ doc.id, ...followersFB ];
+                    pushTokensFB = [ doc.data().pushToken, ...pushTokensFB];
                 })
                 this.setState({ followers: followersFB });
+                this.setState({ pushTokens: pushTokensFB });
             })          
     }
     
@@ -134,7 +138,7 @@ class OutfitPostScreen extends Component {
     handleOutfitPost = () => {
       if (this.state.fileList.length != 0) {
         Fire.shared
-            .addOutfitPic({ text: this.state.text.trim(), images: this.state.fileList, user: this.state.user, duration: this.state.duration, privatePoll: this.state.privatePoll, blockComments: this.state.comments, followers: this.state.followers })
+            .addOutfitPic({ text: this.state.text.trim(), images: this.state.fileList, user: this.state.user, duration: this.state.duration, privatePoll: this.state.privatePoll, blockComments: this.state.comments, followers: this.state.followers, pushTokens: this.state.pushTokens })
             .then(ref => {
                 this.setState({ text: "", fileList:[], count:0 });
                 this.props.navigation.goBack();

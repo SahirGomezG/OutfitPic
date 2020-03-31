@@ -36,7 +36,7 @@ class Fire {
         });
     };
     
-    addOutfitPic = async ({ text, images, user, duration, privatePoll, blockComments, followers }) => {
+    addOutfitPic = async ({ text, images, user, duration, privatePoll, blockComments, followers, pushTokens }) => {
         let fireArray = [];
         let votes = {'0':0,'1':0,'2':0};
         for ( let i=0; i<images.length; i++){
@@ -64,7 +64,8 @@ class Fire {
                     privatePoll: privatePoll,
                     blockComments: blockComments,
                     votes: votes,
-                    followers: followers
+                    followers: followers,
+                    pushTokens: pushTokens,
                 })
                 .then(ref => {
                   userRef.update({ numPosts: increment });
@@ -126,6 +127,7 @@ class Fire {
                 joined: this.creationTime,
                 avatar: null,
                 notificationSettings: notificationSettings,
+                pushToken: '',
             });
             FCM.getToken()
                 .then(token => { db.update({ pushToken: token })})
@@ -167,7 +169,7 @@ class Fire {
         }
     }
     
-    updateNotificationSettins =  async (option1, option2, option3, option4, option5) => {
+    updateNotificationSettings =  async (option1, option2, option3, option4, option5) => {
         try { 
             let db = this.firestore.collection("users").doc(this.uid);
             db.update({
@@ -203,7 +205,7 @@ class Fire {
         });
 	};
 		
-	followUser = async ( targetUserId, targetName, myName, targetAvatar, myAvatar ) => {  
+	followUser = async ( targetUserId, targetName, myName, targetAvatar, myAvatar, targetToken, myToken ) => {  
 		return new Promise((res, rej) => {
             let userRef = this.firestore.collection("users").doc(this.uid);
             let followingRef = userRef.collection('following').doc(targetUserId);
@@ -212,8 +214,8 @@ class Fire {
             const increment = firebase.firestore.FieldValue.increment(1);
             const batch = this.firestore.batch();
 
-            batch.set( followingRef, ({ id: targetUserId, name: targetName, avatar: targetAvatar }));
-            batch.set( followerRef, ({ id: this.uid, name: myName, avatar: myAvatar }));
+            batch.set( followingRef, ({ id: targetUserId, name: targetName, avatar: targetAvatar, pushToken: targetToken }));
+            batch.set( followerRef, ({ id: this.uid, name: myName, avatar: myAvatar, pushToken: myToken }));
             batch.commit()
             .then(ref => {
               userRef.update({ numFollowing: increment });

@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import {View, Text, StyleSheet, TouchableOpacity, Switch} from 'react-native';
 import Fire from "../../Fire";
-import { Container, Header, Item, Icon, Button, List, ListItem, Left, Right, Content } from 'native-base';
-import _ from 'lodash';
+import { Container, Header, Item, Icon, List, ListItem, Left, Right, Content } from 'native-base';
+import Dialog from "react-native-dialog";
 
 class NotificationsSettings extends Component {
     static navigationOptions = {
@@ -18,7 +18,8 @@ class NotificationsSettings extends Component {
             option2: false,
             option3: false,
             option4: false,
-            comments:false,
+            option5: false,
+            dialogVisible: false
         }
     }
 
@@ -30,17 +31,34 @@ class NotificationsSettings extends Component {
 
         currentuserRef.get()
         .then(doc => {
-            this.setState({ user: doc.data() });
+            this.setState({ option1: doc.data().notificationSettings.option1 });
+            this.setState({ option2: doc.data().notificationSettings.option2 });
+            this.setState({ option3: doc.data().notificationSettings.option3 });
+            this.setState({ option4: doc.data().notificationSettings.option4 });
+            this.setState({ option5: doc.data().notificationSettings.option5 });
         });
     }
 
     componentWillUnmount() {
-        //this.unsubscribe();
+       //this.unsubscribe();
     }
 
+    handleUpdateSettings = () => {
+        const {option1, option2, option3, option4, option5} = this.state;
+        Fire.shared.updateNotificationSettings(option1, option2 ,option3, option4, option5);
+        this.setState({ dialogVisible: false });
+    }
+
+    showDialog = () => {
+      this.setState({ dialogVisible: true });
+    };
+   
+    handleCancel = () => {
+      this.setState({ dialogVisible: false });
+    };
 
     render() {
-        const {option1, option2, option3, option4, comments} = this.state;
+        const {option1, option2, option3, option4, option5} = this.state;
         return (
             <Container style={styles.container}>
 
@@ -82,11 +100,11 @@ class NotificationsSettings extends Component {
                         </Left>
                         <Right>
                             <Switch
-                                value={comments}
+                                value={option2}
                                 style={{ transform: [{ scaleX: .8 }, { scaleY: .8 }] }}
                                 ios_backgroundColor="#EAEAED"
                                 trackColor={{ false: "#EAEAED", true: "#b53f45" }}
-                                onValueChange={() => this.setState({ comments: !comments })}
+                                onValueChange={() => this.setState({ option2: !option2 })}
                             />
                         </Right>
                     </ListItem>
@@ -96,11 +114,11 @@ class NotificationsSettings extends Component {
                         </Left>
                         <Right>
                             <Switch
-                                value={option2}
+                                value={option3}
                                 style={{ transform: [{ scaleX: .8 }, { scaleY: .8 }] }}
                                 ios_backgroundColor="#EAEAED"
                                 trackColor={{ false: "#EAEAED", true: "#b53f45" }}
-                                onValueChange={() => this.setState({ option2: !option2 })}
+                                onValueChange={() => this.setState({ option3: !option3 })}
                             />
                         </Right>
                     </ListItem>
@@ -110,11 +128,11 @@ class NotificationsSettings extends Component {
                         </Left>
                         <Right>
                             <Switch
-                                value={option3}
+                                value={option4}
                                 style={{ transform: [{ scaleX: .8 }, { scaleY: .8 }] }}
                                 ios_backgroundColor="#EAEAED"
                                 trackColor={{ false: "#EAEAED", true: "#b53f45" }}
-                                onValueChange={() => this.setState({ option3: !option3 })}
+                                onValueChange={() => this.setState({ option4: !option4 })}
                             />
                         </Right>
                     </ListItem>
@@ -127,16 +145,30 @@ class NotificationsSettings extends Component {
                         </Left>
                         <Right>
                             <Switch
-                                value={option4}
+                                value={option5}
                                 style={{ transform: [{ scaleX: .8 }, { scaleY: .8 }] }}
                                 ios_backgroundColor="#EAEAED"
                                 trackColor={{ false: "#EAEAED", true: "#b53f45" }}
-                                onValueChange={() => this.setState({ option4: !option4 })}
+                                onValueChange={() => this.setState({ option5: !option5 })}
                             />
                         </Right>
                     </ListItem>  
                 </List>
-                </Content>   
+                <View style={{alignItems:'center', marginTop: 20}}>            
+                  <TouchableOpacity style={styles.saveButton} onPress={this.showDialog}>
+                      <Text style={styles.saveText}>Save Changes</Text>
+                  </TouchableOpacity>
+                </View>
+                </Content> 
+
+                <View>
+                  <Dialog.Container visible={this.state.dialogVisible}>
+                    <Dialog.Title>Save Changes?</Dialog.Title>
+                    <Dialog.Button label="Cancel" onPress={this.handleCancel} />
+                    <Dialog.Button label="Save" onPress={this.handleUpdateSettings} />
+                  </Dialog.Container>
+                </View>
+                  
             </Container>           
         );
     }
@@ -190,6 +222,26 @@ const styles = StyleSheet.create({
       alignItems: "center",
       justifyContent: "center"
     },
+    saveText:{
+      color: '#FFF',
+      fontSize: 14,
+      fontWeight: "200",
+      fontFamily: "HelveticaNeue"
+    },
+    saveButton: {
+      marginHorizontal: 30,
+      marginTop:20,
+      width: 70+'%',
+      backgroundColor: "#252B3B",
+      borderRadius: 10,
+      height: 50,
+      alignItems: 'center',
+      justifyContent: 'center',
+      shadowColor: "#5D3F6A",
+      shadowOffset: { height: 5 },
+      shadowRadius: 5,
+      shadowOpacity: 0.5
+    }, 
 });
 
 export default NotificationsSettings;
