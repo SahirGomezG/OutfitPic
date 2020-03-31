@@ -36,7 +36,7 @@ class Fire {
         });
     };
     
-    addOutfitPic = async ({ text, images, user, duration, privatePoll, blockComments, followers, pushTokens }) => {
+    addOutfitPic = async ({ text, images, user, duration, privatePoll, blockComments, followers}) => {
         let fireArray = [];
         let votes = {'0':0,'1':0,'2':0};
         for ( let i=0; i<images.length; i++){
@@ -65,7 +65,6 @@ class Fire {
                     blockComments: blockComments,
                     votes: votes,
                     followers: followers,
-                    pushTokens: pushTokens,
                 })
                 .then(ref => {
                   userRef.update({ numPosts: increment });

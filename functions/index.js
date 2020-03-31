@@ -5,35 +5,6 @@ const admin = require('firebase-admin');
 // initializes your application
 admin.initializeApp(functions.config().firebase);
 
-/*
-exports.sendPushToFollowers = functions.firestore
-  .document('outfitPolls/{pollId}')
-  .onCreate((snap, context) => {
-		const postData = snap.data();
-		const uid = postData.uid;
-		const author = postData.user.name;
-		const registrationTokens = postData.pushTokens;
-		console.log(
-      'PollId:',
-      context.params.pollId,
-      'tokens:',
-      registrationTokens,
-		);
-		let payload = {
-      notification: {
-        title: 'New OutfitPic Post',
-        body: `Hey! new Poll from ${author}, check it out.`,
-        sound: 'default',
-      },
-    };
-    return admin
-      .messaging()
-      .sendToDevice(registrationTokens, payload)
-      .catch(console.error);
-  });
-		
- */
-
 // ------ When someone starts following me: Option 1
 exports.sendNewFollowerNotification = functions.firestore
   .document('users/{uid}/followers/{followerId}')
@@ -148,29 +119,9 @@ exports.sendNewLikeNotification = functions.firestore
 exports.sendPushToFollowers = functions.firestore
   .document('outfitPolls/{pollId}')
   .onCreate((snap, context) => {
-		const postData = snap.data();
-		const uid = postData.uid;
-		const author = postData.user.name;
-		const registrationTokens = postData.pushTokens;
-		console.log(
-      'PollId:',
-      context.params.pollId,
-      'tokens:',
-      registrationTokens,
-    );
-		
-		const getTokens = admin.firestore().collection('users').doc(uid).collection('followers').get()
-      .then(snapshot => {
-        const tokens = [];
-        snapshot.forEach(doc => {
-					const followerKey = doc.id;
-          const token = doc.data().pushToken;
-					// get other user tokens except the sender
-					if (followerKey !== uid) tokens.push(token);
-        });
-        return Promise.all(tokens)                
-      })
-
+    const postData = snap.data();
+    const uid = postData.uid;
+    const author = postData.user.name;
     let payload = {
       notification: {
         title: 'New OutfitPic Post',
@@ -178,10 +129,32 @@ exports.sendPushToFollowers = functions.firestore
         sound: 'default',
       },
     };
+
     return admin
-      .messaging()
-      .sendToDevice(registrationTokens, payload)
-      .catch(console.error);
+      .firestore()
+      .collection('users')
+      .doc(uid)
+      .collection('followers')
+      .limit(30)
+      .get()
+      .then(snapshot => {
+        const tokens = [];
+        snapshot.forEach(user => {
+          const userKey = user.id;
+          const token = user.data().pushToken;
+          // get other user tokens except the sender
+          if (userKey !== uid && token) tokens.push(token);
+        });
+        console.log('tokens', tokens);
+        return Promise.all(tokens);
+      })
+      .then(tokens => {
+        const pushtokens = tokens;
+        return admin
+          .messaging()
+          .sendToDevice(pushtokens, payload)
+          .catch(console.error);
+      });
   });
 
 // ------ When I receive a new private chat message: Option 5

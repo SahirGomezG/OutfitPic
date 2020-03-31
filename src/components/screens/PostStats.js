@@ -132,8 +132,8 @@ class PostStats extends Component{
         )
       }; 
 
-    renderGraphItem =({item, index}) => {
-        const percentage = (item.votes/this.state.numParticipants*100).toFixed(0);
+    renderGraphItem =({item, index}) => { 
+        const percentage = this.state.numParticipants === 0 ? 1 : (item.votes/this.state.numParticipants*100).toFixed(1);
         return (
             <TouchableWithoutFeedback key={index} onPress={() => {this.openListVoters(index.toString())}}>
                 <View style={styles.mediaGraphContainer}>     
