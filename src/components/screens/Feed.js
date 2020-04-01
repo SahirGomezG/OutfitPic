@@ -20,15 +20,16 @@ class Feed extends Component {
         this.senderId = '1082830494457';
         this.state = {
             user: {},
-            globalPosts: [], //documentData
+            globalPosts: [], 
             privatePosts: [],
-            isLoading: true,
             modalVisible: false,
-
-            limit: 5,
-            lastVisible: null,
+            limit: 3,
             loading: false,
+
+            lastVisible: null,
             refreshing: false,
+            lastVisiblePrivate: null,
+            refreshingPrivate: false,
         }
     };    
 
@@ -42,9 +43,7 @@ class Feed extends Component {
         this.localNotify = notificationManager;
         this.localNotify.configure(this.onRegister, this.onNotification, this.onOpenNotification, this.senderId);
         
-        this.setState({
-            loading: true,
-        });
+        this.setState({ loading: true });
         console.log('Retrieving Data');
     
         const user = this.props.uid || Fire.shared.uid;
@@ -66,8 +65,7 @@ class Feed extends Component {
             
         this.unsubscribe = query1
             .onSnapshot(snapshot => {
-                //let lastVisible = snapshot.docs[snapshot.docs.length - 1].data().timestamp;
-                let lastVisible = snapshot.docs[0].data().timestamp;
+                let lastVisible = snapshot.docs[snapshot.docs.length - 1].data().timestamp;
                 var postsFB = [];
                 snapshot.forEach(doc => { 
                         postsFB = [({
@@ -82,13 +80,13 @@ class Feed extends Component {
                             likesCount: doc.data().likesCount,
                         }), ...postsFB];                   
                 })       
-                this.setState({ globalPosts: (postsFB.reverse()) });
-                //(postsFB.reverse())
+                this.setState({ globalPosts: postsFB.reverse()});
                 this.setState({ lastVisible: lastVisible })
                 this.setState({ loading: false });
             });  
         this.unsubscribe2 = query2
             .onSnapshot(snapshot => {
+                let lastVisiblePrivate = snapshot.docs[snapshot.docs.length - 1].data().timestamp;
                 var postsFB = [];
                 snapshot.forEach(doc => { 
                         postsFB = [({
@@ -104,20 +102,55 @@ class Feed extends Component {
                         }), ...postsFB];                   
                 })       
                 this.setState({ privatePosts: (postsFB.reverse()) });
+                this.setState({ lastVisiblePrivate: lastVisiblePrivate })
+                this.setState({ loading: false });
             });         
     };
 
-  retrieveMore = async () => {
-    try {
-      // Set State: Refreshing
-      this.setState({
-        refreshing: true,
-      });
-      console.log('Retrieving additional Data');
-      // Cloud Firestore: Query (Additional Query)
-      let pollsRef = Fire.shared.firestore.collection("outfitPolls");
-      let additionalQuery = pollsRef.where('privatePoll','==', false).orderBy('timestamp','desc').startAfter(this.state.lastVisible).limit(this.state.limit);
-      this.unsubscribe3 = additionalQuery
+  retrieveMore = () => {
+    const postListSize = this.state.globalPosts.length;
+    if ( postListSize <= 12 ) {
+        this.setState({ refreshing: true });
+        //this.setState({ loading: true });
+        console.log('Retrieving additional Data');
+        // Cloud Firestore: Query (Additional Query)
+        let pollsRef = Fire.shared.firestore.collection("outfitPolls");
+        let additionalQuery = pollsRef.where('privatePoll','==', false).orderBy('timestamp','desc').startAfter(this.state.lastVisible).limit(this.state.limit);
+        this.unsubscribe3 = additionalQuery
+                .onSnapshot(snapshot => {
+                    let lastVisible = snapshot.docs[snapshot.docs.length - 1].data().timestamp;
+                    var postsFB = [];
+                    snapshot.forEach(doc => { 
+                            postsFB = [({
+                                id: doc.id,
+                                name: doc.data().user.name,
+                                text: doc.data().text,
+                                timestamp: doc.data().timestamp,
+                                avatar: doc.data().user.avatar,
+                                images: doc.data().images,
+                                blockComments: doc.data().blockComments,
+                                authorId: doc.data().uid,
+                                likesCount: doc.data().likesCount,
+                            }), ...postsFB];                   
+                    })       
+                    this.setState({ globalPosts: ([...this.state.globalPosts, ...postsFB.reverse()]) });
+                    this.setState({ lastVisible: lastVisible })
+                    this.setState({ refreshing: false });
+                });  
+    } else {
+          alert( 'End of feed!')
+    }    
+  };
+
+  retrieveMorePrivatePosts = () => {
+    const postListSize = this.state.privatePosts.length;
+    if ( postListSize <= 6 ) {
+        this.setState({ refreshingPrivate: true });
+        console.log('Retrieving additional Data');
+        // Cloud Firestore: Query (Additional Query)
+        let pollsRef = Fire.shared.firestore.collection("outfitPolls");
+        let additionalQuery = pollsRef.where('privatePoll','==', true).orderBy('timestamp','desc').startAfter(this.state.lastVisiblePrivate).limit(this.state.limit);
+        this.unsubscribe3 = additionalQuery
             .onSnapshot(snapshot => {
                 let lastVisible = snapshot.docs[snapshot.docs.length - 1].data().timestamp;
                 var postsFB = [];
@@ -134,19 +167,19 @@ class Feed extends Component {
                             likesCount: doc.data().likesCount,
                         }), ...postsFB];                   
                 })       
-                this.setState({ globalPosts: ([...this.state.globalPosts, ...postsFB]).reverse() });
-                this.setState({ lastVisible: lastVisible })
-                this.setState({ refreshing: false });
+                this.setState({ privatePosts: ([...this.state.privatePosts, ...postsFB.reverse()]) });
+                this.setState({ lastVisiblePrivate: lastVisible })
+                this.setState({ refreshingPrivate: false });
             });  
-    } catch (error) {
-        console.log(error);
-    }
-  };
+    } else {
+        alert( 'End of feed!')
+    }    
+};
 
     componentWillUnmount() {
         this.unsubscribe();
         this.unsubscribe2();
-        //this.unsubscribe3();
+        this.unsubscribe3();
     }
 
     onRegister(token){
@@ -207,20 +240,10 @@ class Feed extends Component {
     }
 
     renderFooter = () => {
-        try {
-          // Check If Loading
-          if (this.state.loading) {
-            return (
-              <ActivityIndicator />
-            )
-          }
-          else {
-            return null;
-          }
-        }
-        catch (error) {
-          console.log(error);
-        }
+        return ( 
+            this.state.loading 
+            ? <ActivityIndicator size="large"></ActivityIndicator> 
+            : null )
     };
 
     renderItem = ({item,index}) => {
@@ -346,8 +369,10 @@ class Feed extends Component {
                                     renderItem = {this.renderPoll}
                                     keyExtractor={item => item.id}
                                     showsVerticalScrollIndicator={false}
-                                    //refreshing={this.state.refreshing}
-                                    //onRefresh={this.retrieveMore}
+                                    onEndReached={this.retrieveMorePrivatePosts}
+                                    onEndReachedThreshold={0}
+                                    refreshing={this.state.refreshingPrivate}
+                                    ListFooterComponent={this.renderFooter}
                                 ></FlatList>
                             </View>
                         </Tab>
