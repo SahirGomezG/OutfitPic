@@ -29,22 +29,22 @@ const firebase = require('firebase');
 require('firebase/firestore');
 
 class OutfitPostScreen extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      text: '',
-      image:
-        'https://lh3.googleusercontent.com/-O21uHkUnuq25SIdMP63NotDP_kh65s09N5Ud7Nvh2pfJ38-7_Yzc5tWNkQGehySuDg8EKuz4fso8vBRF_MeBw5V',
-      user: {},
-      fileList: [],
-      count: 0,
-      duration: 24,
-      privatePoll: false,
-      comments: false,
-      modalVisible: false,
-      followers: [],
-    };
-  }
+		constructor(props) {
+				super(props);
+				this.state = {
+						text: '',
+						image:
+							'https://lh3.googleusercontent.com/-O21uHkUnuq25SIdMP63NotDP_kh65s09N5Ud7Nvh2pfJ38-7_Yzc5tWNkQGehySuDg8EKuz4fso8vBRF_MeBw5V',
+						user: {},
+						fileList: [],
+						count: 0,
+						duration: 24,
+						privatePoll: false,
+						comments: false,
+						modalVisible: false,
+						followers: [],
+			};
+		}
 
   unsuscribe = null;
 
@@ -149,7 +149,16 @@ class OutfitPostScreen extends Component {
         );
       }
     }
-  };
+	};
+	
+	get userInfo() {
+		return {
+				name: this.state.user.name,
+				avatar: this.state.user.avatar,
+				joined: this.state.user.joined,
+				email: this.state.user.email
+		};
+	}	
 
   handleOutfitPost = () => {
     if (this.state.fileList.length != 0) {
@@ -157,14 +166,14 @@ class OutfitPostScreen extends Component {
         .addOutfitPic({
           text: this.state.text.trim(),
           images: this.state.fileList,
-          user: this.state.user,
+          user: this.userInfo,
           duration: this.state.duration,
           privatePoll: this.state.privatePoll,
           blockComments: this.state.comments,
           followers: this.state.followers,
         })
         .then(ref => {
-          this.setState({text: '', fileList: [], count: 0});
+          this.setState({text: '', fileList: [], count: 0, privatePoll: false});
           this.props.navigation.goBack();
         })
         .catch(error => {

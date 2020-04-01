@@ -52,7 +52,8 @@ class PostStats extends Component{
             votes: [],
             modalVisible: false,
             modalImage: '',
-            dialogVisible: false
+            dialogVisible: false,
+            blockComments: false,
         }
     }
 
@@ -67,6 +68,7 @@ class PostStats extends Component{
             .then(doc => {
               this.setState({ poll: doc.data() });
               this.setState({ photos: doc.data().images });
+              this.setState({ blockComments: doc.data().blockComments})
               var votes = this.state.poll.votes;
               var result = Object.keys(votes).map(key => ({id: Number(key), votes: votes[key]}));
               this.setState({ votes: result });
@@ -181,9 +183,11 @@ class PostStats extends Component{
                         {this.state.poll.numComments 
                         ? <TouchableOpacity onPress={() => this.openComments()}><Text style={styles.statTitle}><Icon name="chatboxes" color="#E27128"/></Text></TouchableOpacity>
                         : <Text style={styles.statTitle}><Icon name="chatboxes"/></Text>}
-                        <TouchableOpacity onPress={() => this.openComments()}>
+                        {!this.state.blockComments 
+                        ? <TouchableOpacity onPress={() => this.openComments()}>
                             <Text style={styles.statAmount}>{this.state.poll.numComments}</Text>
-                        </TouchableOpacity>            
+                         </TouchableOpacity> 
+                        : <Text style={styles.statAmount}><Icon name="lock" size={18}/></Text>  }        
                     </View>
                     <View style={styles.stat}>
                         {this.state.poll.likesCount

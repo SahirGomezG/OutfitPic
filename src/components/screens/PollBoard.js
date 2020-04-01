@@ -5,6 +5,7 @@ import moment from "moment";
 import Fire from "../../Fire";
 import ImageZoom from 'react-native-image-pan-zoom';
 import ProgressCircle from 'react-native-progress-circle';
+import Dialog from "react-native-dialog";
 
 class PollBoard extends Component {
 
@@ -24,6 +25,7 @@ class PollBoard extends Component {
             privatePoll: false,
             ownerAvatar: '',
             modalVisible: false,
+            dialogVisible: false,
             photos:[],
 
             modalImage: 'https://lh3.googleusercontent.com/PsNYOb7sTef-wh0JCHO4rLMnGDti3Fdpo-Df3hyMPe2IsLwyduf9B8XqSst50wxUhWKlXh8a2D5-6l8oL3AAa2C8',
@@ -89,6 +91,7 @@ class PollBoard extends Component {
       const idRef = id.toString();
       Fire.shared.LikeOutfit(this.state.pollId, idRef, this.user )
         .then(ref => { 
+          this.setState({ dialogVisible: false });
           this.props.navigation.goBack();
         })
         .catch(error => { 
@@ -106,6 +109,14 @@ class PollBoard extends Component {
       this.props.navigation.navigate('comments', { pollId: this.state.pollId});
     }
 
+    showDialog = () => {
+      this.setState({ dialogVisible: true });
+    };
+   
+    handleCancel = () => {
+      this.setState({ dialogVisible: false });
+    };
+
     renderItem = ({item,index}) => {
       const { liked } = this.state;
     
@@ -118,12 +129,22 @@ class PollBoard extends Component {
                   <TouchableOpacity style={styles.dislikeContainer} onPress={() => this.deleteItem(item)}>
                       <Icon name="md-thumbs-down" size={30} color="white" ></Icon>
                   </TouchableOpacity>
-                  <TouchableOpacity key={index} onPress={() => this.addVote(item.id)} style={styles.likeContainer}>
+                  <TouchableOpacity key={index} onPress={this.showDialog} style={styles.likeContainer}>
                       <Icon name="md-heart" size={30} color="white" ></Icon>
                   </TouchableOpacity>    
                 </View>): null}    
             </ImageBackground>        
           </TouchableWithoutFeedback>
+                    <View>
+                      <Dialog.Container visible={this.state.dialogVisible}>
+                        <Dialog.Title>Pick an outfit</Dialog.Title>
+                          <Dialog.Description>
+                            Awesome! Remember you can't undo your vote.
+                          </Dialog.Description>
+                        <Dialog.Button label="Cancel" onPress={this.handleCancel} />
+                        <Dialog.Button label="Send" onPress={() => this.addVote(item.id)} />
+                      </Dialog.Container>
+                    </View>
         </View>
     )
   };
@@ -175,7 +196,7 @@ class PollBoard extends Component {
                             percent={percentage}
                             radius={40}
                             borderWidth={5}
-                            color='#0439E2'
+                            color='#252B3B'
                             shadowColor="#c7bacc"
                             bgColor="#fff"
                         >
@@ -196,7 +217,7 @@ class PollBoard extends Component {
                                 : require("../../../assets/default.png")} 
                                 style={styles.avatar}>
                               </Image>
-                              <View style={{borderRadius: 10, backgroundColor: 'white', height: 30, width: 80+'%',justifyContent: "center"}}>
+                              <View style={{borderRadius: 20, backgroundColor: 'white', height: 40, width: 80+'%',justifyContent: "center"}}>
                                 <Text style={{color:'#3D425C', marginLeft: 10}}><Icon name="ios-lock" size={15} /> - Comments blocked for this poll</Text>
                               </View>
                           </View>  

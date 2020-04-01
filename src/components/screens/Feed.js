@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, Text, StyleSheet, Image, FlatList, TouchableWithoutFeedback, TouchableOpacity, StatusBar, Modal } from "react-native";
+import { View, Text, StyleSheet, Image, FlatList, TouchableWithoutFeedback, TouchableOpacity, StatusBar, Modal, ActivityIndicator } from "react-native";
 import Fire from "../../Fire";
 import moment from "moment";
 import Icon from 'react-native-ionicons';
@@ -20,25 +20,36 @@ class Feed extends Component {
         this.senderId = '1082830494457';
         this.state = {
             user: {},
-            globalPosts: [],
+            globalPosts: [], //documentData
             privatePosts: [],
             isLoading: true,
             modalVisible: false,
+
+            limit: 5,
+            lastVisible: null,
+            loading: false,
+            refreshing: false,
         }
     };    
 
     unsubscribe = null;
-    unsubscribe2 = null;    
+    unsubscribe2 = null;
+    unsubscribe3 = null;    
 
     componentDidMount(){
         FCM = firebase.messaging();
         FCM.requestPermission();
+        this.localNotify = notificationManager;
+        this.localNotify.configure(this.onRegister, this.onNotification, this.onOpenNotification, this.senderId);
+        
+        this.setState({
+            loading: true,
+        });
+        console.log('Retrieving Data');
     
         const user = this.props.uid || Fire.shared.uid;
         let pollsRef = Fire.shared.firestore.collection("outfitPolls");
         let currentuserRef = Fire.shared.firestore.collection("users").doc(user);
-        this.localNotify = notificationManager;
-        this.localNotify.configure(this.onRegister, this.onNotification, this.onOpenNotification, this.senderId)
 
         currentuserRef.get()
         .then(doc => {
@@ -50,11 +61,13 @@ class Feed extends Component {
             currentuserRef.update({ pushToken: token });
         });
 
-        let query1 = pollsRef.where('privatePoll','==', false).orderBy('timestamp','desc').limit(10);
-        let query2 = pollsRef.where('privatePoll','==', true).where('followers', 'array-contains', user).orderBy('timestamp','desc').limit(10);
+        let query1 = pollsRef.where('privatePoll','==', false).orderBy('timestamp','desc').limit(this.state.limit);
+        let query2 = pollsRef.where('privatePoll','==', true).where('followers', 'array-contains', user).orderBy('timestamp','desc').limit(this.state.limit);
             
         this.unsubscribe = query1
             .onSnapshot(snapshot => {
+                //let lastVisible = snapshot.docs[snapshot.docs.length - 1].data().timestamp;
+                let lastVisible = snapshot.docs[0].data().timestamp;
                 var postsFB = [];
                 snapshot.forEach(doc => { 
                         postsFB = [({
@@ -70,7 +83,9 @@ class Feed extends Component {
                         }), ...postsFB];                   
                 })       
                 this.setState({ globalPosts: (postsFB.reverse()) });
-                this.setState({ isLoading: false });
+                //(postsFB.reverse())
+                this.setState({ lastVisible: lastVisible })
+                this.setState({ loading: false });
             });  
         this.unsubscribe2 = query2
             .onSnapshot(snapshot => {
@@ -92,9 +107,46 @@ class Feed extends Component {
             });         
     };
 
+  retrieveMore = async () => {
+    try {
+      // Set State: Refreshing
+      this.setState({
+        refreshing: true,
+      });
+      console.log('Retrieving additional Data');
+      // Cloud Firestore: Query (Additional Query)
+      let pollsRef = Fire.shared.firestore.collection("outfitPolls");
+      let additionalQuery = pollsRef.where('privatePoll','==', false).orderBy('timestamp','desc').startAfter(this.state.lastVisible).limit(this.state.limit);
+      this.unsubscribe3 = additionalQuery
+            .onSnapshot(snapshot => {
+                let lastVisible = snapshot.docs[snapshot.docs.length - 1].data().timestamp;
+                var postsFB = [];
+                snapshot.forEach(doc => { 
+                        postsFB = [({
+                            id: doc.id,
+                            name: doc.data().user.name,
+                            text: doc.data().text,
+                            timestamp: doc.data().timestamp,
+                            avatar: doc.data().user.avatar,
+                            images: doc.data().images,
+                            blockComments: doc.data().blockComments,
+                            authorId: doc.data().uid,
+                            likesCount: doc.data().likesCount,
+                        }), ...postsFB];                   
+                })       
+                this.setState({ globalPosts: ([...this.state.globalPosts, ...postsFB]).reverse() });
+                this.setState({ lastVisible: lastVisible })
+                this.setState({ refreshing: false });
+            });  
+    } catch (error) {
+        console.log(error);
+    }
+  };
+
     componentWillUnmount() {
         this.unsubscribe();
         this.unsubscribe2();
+        //this.unsubscribe3();
     }
 
     onRegister(token){
@@ -153,6 +205,23 @@ class Feed extends Component {
             options //options
         )
     }
+
+    renderFooter = () => {
+        try {
+          // Check If Loading
+          if (this.state.loading) {
+            return (
+              <ActivityIndicator />
+            )
+          }
+          else {
+            return null;
+          }
+        }
+        catch (error) {
+          console.log(error);
+        }
+    };
 
     renderItem = ({item,index}) => {
         return (
@@ -262,8 +331,10 @@ class Feed extends Component {
                                     renderItem = {this.renderPoll}
                                     keyExtractor={item => item.id}
                                     showsVerticalScrollIndicator={false}
-                                    refreshing={this.state.isLoading}
-                                    onRefresh={this.componentDidMount}
+                                    onEndReached={this.retrieveMore}
+                                    onEndReachedThreshold={0}
+                                    refreshing={this.state.refreshing}
+                                    ListFooterComponent={this.renderFooter}
                                 ></FlatList>
                             </View>
                         </Tab>
@@ -275,8 +346,8 @@ class Feed extends Component {
                                     renderItem = {this.renderPoll}
                                     keyExtractor={item => item.id}
                                     showsVerticalScrollIndicator={false}
-                                    refreshing={this.state.isLoading}
-                                    onRefresh={this.componentDidMount}
+                                    //refreshing={this.state.refreshing}
+                                    //onRefresh={this.retrieveMore}
                                 ></FlatList>
                             </View>
                         </Tab>

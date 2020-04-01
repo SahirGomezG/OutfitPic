@@ -110,14 +110,14 @@ class ProfileSettings extends Component {
             <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
               <KeyboardAvoidingView style = {{ flex:1, justifyContent:'center', alignItems: 'center', backgroundColor: "#EBECF4"}} behavior="padding" enabled>
                 <View style={styles.container}>
-                  
+            
                   <View style={styles.header}>
-                      <Text style={styles.headerTitle}>Profile Settings</Text> 
-                      <View style={styles.menu}>
+                    <Text style={styles.headerTitle}>Profile Settings</Text> 
+                    <View style={styles.menu}>
                           <TouchableOpacity onPress={this.props.navigation.openDrawer}>
                               <Icon name="ios-menu" size={24} color="#FFF"></Icon>
                           </TouchableOpacity>
-                      </View>     
+                    </View>     
                   </View>
 
                 <View style={{marginTop: 70, alignItems: "center"}}>
@@ -411,16 +411,3 @@ const styles = StyleSheet.create({
 });
 
 export default ProfileSettings;
-
-/*<View style={styles.userDataBio}>
-                            {this.state.user.bio
-                                ? <Text style={styles.userDataBioText}>{this.state.user.bio}</Text>
-                                : <TextInput 
-                                    style={styles.userData2} 
-                                    multiline={true}
-                                    numberOfLines={3}
-                                    placeholder="Tell the world a bit about yourself"
-                                    onChangeText={text => this.setState({ text })}
-                                    value={this.state.text}></TextInput>
-                                }
-                        </View>*/

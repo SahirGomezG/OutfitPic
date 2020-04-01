@@ -43,6 +43,17 @@ const PostStack = createStackNavigator(
   }
 )
 
+const ProfileStack = createStackNavigator(
+  {
+    profileSettings : ProfileSettings,
+  },
+  {
+    initialRouteName:'profileSettings',
+    mode: "modal",
+    headerMode: "none",
+  }
+)
+
 const DrawerNavigator = createDrawerNavigator(
   {
       Home: {
@@ -81,7 +92,7 @@ const DrawerNavigator = createDrawerNavigator(
         }
       },
       Settings: {
-          screen: ProfileSettings,
+          screen: ProfileStack,
           navigationOptions: {
               title: "Settings",
               drawerIcon: ({ tintColor }) => <Icon name="ios-settings" size={16} color={tintColor} />
@@ -121,7 +132,7 @@ const AppContainer = createStackNavigator(
     followersList: FollowersList,
     publicProfile: PublicProfile,
     postModal: {
-      screen: OutfitPostScreen
+      screen: OutfitPostScreen,
     },
   },
   {

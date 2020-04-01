@@ -57,6 +57,10 @@ class Profile extends Component {
     this.props.navigation.navigate('followersList', {userId: this.state.user.id, friendName: this.state.user.name});
   };
 
+  openProfileSettings = () => {
+    this.props.navigation.navigate('profileSettings');
+  }
+
   renderItem = ({item,index}) => {
     return (
       <View style={styles.mediaImageContainer}> 
@@ -86,6 +90,11 @@ class Profile extends Component {
         return (
           <View style={styles.container}>
             <View style={styles.header}>
+                    <View style={styles.back}>
+                        <TouchableOpacity onPress={this.openProfileSettings}>
+                            <Icon name="ios-brush" size={22} color="#FFF"></Icon>
+                        </TouchableOpacity>
+                    </View>     
                     <Text style={styles.headerTitle}>My Polls</Text> 
                     <View style={styles.menu}>
                         <TouchableOpacity onPress={this.props.navigation.openDrawer}>
@@ -217,6 +226,15 @@ class Profile extends Component {
       marginBottom: 10,
       fontSize: 14,
       color: "#838899"
+    },
+    back: {
+      position: "absolute",
+      top: 50,
+      left: 20,
+      width: 20,
+      height: 28,
+      alignItems: "center",
+      justifyContent: "center"
     },   
       
   });
