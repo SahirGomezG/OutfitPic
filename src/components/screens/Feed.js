@@ -23,7 +23,7 @@ class Feed extends Component {
             globalPosts: [], 
             privatePosts: [],
             modalVisible: false,
-            limit: 3,
+            limit: 2,
             loading: false,
 
             lastVisible: null,
@@ -34,8 +34,7 @@ class Feed extends Component {
     };    
 
     unsubscribe = null;
-    unsubscribe2 = null;
-    unsubscribe3 = null;    
+    unsubscribe2 = null; 
 
     componentDidMount(){
         FCM = firebase.messaging();
@@ -60,9 +59,7 @@ class Feed extends Component {
             currentuserRef.update({ pushToken: token });
         });
 
-        let query1 = pollsRef.where('privatePoll','==', false).orderBy('timestamp','desc').limit(this.state.limit);
-        let query2 = pollsRef.where('privatePoll','==', true).where('followers', 'array-contains', user).orderBy('timestamp','desc').limit(this.state.limit);
-            
+        let query1 = pollsRef.where('privatePoll','==', false).orderBy('timestamp','desc').limit(this.state.limit);  
         this.unsubscribe = query1
             .onSnapshot(snapshot => {
                 let lastVisible = snapshot.docs[snapshot.docs.length - 1].data().timestamp;
@@ -83,9 +80,15 @@ class Feed extends Component {
                 this.setState({ globalPosts: postsFB.reverse()});
                 this.setState({ lastVisible: lastVisible })
                 this.setState({ loading: false });
-            });  
+            });
+
+        let query2 = pollsRef.where('privatePoll','==', true).where('followers', 'array-contains', user).orderBy('timestamp','desc').limit(this.state.limit);      
         this.unsubscribe2 = query2
             .onSnapshot(snapshot => {
+                if (snapshot.empty) { 
+                    console.log('No posts');
+                    this.setState({ lastVisiblePrivate: null, privatePosts: this.state.privatePosts })
+                } else {
                 let lastVisiblePrivate = snapshot.docs[snapshot.docs.length - 1].data().timestamp;
                 var postsFB = [];
                 snapshot.forEach(doc => { 
@@ -104,54 +107,60 @@ class Feed extends Component {
                 this.setState({ privatePosts: (postsFB.reverse()) });
                 this.setState({ lastVisiblePrivate: lastVisiblePrivate })
                 this.setState({ loading: false });
+                }
             });         
     };
 
-  retrieveMore = () => {
-    const postListSize = this.state.globalPosts.length;
-    if ( postListSize <= 12 ) {
-        this.setState({ refreshing: true });
-        //this.setState({ loading: true });
-        console.log('Retrieving additional Data');
-        // Cloud Firestore: Query (Additional Query)
-        let pollsRef = Fire.shared.firestore.collection("outfitPolls");
-        let additionalQuery = pollsRef.where('privatePoll','==', false).orderBy('timestamp','desc').startAfter(this.state.lastVisible).limit(this.state.limit);
-        this.unsubscribe3 = additionalQuery
-                .onSnapshot(snapshot => {
-                    let lastVisible = snapshot.docs[snapshot.docs.length - 1].data().timestamp;
-                    var postsFB = [];
-                    snapshot.forEach(doc => { 
-                            postsFB = [({
-                                id: doc.id,
-                                name: doc.data().user.name,
-                                text: doc.data().text,
-                                timestamp: doc.data().timestamp,
-                                avatar: doc.data().user.avatar,
-                                images: doc.data().images,
-                                blockComments: doc.data().blockComments,
-                                authorId: doc.data().uid,
-                                likesCount: doc.data().likesCount,
-                            }), ...postsFB];                   
-                    })       
-                    this.setState({ globalPosts: ([...this.state.globalPosts, ...postsFB.reverse()]) });
-                    this.setState({ lastVisible: lastVisible })
-                    this.setState({ refreshing: false });
-                });  
-    } else {
-          alert( 'End of feed!')
-    }    
-  };
+    retrieveMore = () => {
+        const postListSize = this.state.globalPosts.length;
+        if ( postListSize <= 12 ) {
+            this.setState({ refreshing: true });
+            //this.setState({ loading: true });
+            console.log('Retrieving additional Data');
+            // Cloud Firestore: Query (Additional Query)
+            let pollsRef = Fire.shared.firestore.collection("outfitPolls");
+            let additionalQuery = pollsRef.where('privatePoll','==', false).orderBy('timestamp','desc').startAfter(this.state.lastVisible).limit(this.state.limit);
+            this.unsubscribe3 = additionalQuery
+                    .get().then(snapshot => {
+                        let lastVisible = snapshot.docs[snapshot.docs.length - 1].data().timestamp;
+                        var postsFB = [];
+                        snapshot.forEach(doc => { 
+                                postsFB = [({
+                                    id: doc.id,
+                                    name: doc.data().user.name,
+                                    text: doc.data().text,
+                                    timestamp: doc.data().timestamp,
+                                    avatar: doc.data().user.avatar,
+                                    images: doc.data().images,
+                                    blockComments: doc.data().blockComments,
+                                    authorId: doc.data().uid,
+                                    likesCount: doc.data().likesCount,
+                                }), ...postsFB];                   
+                        })       
+                        this.setState({ globalPosts: ([...this.state.globalPosts, ...postsFB.reverse()]) });
+                        this.setState({ lastVisible: lastVisible })
+                        this.setState({ refreshing: false });
+                    });  
+        } else {
+            alert( 'End of feed!')
+        }    
+    };
 
   retrieveMorePrivatePosts = () => {
+    const user = this.props.uid || Fire.shared.uid;
     const postListSize = this.state.privatePosts.length;
-    if ( postListSize <= 6 ) {
+    if ( postListSize <= 2 ) {
         this.setState({ refreshingPrivate: true });
         console.log('Retrieving additional Data');
         // Cloud Firestore: Query (Additional Query)
         let pollsRef = Fire.shared.firestore.collection("outfitPolls");
-        let additionalQuery = pollsRef.where('privatePoll','==', true).orderBy('timestamp','desc').startAfter(this.state.lastVisiblePrivate).limit(this.state.limit);
-        this.unsubscribe3 = additionalQuery
-            .onSnapshot(snapshot => {
+        let additionalQuery = pollsRef.where('privatePoll','==', true).where('followers', 'array-contains', user).orderBy('timestamp','desc').startAfter(this.state.lastVisiblePrivate).limit(this.state.limit);
+        this.unsubscribe4 = additionalQuery
+            .get().then(snapshot => {
+                if (snapshot.empty) { 
+                    console.log('No posts')
+                    this.setState({ lastVisiblePrivate: null, privatePosts: this.state.privatePosts })
+                } else {
                 let lastVisible = snapshot.docs[snapshot.docs.length - 1].data().timestamp;
                 var postsFB = [];
                 snapshot.forEach(doc => { 
@@ -170,6 +179,7 @@ class Feed extends Component {
                 this.setState({ privatePosts: ([...this.state.privatePosts, ...postsFB.reverse()]) });
                 this.setState({ lastVisiblePrivate: lastVisible })
                 this.setState({ refreshingPrivate: false });
+            }
             });  
     } else {
         alert( 'End of feed!')
@@ -179,7 +189,6 @@ class Feed extends Component {
     componentWillUnmount() {
         this.unsubscribe();
         this.unsubscribe2();
-        this.unsubscribe3();
     }
 
     onRegister(token){
@@ -321,11 +330,11 @@ class Feed extends Component {
                             <HeartButton uid={this.state.user.id} pollId={item.id} />
                             <Text style={[styles.post,{fontSize:10}]}> {item.likesCount} Likes</Text>
                         </TouchableOpacity>
-                        {!item.blockComments ? 
-                        (<TouchableOpacity onPress={() => this.openComments(item)}>
+                        {!item.blockComments 
+                        ? <TouchableOpacity onPress={() => this.openComments(item)}>
                             <Icon name="ios-chatboxes" size={20} color="#73788B"/>
-                        </TouchableOpacity> ) : (null)
-                        }  
+                          </TouchableOpacity>  
+                        : null }  
                     </View>
                 </View>          
             </View>   
@@ -377,8 +386,7 @@ class Feed extends Component {
                             </View>
                         </Tab>
                     </Tabs>
-                </Container>
-                
+                </Container>            
             </View>
         );
     };

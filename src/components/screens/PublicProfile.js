@@ -148,7 +148,7 @@ class PublicProfile extends Component {
                   <TouchableOpacity style={styles.back} onPress={() => this.props.navigation.goBack()}>
                     <Icon name="arrow-round-back"></Icon>
                   </TouchableOpacity> 
-                  <TouchableOpacity onPress={() => this.setModalVisible(true)}>  
+                  <TouchableOpacity style={styles.more} onPress={() => this.setModalVisible(true)}>  
                     <Icon name="md-more" size={24} color="#52575D"></Icon>
                   </TouchableOpacity> 
                 </View>
@@ -399,6 +399,14 @@ const styles = StyleSheet.create({
         marginRight: 20
     },
     back: {
+      width: 32,
+      height: 32,
+      borderRadius: 16,
+      backgroundColor: "rgba(21, 22, 48, 0.1)",
+      alignItems: "center",
+      justifyContent: "center"
+    },
+    more: {
       width: 32,
       height: 32,
       borderRadius: 16,

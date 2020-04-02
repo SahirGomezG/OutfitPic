@@ -141,7 +141,7 @@ class FriendsScreen extends Component {
                   <Header searchBar rounded>
                     <Item>
                         <Icon name="ios-search" size={20} />
-                        <Input placeholder="Search" onChangeText = {text => this.handleSearch(text)} />
+                        <Input placeholder="Search" autoCapitalize="none" onChangeText = {text => this.handleSearch(text)} />
                         <Icon name="ios-people" size={20} />
                     </Item>
                     <Button transparent>

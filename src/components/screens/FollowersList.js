@@ -133,7 +133,7 @@ class FollowersList extends Component {
                               <Header searchBar rounded style={{height: 20, paddingTop:-30}}>
                                   <Item>
                                       <Icon name="ios-search" size={20} />
-                                      <Input placeholder="Search" onChangeText = {text => this.handleSearch(text)} />
+                                      <Input placeholder="Search" autoCapitalize="none" onChangeText = {text => this.handleSearch(text)} />
                                       <Icon name="ios-people" size={20} />
                                   </Item>
                                   <Button transparent>
@@ -152,7 +152,7 @@ class FollowersList extends Component {
                               <Header searchBar rounded style={{height: 20, paddingTop:-30}}>
                                   <Item>
                                     <Icon name="ios-search" size={20} />
-                                     <Input placeholder="Search" onChangeText = {text => this.handleSearch2(text)} />
+                                     <Input placeholder="Search" autoCapitalize="none" onChangeText = {text => this.handleSearch2(text)} />
                                     <Icon name="ios-people" size={20} />
                                   </Item>
                                   <Button transparent>

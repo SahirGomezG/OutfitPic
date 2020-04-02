@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Image, TextInput, TouchableWithoutFeedback, Keyboard, KeyboardAvoidingView } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Image, TextInput, TouchableWithoutFeedback, Keyboard, KeyboardAvoidingView, ScrollView } from 'react-native';
 import Fire from "../../Fire";
 import Icon from 'react-native-ionicons';
 import StatsElement from '../presentation/StatsElement';
@@ -9,6 +9,7 @@ import Constants from "expo-constants";
 import * as Permissions from "expo-permissions";
 import * as ImagePicker from "expo-image-picker";
 import Dialog from "react-native-dialog";
+import PasswordForm from '../presentation/PasswordForm';
 
 class ProfileSettings extends Component {
 
@@ -19,8 +20,12 @@ class ProfileSettings extends Component {
         newAvatar: '',
         editMode: false,
         editName: false,
+        editPassword: false,
         gender: undefined,
-        dialogVisible: false
+        dialogVisible: false,
+
+        currentPassword: "",
+        newPassword: "",
     };
 
     unsubscribe = null;
@@ -39,7 +44,7 @@ class ProfileSettings extends Component {
             });     
     }
 
-   componentWillUnmount() {
+    componentWillUnmount() {
         this.unsubscribe();
     }
 
@@ -59,8 +64,7 @@ class ProfileSettings extends Component {
     };
 
     handlePickAvatar = async () => {
-        this.getPhotoPermission();
-    
+        this.getPhotoPermission(); 
         let result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.Images,
             allowsEditing: true,
@@ -90,6 +94,10 @@ class ProfileSettings extends Component {
         this.setState({ editName: !this.state.editName })
     }
 
+    editToggledPassword = () => {
+        this.setState({ editPassword: !this.state.editPassword })
+    }
+
     onValueChange2(value) {
         this.setState({
           gender: value
@@ -105,10 +113,10 @@ class ProfileSettings extends Component {
     };
 
     render() {
-        const {name, email, numFollowers, numFollowing, numPosts} = this.state.user;
+        const {name, email } = this.state.user;
+        const { currentPassword, newPassword, editPassword} = this.state;
         return (
-            <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-              <KeyboardAvoidingView style = {{ flex:1, justifyContent:'center', alignItems: 'center', backgroundColor: "#EBECF4"}} behavior="padding" enabled>
+            <KeyboardAvoidingView style = {{ flex:1, justifyContent:'center', alignItems: 'center', backgroundColor: "#EBECF4"}} behavior="padding" enabled>
                 <View style={styles.container}>
             
                   <View style={styles.header}>
@@ -120,40 +128,63 @@ class ProfileSettings extends Component {
                     </View>     
                   </View>
 
-                <View style={{marginTop: 70, alignItems: "center"}}>
-                   <Text style={{color:'black'}}>OutfitPic</Text>
+                <View style={{marginTop: 50, alignItems: "center"}}>
+                    <Text style={[styles.headerTitle, {color:'black'}]}>OutfitPic</Text>
                 </View>
-            
+
+                <ScrollView style={{marginBottom: 20}} indicatorStyle={"black"}>
                  
-                <View style={{marginTop: 40, alignItems: "center"}}>
-                    <View style={styles.avatarContainer}>
-                        <Image
-                            source={this.state.newAvatar
-                                ? { uri: this.state.newAvatar }
-                                : require("../../../assets/default.png")} 
-                            style={styles.avatar}
-                        />         
-                        <TouchableOpacity style={styles.add} onPress={this.handlePickAvatar}>
-                            <View>
-                                <Icon name="ios-add" size={24} color="#DFD8C8" style={{ marginTop: 0.5, marginLeft: 0.5 }}></Icon>
-                            </View>
+                    <View style={{marginTop: 20, alignItems: "center"}}>
+                        <View style={styles.avatarContainer}>
+                            <Image
+                                source={this.state.newAvatar
+                                    ? { uri: this.state.newAvatar }
+                                    : require("../../../assets/default.png")} 
+                                style={styles.avatar}
+                            />         
+                            <TouchableOpacity style={styles.add} onPress={this.handlePickAvatar}>
+                                <View>
+                                    <Icon name="ios-add" size={24} color="#DFD8C8" style={{ marginTop: 0.5, marginLeft: 0.5 }}></Icon>
+                                </View>
+                            </TouchableOpacity>          
+                        </View>
+                        <View>
+                        <TouchableOpacity onPress={this.showDialog}>
+                            <Text style={{marginTop: 30, alignItems: "center"}}>Change Profile Photo</Text>
                         </TouchableOpacity>
-                          
+                        </View>
                     </View>
-                    <View>
-                      <TouchableOpacity onPress={this.showDialog}>
-                         <Text style={{marginTop: 30, alignItems: "center"}}>Change Profile Photo</Text>
-                      </TouchableOpacity>
-                    </View>
-                </View>
-                <View style={styles.statsContainer}>
-                    <StatsElement numPosts={numPosts} numFollowers={numFollowers} numFollowing ={numFollowing} ></StatsElement>  
-                </View>
+                
 
-                <View style={{marginBottom: 20}}>
-
-                    <View style={{marginBottom: 20, alignItems: "center"}}>
+                    <View style={{marginBottom: 20, marginTop: 40, alignItems: "center"}}>
                         <Text style={{fontWeight:'500', fontFamily: "HelveticaNeue"}}>Personal Information</Text>
+                    </View>
+
+                    <View style={styles.menuContainer}>
+                        <View style={{height: 40, width: 30+'%', paddingHorizontal: 20, marginTop: 10,}} >
+                            <Text style={styles.userData}>Bio:</Text>
+                        </View>
+                        <View style={{height: 40, width: 60+'%', marginTop: 10,}}>
+                            {!this.state.editMode 
+                            ? <Text style={styles.userData2}>{this.state.user.bio}</Text>
+                            : <TextInput 
+                                    style={styles.userData2} 
+                                    multiline={true}
+                                    numberOfLines={3}
+                                    placeholder="Tell the world a bit about yourself"
+                                    onChangeText={text => this.setState({ text })}
+                                    value={this.state.text}></TextInput>
+                            }
+                        </View>
+                        <View style={styles.userDataEdit}>
+                            {this.state.editMode ?
+                            <TouchableOpacity onPress={this.editToggled}>
+                                <Icon name="ios-close-circle" size={20} color="#FF2D42" ></Icon>
+                            </TouchableOpacity> : 
+                            <TouchableOpacity onPress={this.editToggled}>
+                                <Icon name="ios-remove-circle" size={20} color="#8E95AB" ></Icon>
+                            </TouchableOpacity>}
+                        </View>
                     </View>
                           
                     <View style={styles.menuContainer}>
@@ -188,33 +219,7 @@ class ProfileSettings extends Component {
                         <View style={styles.userDataTitle2}>
                             <Text style={styles.userData2}>{email}</Text>
                         </View>
-                    </View>
-              
-                    <View style={styles.menuContainer}>
-                        <View style={{height: 40, width: 30+'%', paddingHorizontal: 20, marginTop: 10,}} >
-                            <Text style={styles.userData}>Bio:</Text>
-                        </View>
-                        <View style={{height: 40, width: 60+'%', marginTop: 10,}}>
-                            {!this.state.editMode ? (<Text style={styles.userData2}>{this.state.user.bio}</Text>)
-                                : (<TextInput 
-                                    style={styles.userData2} 
-                                    multiline={true}
-                                    numberOfLines={3}
-                                    placeholder="Tell the world a bit about yourself"
-                                    onChangeText={text => this.setState({ text })}
-                                    value={this.state.text}></TextInput>)
-                                }
-                        </View>
-                        <View style={styles.userDataEdit}>
-                            {this.state.editMode ?
-                            <TouchableOpacity onPress={this.editToggled}>
-                                <Icon name="ios-close-circle" size={20} color="#FF2D42" ></Icon>
-                            </TouchableOpacity> : 
-                            <TouchableOpacity onPress={this.editToggled}>
-                                <Icon name="ios-remove-circle" size={20} color="#8E95AB" ></Icon>
-                            </TouchableOpacity>}
-                        </View>
-                    </View>
+                    </View>   
 
                     <View style={styles.menuContainer}>
                         <View style={styles.userDataTitle} >
@@ -242,22 +247,43 @@ class ProfileSettings extends Component {
                             </Item>       
                         </View>    
                     </View>
-                  <View style={{alignItems:'center'}}>            
-                  <TouchableOpacity style={styles.saveButton} onPress={this.handleUpdateInfo}>
-                      <Text style={styles.saveText}>Save Changes</Text>
-                  </TouchableOpacity>
-                  </View>  
-                </View>
 
-                <View style = {styles.lineStyle} />   
+                    <View style={styles.menuContainer}>
+                        <View style={{height: 20, width: 30+'%', paddingHorizontal: 20, marginTop: 10 }} >
+                            <Text style={styles.userData}>Password:</Text>
+                        </View>
+                        <View style={{height: 96, width: 60+'%', marginTop:10 }}>
+                            {!this.state.editPassword 
+                            ? <Text style={styles.userData2}>-------------</Text> 
+                            : <PasswordForm currentPassword={currentPassword} newPassword={newPassword}/>}        
+                        </View>
+                        <View style={{height: 20, width: 10+'%', marginTop: 10, marginLeft:10}}>
+                            {this.state.editPassword 
+                            ? <TouchableOpacity onPress={this.editToggledPassword}>
+                                <Icon name="ios-close-circle" size={20} color="#FF2D42" ></Icon>
+                              </TouchableOpacity> 
+                            : <TouchableOpacity onPress={this.editToggledPassword}>
+                                <Icon name="ios-remove-circle" size={20} color="#8E95AB" ></Icon>
+                              </TouchableOpacity>}
+                        </View>
+                    </View> 
+
+                  <View style={{marginTop:20, alignItems:'center'}}>            
+                    <TouchableOpacity style={styles.saveButton} onPress={this.handleUpdateInfo}>
+                        <Text style={styles.saveText}>Save Changes</Text>
+                    </TouchableOpacity>
+                  </View>  
+
+                  <View style = {styles.lineStyle} />   
             
-                <View style={styles.signOut}>
-                    <TouchableOpacity onPress={this.signOut}>
-                        <Text style={{fontWeight: "600", fontFamily: "HelveticaNeue", fontSize: 13}} >
-                            <Icon name="ios-log-out" size={15} color="#4F566D" style={{ marginTop: 10, marginLeft: 0.5 }} ></Icon>   LogOut
-                        </Text>
-                    </TouchableOpacity> 
-                </View>  
+                    <View style={styles.signOut}>
+                        <TouchableOpacity onPress={this.signOut}>
+                            <Text style={{fontWeight: "600", fontFamily: "HelveticaNeue", fontSize: 13}} >
+                                <Icon name="ios-log-out" size={15} color="#4F566D" style={{ marginTop: 10, marginLeft: 0.5 }} ></Icon>   LogOut
+                            </Text>
+                        </TouchableOpacity> 
+                    </View>
+                </ScrollView>
 
                 <View>
                   <Dialog.Container visible={this.state.dialogVisible}>
@@ -271,8 +297,7 @@ class ProfileSettings extends Component {
                 </View>
 
               </View>
-            </KeyboardAvoidingView>
-          </TouchableWithoutFeedback>  
+            </KeyboardAvoidingView> 
         );
     }
 }
@@ -309,11 +334,6 @@ const styles = StyleSheet.create({
         width: 112,
         height: 112,
         borderRadius: 56,
-    },
-    name: {
-        marginTop: 24,
-        fontSize: 16,
-        fontWeight: "600"
     },
     statsContainer: {
         flexDirection: "row",
@@ -384,7 +404,6 @@ const styles = StyleSheet.create({
         fontFamily: "HelveticaNeue"
     },
     userData2:{
-        //flex:1,
         fontSize: 13,
         fontFamily: "HelveticaNeue",
         color: "#4F566D"
@@ -408,6 +427,16 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "center"
     },
+    changePasswordButton: {
+        marginHorizontal: 30,
+        //marginTop:20,
+        //width: 70+'%',
+        backgroundColor: "#252B3B",
+        borderRadius: 10,
+        height: 22,
+        alignItems: 'center',
+        justifyContent: 'center',
+    }
 });
 
 export default ProfileSettings;
