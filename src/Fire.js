@@ -1,5 +1,6 @@
 import config from "./config";
 import firebase from 'firebase';
+import { Alert } from 'react-native';
 import * as firebasenative from 'react-native-firebase';
 require("firebase/firestore");
 
@@ -136,7 +137,7 @@ class Fire {
                 db.set({ avatar: remoteUri }, { merge: true });
             }
         } catch (error) {
-            alert("Error: ", error);
+            Alert.alert("Ops! ", error.message);
         }
     };
     

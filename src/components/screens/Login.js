@@ -73,7 +73,7 @@ login() {
                 style={{ width: '100%', height: '100%', flex: 1}}
            >
              <View style={{ alignItems:'center', justifyContent:'center', flex:1, backgroundColor:'rgba(0,0,0,0.20)'}}>
-                <View style={{marginTop:-40}}>
+                <View style={{marginTop:-20}}>
                    <Text style={styles.logo}>OutfitPic</Text>
                 </View>
 
@@ -111,6 +111,12 @@ login() {
                 title='New to OutfitPic? Sign Up'
                 color='#FFF'
                 />
+
+                <Button  
+                onPress = {() => { this.props.navigation.navigate('resetPassword')}} 
+                title='Forgot Password?'
+                color='grey'
+                />
                 
              </View>   
            </ImageBackground>        
@@ -122,9 +128,9 @@ login() {
 
 const styles = StyleSheet.create({
   greeting: {
-    marginTop: 260,
+    marginTop: 240,
     fontSize: 18,
-    fontWeight: '600',
+    fontWeight: '200',
     textAlign: "center",
     color: 'white',
     fontFamily: "HelveticaNeue"
@@ -159,7 +165,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 30,
   },
   error :{
-    color:"#E9446A",
+    color:"#FFF",
     fontSize: 13,
     fontWeight: '600',
     textAlign: 'center',

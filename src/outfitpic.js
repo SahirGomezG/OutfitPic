@@ -7,7 +7,8 @@ import {
   Loading, 
   MainFeed, //not used here
   PostStats, 
-  Login, 
+  Login,
+  ResetPassword, 
   Register, 
   FriendsScreen, 
   PostScreen,
@@ -145,6 +146,7 @@ const IntroStack = createStackNavigator(
     {
       login: Login,
       register: Register,
+      resetPassword: ResetPassword
     },
     {
       initialRouteName: 'login',

@@ -19,7 +19,7 @@ class Register extends Component {
       email: "",
       password: "",
       avatar: "https://lh3.googleusercontent.com/ZZ2SDZXCutrnPTPyNoBYhBzsuVCQabOfa_scj8RkxH8ZAoq3d8bXca8jsQS6tWEoCy-Se6QyfNn9gepDBw87p6OhkgI",
-  },
+    },
     errorMessage: null
   }
 
@@ -67,7 +67,7 @@ class Register extends Component {
                 <View style={{ alignItems:'center', justifyContent:'center', flex:1, backgroundColor: 'rgba(128,128,128,0.35)'}}>
 
                     <TouchableOpacity style={styles.back} onPress={() => this.props.navigation.goBack()}>
-                      <Icon name="arrow-round-back"></Icon>
+                      <Icon name="arrow-round-back" color='white'></Icon>
                     </TouchableOpacity>
 
                     <View style={{  marginTop: 30, alignItems: "center", width: "100%" }}>
@@ -141,7 +141,7 @@ const styles = StyleSheet.create({
     greeting: {
       marginBottom: 110,
       fontSize: 18,
-      fontWeight: '500',
+      fontWeight: '200',
       textAlign: "center",
       color: "#FFF"
     },

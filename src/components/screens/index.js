@@ -1,5 +1,6 @@
 import MainFeed from './MainFeed';
 import Login from './Login';
+import ResetPassword from './ResetPassword';
 import ProfileSettings from './ProfileSettings';
 import Camera from './Profile';
 import Register from './Register';
@@ -22,4 +23,4 @@ import FollowersList from './FollowersList';
 import Likes from './Likes';
 import NotificationsSettings from './NotificationsSettings';
 
-export { MainFeed, Login, ProfileSettings, Camera, Register, Loading, PostStats, FriendsScreen, PostScreen, Home, Feed, ChatScreen, Rooms, PrivateChatScreen, OutfitPostScreen, PollBoard, Comments, PublicProfile, Profile, VotersScreen, FollowersList, Likes, NotificationsSettings };
+export { MainFeed, Login, ResetPassword, ProfileSettings, Camera, Register, Loading, PostStats, FriendsScreen, PostScreen, Home, Feed, ChatScreen, Rooms, PrivateChatScreen, OutfitPostScreen, PollBoard, Comments, PublicProfile, Profile, VotersScreen, FollowersList, Likes, NotificationsSettings };
