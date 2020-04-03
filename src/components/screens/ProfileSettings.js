@@ -113,8 +113,8 @@ class ProfileSettings extends Component {
     };
 
     render() {
-        const {name, email } = this.state.user;
-        const { currentPassword, newPassword, editPassword} = this.state;
+        const { name, email } = this.state.user;
+        const { currentPassword, newPassword } = this.state;
         return (
             <KeyboardAvoidingView style = {{ flex:1, justifyContent:'center', alignItems: 'center', backgroundColor: "#EBECF4"}} behavior="padding" enabled>
                 <View style={styles.container}>
@@ -138,8 +138,8 @@ class ProfileSettings extends Component {
                         <View style={styles.avatarContainer}>
                             <Image
                                 source={this.state.newAvatar
-                                    ? { uri: this.state.newAvatar }
-                                    : require("../../../assets/default.png")} 
+                                ? { uri: this.state.newAvatar }
+                                : require("../../../assets/default.png")} 
                                 style={styles.avatar}
                             />         
                             <TouchableOpacity style={styles.add} onPress={this.handlePickAvatar}>
@@ -149,9 +149,9 @@ class ProfileSettings extends Component {
                             </TouchableOpacity>          
                         </View>
                         <View>
-                        <TouchableOpacity onPress={this.showDialog}>
-                            <Text style={{marginTop: 30, alignItems: "center"}}>Change Profile Photo</Text>
-                        </TouchableOpacity>
+                            <TouchableOpacity onPress={this.showDialog}>
+                                <Text style={{marginTop: 30, alignItems: "center"}}>Change Profile Photo</Text>
+                            </TouchableOpacity>
                         </View>
                     </View>
                 
@@ -168,22 +168,23 @@ class ProfileSettings extends Component {
                             {!this.state.editMode 
                             ? <Text style={styles.userData2}>{this.state.user.bio}</Text>
                             : <TextInput 
-                                    style={styles.userData2} 
-                                    multiline={true}
-                                    numberOfLines={3}
-                                    placeholder="Tell the world a bit about yourself"
-                                    onChangeText={text => this.setState({ text })}
-                                    value={this.state.text}></TextInput>
+                                style={styles.userData2} 
+                                multiline={true}
+                                numberOfLines={3}
+                                placeholder="Tell the world a bit about yourself"
+                                onChangeText={text => this.setState({ text })}
+                                value={this.state.text}></TextInput>
                             }
                         </View>
                         <View style={styles.userDataEdit}>
-                            {this.state.editMode ?
-                            <TouchableOpacity onPress={this.editToggled}>
-                                <Icon name="ios-close-circle" size={20} color="#FF2D42" ></Icon>
-                            </TouchableOpacity> : 
-                            <TouchableOpacity onPress={this.editToggled}>
-                                <Icon name="ios-remove-circle" size={20} color="#8E95AB" ></Icon>
-                            </TouchableOpacity>}
+                            {this.state.editMode 
+                            ? <TouchableOpacity onPress={this.editToggled}>
+                                 <Icon name="ios-close-circle" size={20} color="#FF2D42" ></Icon>
+                              </TouchableOpacity> 
+                            : <TouchableOpacity onPress={this.editToggled}>
+                                 <Icon name="ios-remove-circle" size={20} color="#8E95AB" ></Icon>
+                              </TouchableOpacity>
+                            }
                         </View>
                     </View>
                           
@@ -192,14 +193,14 @@ class ProfileSettings extends Component {
                             <Text style={styles.userData}>Name:</Text>
                         </View>
                         <View style={{height: 20, width: 60+'%', marginTop: 10,}}>
-                            {!this.state.editName ? (<Text style={styles.userData2}>{name}</Text>)
-                                : (<TextInput 
-                                    style={styles.userData2} 
-                                    placeholder="Name"
-                                    onChangeText={textName => this.setState({ textName })}
-                                    value={this.state.textName}></TextInput>)
-                                }
-                     
+                            {!this.state.editName 
+                            ? <Text style={styles.userData2}>{name}</Text>
+                            : <TextInput 
+                                style={styles.userData2} 
+                                placeholder="Name"
+                                onChangeText={textName => this.setState({ textName })}
+                                value={this.state.textName}></TextInput>
+                            }
                         </View>
                         <View style={{height: 20, width: 10+'%', marginTop: 10, marginLeft:10}}>
                             {this.state.editName ?
@@ -268,13 +269,13 @@ class ProfileSettings extends Component {
                         </View>
                     </View> 
 
-                  <View style={{marginTop:20, alignItems:'center'}}>            
-                    <TouchableOpacity style={styles.saveButton} onPress={this.handleUpdateInfo}>
-                        <Text style={styles.saveText}>Save Changes</Text>
-                    </TouchableOpacity>
-                  </View>  
+                    <View style={{marginTop:20, alignItems:'center'}}>            
+                        <TouchableOpacity style={styles.saveButton} onPress={this.handleUpdateInfo}>
+                            <Text style={styles.saveText}>Save Changes</Text>
+                        </TouchableOpacity>
+                    </View>  
 
-                  <View style = {styles.lineStyle} />   
+                    <View style = {styles.lineStyle} />   
             
                     <View style={styles.signOut}>
                         <TouchableOpacity onPress={this.signOut}>

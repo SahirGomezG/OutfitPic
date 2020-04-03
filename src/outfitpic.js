@@ -5,7 +5,6 @@ import { createBottomTabNavigator } from 'react-navigation-tabs';
 import { createDrawerNavigator } from 'react-navigation-drawer';
 import { 
   Loading, 
-  MainFeed, //not used here
   PostStats, 
   Login,
   ResetPassword, 

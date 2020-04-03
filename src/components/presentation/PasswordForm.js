@@ -30,7 +30,16 @@ class PasswordForm extends Component {
                 Alert.alert(error.message) 
             });
         }).catch((error) => { Alert.alert(error.message) });
-    }  
+    }
+    
+    onChangeEmailPress = () => {
+        this.reauthenticate(this.state.currentPassword).then(() => {
+          var user = firebase.auth().currentUser;
+          user.updateEmail(this.state.newEmail).then(() => {
+            Alert.alert("Email was changed");
+          }).catch((error) => { Alert.alert(error.message)  });
+        }).catch((error) => { Alert.alert(error.message)  });
+      }
 
     render(){
         return (

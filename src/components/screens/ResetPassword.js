@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, TouchableOpacity, TextInput, Alert, StyleSheet, StatusBar, Image, LayoutAnimation, KeyboardAvoidingView, ImageBackground, TouchableWithoutFeedback, Keyboard} from 'react-native';
+import { View, Text, TouchableOpacity, TextInput, Alert, StyleSheet, StatusBar, LayoutAnimation, KeyboardAvoidingView, ImageBackground, TouchableWithoutFeedback, Keyboard} from 'react-native';
 import * as firebase from 'firebase';
 import Icon from 'react-native-ionicons';
 
@@ -31,12 +31,9 @@ class ResetPassword extends Component {
         LayoutAnimation.easeInEaseOut();
         return (
           <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-            <KeyboardAvoidingView style = {{ flex:1, justifyContent:'center', alignItems: 'center', backgroundColor: "#EBECF4"}} behavior="padding" enabled>
+            <KeyboardAvoidingView style = {{ flex:1, justifyContent:'center', alignItems: 'center', backgroundColor: "#332F3E"}} behavior="padding" enabled>
               <StatusBar barStyle="light-content"></StatusBar>
-                 <ImageBackground
-                      source={require("../../../assets/wallpaper.jpg")}
-                      style={{ width: '100%', height: '100%', flex: 1}}
-                 >
+                 
                    <View style={styles.container}>
                         <View style={{marginTop:10}}>
                             <Text style={styles.logo}>OutfitPic</Text>
@@ -46,7 +43,7 @@ class ResetPassword extends Component {
                         </TouchableOpacity>
       
                         <Text style={styles.greeting}>Reset Password </Text>
-                        <Text style={styles.greeting}>Enter the email address you use to log in. </Text>
+                        <Text style={[styles.greeting,{marginTop:10}]}>Enter the email address you use to log in. </Text>
         
                         <View style={styles.errorMessage}>
                             {this.state.errorMessage && <Text style={styles.error}>{this.state.errorMessage}</Text>}
@@ -65,8 +62,7 @@ class ResetPassword extends Component {
                             <Text style={{color:'#fff', fontWeight:"600", fontSize:15}}>Send Email</Text>
                         </TouchableOpacity> 
                       
-                   </View>   
-                 </ImageBackground>        
+                   </View>         
               </KeyboardAvoidingView>
             </TouchableWithoutFeedback>
         );
@@ -76,9 +72,10 @@ class ResetPassword extends Component {
 const styles = StyleSheet.create({
     container:{
         alignItems:'center', 
-        justifyContent:'center', 
+        justifyContent:'center',
+        width: 100+'%', 
         flex:1, 
-        backgroundColor:'rgba(0,0,0,0.20)'
+        //backgroundColor:'rgba(0,0,0,0.20)'
     },
     greeting: {
         marginTop: 100,
@@ -143,3 +140,8 @@ const styles = StyleSheet.create({
 })
   
 export default ResetPassword;
+
+    /*<ImageBackground
+            source={require("../../../assets/wallpaper.jpg")}
+          style={{ width: '100%', height: '100%', flex: 1}}
+   ></ImageBackground>*/
