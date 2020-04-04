@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, Text, StyleSheet, Image, TouchableHighlight, TouchableOpacity, TouchableOpacityComponent } from "react-native";
+import { View, Text, StyleSheet } from "react-native";
 
 
 class StatsElement extends Component {

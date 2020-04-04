@@ -24,6 +24,7 @@ import 'react-native-gesture-handler';
 
 import Constants from 'expo-constants';
 import * as Permissions from 'expo-permissions';
+import Dialog from "react-native-dialog";
 
 const firebase = require('firebase');
 require('firebase/firestore');
@@ -42,7 +43,8 @@ class OutfitPostScreen extends Component {
 						privatePoll: false,
 						comments: false,
 						modalVisible: false,
-						followers: [],
+            followers: [],
+            dialogVisible: false,
 			};
 		}
 
@@ -180,7 +182,7 @@ class OutfitPostScreen extends Component {
           alert(error);
         });
     } else {
-      alert('Pleaase add your outfits');
+      alert('Please add your outfits');
     }
   };
 
@@ -195,14 +197,22 @@ class OutfitPostScreen extends Component {
     this.setState({count: filteredItems.length});
   };
 
+  showDialog = () => {
+    this.setState({ dialogVisible: true });
+  };
+ 
+  handleCancel = () => {
+    this.setState({ dialogVisible: false });
+  };
+
   emptyComponent = () => {
     return (
       <View
         style={{
           marginHorizontal: 80,
           marginTop: 10,
-          height: 250,
-          width: 225,
+          height: 300,
+          width: 250,
           borderRadius: 18,
           alignContent: 'center',
         }}>
@@ -247,9 +257,9 @@ class OutfitPostScreen extends Component {
             <TouchableOpacity
               style={styles.back}
               onPress={() => this.props.navigation.goBack()}>
-              <Icon name="arrow-round-back" size={25}></Icon>
+              <Icon name="arrow-round-back" color={'#fff'} size={25}></Icon>
             </TouchableOpacity>
-            <TouchableOpacity onPress={this.handleOutfitPost}>
+            <TouchableOpacity onPress={this.showDialog}>
               <Text
                 style={{
                   fontWeight: '400',
@@ -282,13 +292,13 @@ class OutfitPostScreen extends Component {
             </View>
           </TouchableWithoutFeedback>
 
-          <View style={styles.section}>
-            <TouchableOpacity
-              style={styles.addImage}
-              onPress={this.onClickAddImage}>
-              <Icon name="ios-add-circle" size={50} color="#53115B"></Icon>
-            </TouchableOpacity>
-          </View>
+          <View style={{alignItems:'center', marginBottom:5}}>    
+            <View style={styles.addImage} >
+              <TouchableOpacity onPress={this.onClickAddImage}>
+                <Icon name="ios-add-circle" size={50} color="#53115B"></Icon>
+              </TouchableOpacity>
+            </View>
+          </View>  
 
           <View style={styles.photosContainer}>
             <FlatList
@@ -352,20 +362,8 @@ class OutfitPostScreen extends Component {
                 <Text style={styles.title}>Poll Duration</Text>
               </View>
               <View style={styles.group}>
-                <TouchableOpacity
-                  style={[
-                    styles.button,
-                    styles.first,
-                    duration === 24 ? styles.active : null,
-                  ]}
-                  onPress={() => this.setState({duration: 24})}>
-                  <Text
-                    style={[
-                      styles.buttonText,
-                      duration === 24 ? styles.activeText : styles.inactiveText,
-                    ]}>
-                    24 hr
-                  </Text>
+                <TouchableOpacity style={[styles.button,styles.first, duration === 24 ? styles.active : null,]} onPress={() => this.setState({duration: 24})}>
+                   <Text style={[ styles.buttonText, duration === 24 ? styles.activeText : styles.inactiveText,]}> 24 hr </Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                   style={[styles.button, duration === 6 ? styles.active : null]}
@@ -396,14 +394,20 @@ class OutfitPostScreen extends Component {
               </View>
             </View>
 
+            <View>
+               <Dialog.Container visible={this.state.dialogVisible}>
+                  <Dialog.Description> Add new OutfitPic poll.</Dialog.Description>       
+                  <Dialog.Button label="Cancel" onPress={this.handleCancel} />
+                  <Dialog.Button label="Send" onPress={this.handleOutfitPost} />
+               </Dialog.Container>
+            </View>
+
             <View style={{marginTop: 12}}>
               <Modal
                 animationType="slide"
                 transparent={true}
                 visible={this.state.modalVisible}
-                onRequestClose={() => {
-                  Alert.alert('Modal has been closed.');
-                }}>
+                onRequestClose={() => { Alert.alert('Modal has been closed.')}}>
                 <TouchableWithoutFeedback
                   onPress={() => {
                     this.setModalVisible(!this.state.modalVisible);
@@ -426,7 +430,7 @@ class OutfitPostScreen extends Component {
                       </TouchableOpacity>
 
                       <View style={{alignItems: 'center', marginTop: -5}}>
-                        <Text style={styles.title}>Who can see this?</Text>
+                        <Text style={[styles.title,{fontWeight: '200'}]}>Who can see this?</Text>
                       </View>
 
                       <TouchableOpacity
@@ -550,7 +554,7 @@ const styles = StyleSheet.create({
   },
   header: {
     flexDirection: 'row',
-    backgroundColor: '#8E95AB',
+    backgroundColor:'#3e394d',
     justifyContent: 'space-between',
     paddingTop: 50,
     paddingBottom: 10,
@@ -559,7 +563,7 @@ const styles = StyleSheet.create({
     borderBottomColor: '#D8D9DB',
   },
   inputContainer: {
-    margin: 20,
+    margin: 16,
     flexDirection: 'row',
   },
   avatar: {
@@ -572,9 +576,12 @@ const styles = StyleSheet.create({
     marginHorizontal: 32,
   },
   addImage: {
-    alignItems: 'center',
-    flexDirection: 'row',
-    justifyContent: 'center',
+    width:50, 
+    height:50,
+    shadowColor: "#5D3F6A",
+    shadowOffset: { height: 5 },
+    shadowRadius: 5,
+    shadowOpacity: 0.5
   },
   image: {
     flex: 1,
@@ -582,8 +589,8 @@ const styles = StyleSheet.create({
     width: undefined,
   },
   mediaImageContainer: {
-    width: 225,
-    height: 250,
+    width: 250,
+    height: 300,
     borderRadius: 12,
     overflow: 'hidden',
     marginHorizontal: 10,
@@ -654,6 +661,12 @@ const styles = StyleSheet.create({
     left: 10,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  switchButton: {
+    shadowColor: "#5D3F6A",
+    shadowOffset: { height: 4 },
+    shadowRadius: 4,
+    shadowOpacity: 0.4
   },
 
   // ------ style for poll duration section ------

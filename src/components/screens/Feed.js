@@ -23,7 +23,7 @@ class Feed extends Component {
             globalPosts: [], 
             privatePosts: [],
             modalVisible: false,
-            limit: 2,
+            limit: 3,
             loading: false,
 
             lastVisible: null,
@@ -395,13 +395,14 @@ class Feed extends Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: "#E8EDF2"
+        backgroundColor: "#E8EDF2",
     },
     header: {
         flexDirection:'row',
         paddingTop: 50,
         paddingBottom: 20,
-        backgroundColor: "#8E95AB",
+        //backgroundColor: "#8E95AB",
+        backgroundColor:'#3e394d',
         alignItems: "center",
         justifyContent: "center",
         borderBottomWidth: 1,

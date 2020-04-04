@@ -90,13 +90,12 @@ class Register extends Component {
                           autoCapitalize="none"
                           onChangeText={ name => this.setState({ user: { ...this.state.user, name } }) }
                           value={this.state.user.name}
-                          placeholder='User Name'
+                          placeholder='Username'
                           placeholderTextColor = "grey"
                           autoCorrect={false}
                           style = {styles.input}/>
                         <TextInput 
                           autoCapitalize="none"
-                          //onChangeText={ text => this.updateText(text, 'email') }
                           onChangeText={ email => this.setState({ user: { ...this.state.user, email } })}
                           value={this.state.user.email}
                           placeholder='Email'
@@ -122,9 +121,7 @@ class Register extends Component {
                           <Text style={{color:'#fff', fontWeight:"600", fontSize:15}}>Sign Up</Text>
                         </TouchableOpacity>    
 
-                        <Button onPress = {() => {
-                            this.props.navigation.navigate('login');
-                        }} 
+                        <Button onPress = {() => { this.props.navigation.navigate('login')}} 
                         title='User already? Log In'
                         color='#FFF'
                         />

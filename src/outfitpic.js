@@ -107,13 +107,13 @@ const DrawerNavigator = createDrawerNavigator(
 
       contentOptions: {
           activeBackgroundColor: "#EEF0F7",
-          activeTintColor: "#53115B",
+          activeTintColor: "#3e394d",
           itemsContainerStyle: {
               marginTop: 16,
               marginHorizontal: 8
           },
           itemStyle: {
-              borderRadius: 20
+              borderRadius: 22
           }
       }
   }

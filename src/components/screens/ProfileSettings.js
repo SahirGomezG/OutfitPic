@@ -16,7 +16,7 @@ class ProfileSettings extends Component {
     state = {
         user: {},
         textName:'',
-        text: '',
+        bio: '',
         newAvatar: '',
         editMode: false,
         editName: false,
@@ -39,7 +39,7 @@ class ProfileSettings extends Component {
                 this.setState({ user: doc.data()});
                 this.setState({ gender: doc.data().gender})
                 this.setState({ textName: doc.data().name})
-                this.setState({ text: doc.data().bio})
+                this.setState({ bio: doc.data().bio})
                 this.setState({ newAvatar: doc.data().avatar})
             });     
     }
@@ -77,7 +77,7 @@ class ProfileSettings extends Component {
       };
     
     handleUpdateInfo = () => {
-        Fire.shared.updateProfileInfo(this.state.text, this.state.gender, this.state.textName);
+        Fire.shared.updateProfileInfo(this.state.bio, this.state.gender, this.state.textName);
         this.setState({ editMode: false, editName: false})
     }
 
@@ -99,9 +99,7 @@ class ProfileSettings extends Component {
     }
 
     onValueChange2(value) {
-        this.setState({
-          gender: value
-        });
+        this.setState({ gender: value });
     }
 
     showDialog = () => {
@@ -154,17 +152,18 @@ class ProfileSettings extends Component {
                             </TouchableOpacity>
                         </View>
                     </View>
-                
+
+                    <View style = {styles.lineStyle} />          
 
                     <View style={{marginBottom: 20, marginTop: 40, alignItems: "center"}}>
-                        <Text style={{fontWeight:'500', fontFamily: "HelveticaNeue"}}>Personal Information</Text>
+                        <Text style={{fontWeight:'500', fontFamily: "HelveticaNeue", fontSize:16}}>Personal Information</Text>
                     </View>
 
                     <View style={styles.menuContainer}>
-                        <View style={{height: 40, width: 30+'%', paddingHorizontal: 20, marginTop: 10,}} >
+                        <View style={styles.firstColumn} >
                             <Text style={styles.userData}>Bio:</Text>
                         </View>
-                        <View style={{height: 40, width: 60+'%', marginTop: 10,}}>
+                        <View style={styles.secondColumn}>
                             {!this.state.editMode 
                             ? <Text style={styles.userData2}>{this.state.user.bio}</Text>
                             : <TextInput 
@@ -172,8 +171,8 @@ class ProfileSettings extends Component {
                                 multiline={true}
                                 numberOfLines={3}
                                 placeholder="Tell the world a bit about yourself"
-                                onChangeText={text => this.setState({ text })}
-                                value={this.state.text}></TextInput>
+                                onChangeText={text => this.setState({ bio: text })}
+                                value={this.state.bio}></TextInput>
                             }
                         </View>
                         <View style={styles.userDataEdit}>
@@ -189,10 +188,10 @@ class ProfileSettings extends Component {
                     </View>
                           
                     <View style={styles.menuContainer}>
-                        <View style={{height: 20, width: 30+'%', paddingHorizontal: 20, marginTop: 10,}} >
+                        <View style={styles.firstColumn} >
                             <Text style={styles.userData}>Name:</Text>
                         </View>
-                        <View style={{height: 20, width: 60+'%', marginTop: 10,}}>
+                        <View style={[styles.secondColumn,{height: 20}]}>
                             {!this.state.editName 
                             ? <Text style={styles.userData2}>{name}</Text>
                             : <TextInput 
@@ -250,10 +249,10 @@ class ProfileSettings extends Component {
                     </View>
 
                     <View style={styles.menuContainer}>
-                        <View style={{height: 20, width: 30+'%', paddingHorizontal: 20, marginTop: 10 }} >
+                        <View style={styles.firstColumn}>
                             <Text style={styles.userData}>Password:</Text>
                         </View>
-                        <View style={{height: 96, width: 60+'%', marginTop:10 }}>
+                        <View style={[styles.secondColumn,{height: 95}]}>
                             {!this.state.editPassword 
                             ? <Text style={styles.userData2}>-------------</Text> 
                             : <PasswordForm currentPassword={currentPassword} newPassword={newPassword}/>}        
@@ -274,8 +273,6 @@ class ProfileSettings extends Component {
                             <Text style={styles.saveText}>Save Changes</Text>
                         </TouchableOpacity>
                     </View>  
-
-                    <View style = {styles.lineStyle} />   
             
                     <View style={styles.signOut}>
                         <TouchableOpacity onPress={this.signOut}>
@@ -314,7 +311,7 @@ const styles = StyleSheet.create({
         paddingTop: 50,
         marginBottom: -42,
         paddingBottom: 20,
-        backgroundColor: "#8E95AB",
+        backgroundColor:'#3e394d',
         alignItems: "center",
         justifyContent: "center",
         borderBottomWidth: 1,
@@ -334,16 +331,28 @@ const styles = StyleSheet.create({
     avatar: {
         width: 112,
         height: 112,
-        borderRadius: 56,
+        borderRadius: 56, 
     },
-    statsContainer: {
-        flexDirection: "row",
-        justifyContent: "space-between",
-        margin: 20
+    avatarContainer: {
+        shadowColor: "#454D65",
+        shadowOffset: { height: 5 },
+        shadowRadius: 15,
+        shadowOpacity: 0.2,
     },
     menuContainer: {
         margin: 3,
         flexDirection: 'row',
+    },
+    firstColumn: {
+        height: 20, 
+        width: 30+'%', 
+        paddingHorizontal: 20, 
+        marginTop: 10,
+    },
+    secondColumn: {
+        height: 40, 
+        width: 60+'%', 
+        marginTop: 10,
     },
     add: {
         backgroundColor: "#b53f45",

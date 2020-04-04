@@ -114,12 +114,13 @@ class Fire {
 
     createUser = async (user) => {
         let remoteUri= null;
+        var currentUser = firebase.auth().currentUser;
         let userName = user.name.toLowerCase();
         const FCM = firebasenative.messaging();
         let notificationSettings = {option1: true, option2: true, option3: true, option4: true, option5: true};
 
         try { 
-            await firebase.auth().createUserWithEmailAndPassword(user.email, user.password); 
+            await firebase.auth().createUserWithEmailAndPassword(user.email, user.password);
             let db = this.firestore.collection("users").doc(this.uid);
             db.set({
                 name: userName,

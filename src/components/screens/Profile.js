@@ -54,7 +54,7 @@ class Profile extends Component {
   }
 
   openFollowersList() {
-    this.props.navigation.navigate('followersList', {userId: this.state.user.id, friendName: this.state.user.name});
+    this.props.navigation.push('followersList', {userId: Fire.shared.uid, friendName: this.state.user.name, tabIndex: 0});
   };
 
   openProfileSettings = () => {
@@ -81,9 +81,9 @@ class Profile extends Component {
                         horizontal={true}
                 />
             </TouchableOpacity>    
-          </View>      
+          </View>       
     );
-}
+  }
     
     render() {
       const {name, avatar, joined, numFollowers, numFollowing, numPosts} = this.state.user;
@@ -103,13 +103,14 @@ class Profile extends Component {
                     </View>     
             </View>
             <View style={styles.container2}>
-                <Image source={{ uri: avatar }} style={styles.avatar}>
-                </Image> 
+                <Image source={{ uri: avatar }} style={styles.avatar}></Image> 
+                <TouchableOpacity style={{ flex:1 }} onPress={() => this.openFollowersList()}>
                   <StatsElement numPosts={numPosts} numFollowers={numFollowers} numFollowing ={numFollowing} ></StatsElement> 
+                </TouchableOpacity>
             </View>
             <View style={styles.container3}>
                 <Text style={styles.name}>{name}</Text>
-                <Text style={{color:'#DFD8C8', fontSize: 12, marginLeft: 14, fontFamily: "HelveticaNeue", textTransform: "uppercase"}}><Icon name="ios-calendar" size={16}/>  Joined in {joined}</Text>
+                <Text style={{color:'#DFD8C8', fontSize: 12,fontWeight:'200', marginLeft: 14, fontFamily: "HelveticaNeue", textTransform: "uppercase"}}><Icon name="ios-calendar" size={16}/>  Joined in {joined}</Text>
             </View>
             <View style={styles.postsContainer}>
                     <FlatList
@@ -135,7 +136,7 @@ class Profile extends Component {
       flexDirection:'row',
       paddingTop: 50,
       paddingBottom: 20,
-      backgroundColor: "#8E95AB",
+      backgroundColor:'#3e394d',
       alignItems: "center",
       justifyContent: "center",
       borderBottomWidth: 1,
@@ -168,7 +169,7 @@ class Profile extends Component {
       justifyContent: "space-between",
       paddingTop: 20,
       paddingBottom: 20,
-      paddingHorizontal: 20,
+      paddingHorizontal: 10,
       borderBottomWidth: 1,
       borderBottomColor: "#D8D9DB"
     },
@@ -176,14 +177,14 @@ class Profile extends Component {
       width: 100,
       height: 100,
       borderRadius: 50,
-      marginRight: 20,
+      marginHorizontal: 10,
       borderWidth: 3,
       borderColor: "#FFF"
     },
     name: {
       color: "#DFD8C8",
       fontSize: 15,
-      fontWeight: "800",
+      fontWeight: "400",
       marginVertical: 8,
       margin: 14,
       fontFamily: "HelveticaNeue"

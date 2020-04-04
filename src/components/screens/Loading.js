@@ -13,7 +13,7 @@ class Loading extends Component {
         firebase.auth().onAuthStateChanged(user => {
             this.props.navigation.navigate(user ? 'main': 'intro');
         });
-    }
+        }
     }
 
     render() {

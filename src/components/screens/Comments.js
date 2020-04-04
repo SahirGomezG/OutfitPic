@@ -90,24 +90,22 @@ class Comments extends Component {
               style={styles.avatar}>
         </Image>
         <View style={{flex:1, marginLeft:5}}>
-          <Text style={styles.roomLiText}>{item.user.name}</Text>
-          <Text style={{fontSize:11}}>{item.text}</Text>
-          <Text style={styles.timestamp}>{moment(item.timestamp).fromNow()}</Text>
+            <Text style={styles.roomLiText}>{item.user.name}</Text>
+            <Text style={{fontSize:11}}>{item.text}</Text>
+            <Text style={styles.timestamp}>{moment(item.timestamp).fromNow()}</Text>
         </View>
       </View>
     )
   };
 
   render() {
-    return (
-    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+    return ( 
       <KeyboardAvoidingView style = {{ flex:1,  backgroundColor: "#EBECF4"}} behavior="padding" enabled>  
           <View style={styles.container}>
-
               <View style={styles.circle}/>
               <View style={styles.header}>
                 <TouchableOpacity style={styles.back} onPress={() => this.props.navigation.goBack()}>
-                  <Icon name="arrow-round-back"></Icon>
+                   <Icon name="arrow-round-back" color={'#FFF'}></Icon>
                 </TouchableOpacity>
                 <Text style={styles.headerTitle}>Comments</Text>
               </View>
@@ -118,36 +116,33 @@ class Comments extends Component {
                   renderItem={({item}) => this.renderRow(item)}
                   //keyExtractor={item => item.key}
                   keyExtractor={(item,index) => index.toString()}
+                  showsVerticalScrollIndicator={false}
                 />
               </View>
 
               <View style={styles.commentInputContainer}>
-                      <View style={{margin:10,}}>
-                        <Image source={this.user.avatar
-                            ? { uri: this.user.avatar }
-                            : require("../../../assets/default.png")} 
-                            style={styles.avatar}>
-                        </Image>
-                      </View>
+                    <View style={{margin:10,}}>
+                      <Image source={this.user.avatar
+                          ? { uri: this.user.avatar }
+                          : require("../../../assets/default.png")} 
+                          style={styles.avatar}>
+                      </Image>
+                    </View>
                       
-                      <TextInput  
+                    <TextInput  
                           style={styles.input}
                           multiline={true}
                           maxLength={140}
                           placeholder={" New comment..."}
                           onChangeText={(text) => this.setState({newComment: text})}
                           value={this.state.newComment}
-                      />
-                      <TouchableHighlight style={styles.postButton}
-                          underlayColor="#fff"
-                          onPress={() => this.addComment(this.state.newComment)}
-                      >
+                    />
+                    <TouchableHighlight style={styles.postButton} underlayColor="#fff" onPress={() => this.addComment(this.state.newComment)}>
                         <Text>Post</Text>
-                      </TouchableHighlight>
+                    </TouchableHighlight>
               </View> 
           </View>
         </KeyboardAvoidingView>
-      </TouchableWithoutFeedback>
     );
   }
 }
@@ -178,16 +173,11 @@ const styles = StyleSheet.create({
       paddingTop: 50,
       marginBottom: -42,
       paddingBottom: 20,
-      backgroundColor: "#8E95AB",
+      backgroundColor:'#3e394d',
       alignItems: "center",
       justifyContent: "center",
       borderBottomWidth: 1,
       borderBottomColor: "#EBECF4",
-      shadowColor: "#454D65",
-      shadowOffset: { height: 5 },
-      shadowRadius: 15,
-      shadowOpacity: 0.2,
-      zIndex: 10
     },
     commentView:{
       margin: 10,
@@ -231,7 +221,7 @@ const styles = StyleSheet.create({
     },
     roomsListContainer: {
       flex: 1,
-      alignItems: 'flex-start',
+      //alignItems: 'flex-start',
       justifyContent: 'center',
       flexDirection: 'row',
       marginTop: 40,
