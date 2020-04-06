@@ -200,3 +200,21 @@ exports.pushNotificationChat = functions.database
         }
       });
   });
+
+exports.recentActivity = functions.firestore
+  .document('users/{uid}/following/{followingId}')
+  .onCreate((snap, context) => {
+    const followingData = snap.data();
+    let myId = context.params.uid;
+    let followingId = context.params.followingId;
+    const followingName = followingData.name;
+    console.log('now following:', followingName, 'my Id:', myId);
+
+    return admin
+      .firestore()
+      .collection('users')
+      .doc(myId)
+      .update({lastActivity: followingName})
+      .catch(console.error);
+  });
+

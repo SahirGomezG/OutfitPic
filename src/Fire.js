@@ -297,6 +297,24 @@ class Fire {
         });
     }
 
+    reportPost = async ( pollId, userId ) => {
+        let timestamp = new Date();
+        let report = {
+            userId: userId,
+            timestamp: timestamp
+        };
+        return new Promise((res, rej) => {
+            let reportsRef = this.firestore.collection("postsReported").doc(pollId);
+            reportsRef.set({ reports: firebase.firestore.FieldValue.arrayUnion(report)}, {merge: true} )
+            .then(ref => {
+                res(ref);
+            })
+            .catch(error => {
+                rej(error);
+            });
+        })
+    }
+
     LikePoll = async ( outfitPic, user ) => {
         // Create a reference for a new like, for use inside the transaction
         let pollRef = this.firestore.collection('outfitPolls').doc(outfitPic);
@@ -416,6 +434,10 @@ get messagesRef (){
 
     get timestamp() {
         return Date.now();
+    }
+
+    get lastSignInTime() {
+        return firebase.auth().currentUser.metadata.lastSignInTime;
     }
 
     get creationTime(){

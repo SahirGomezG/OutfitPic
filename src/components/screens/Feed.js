@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, Text, StyleSheet, Image, FlatList, TouchableWithoutFeedback, TouchableOpacity, StatusBar, Modal, ActivityIndicator } from "react-native";
+import { View, Text, StyleSheet, Image, FlatList, AppState, TouchableWithoutFeedback, TouchableOpacity, StatusBar, Modal, ActivityIndicator } from "react-native";
 import Fire from "../../Fire";
 import moment from "moment";
 import Icon from 'react-native-ionicons';
@@ -19,12 +19,14 @@ class Feed extends Component {
         this.localNotify = null;
         this.senderId = '1082830494457';
         this.state = {
+            //appState: AppState.currentState,
             user: {},
             globalPosts: [], 
             privatePosts: [],
             modalVisible: false,
             limit: 3,
             loading: false,
+            modalData: null,
 
             lastVisible: null,
             refreshing: false,
@@ -43,15 +45,19 @@ class Feed extends Component {
         this.localNotify.configure(this.onRegister, this.onNotification, this.onOpenNotification, this.senderId);
         
         this.setState({ loading: true });
-        console.log('Retrieving Data');
+        AppState.addEventListener('change', state => {
+            console.log('AppState changed to', state) }
+        )
     
         const user = this.props.uid || Fire.shared.uid;
         let pollsRef = Fire.shared.firestore.collection("outfitPolls");
         let currentuserRef = Fire.shared.firestore.collection("users").doc(user);
+        let lastActiveSession = Date.now();
 
         currentuserRef.get()
         .then(doc => {
             this.setState({ user: doc.data() });
+            currentuserRef.update({ lastSession: lastActiveSession });
         });
         // should be deprecated later
         FCM.getToken()
@@ -86,7 +92,7 @@ class Feed extends Component {
         this.unsubscribe2 = query2
             .onSnapshot(snapshot => {
                 if (snapshot.empty) { 
-                    console.log('No posts');
+                    console.log('No friends posts');
                     this.setState({ lastVisiblePrivate: null, privatePosts: this.state.privatePosts })
                 } else {
                 let lastVisiblePrivate = snapshot.docs[snapshot.docs.length - 1].data().timestamp;
@@ -201,7 +207,6 @@ class Feed extends Component {
 
     onOpenNotification(notify) {
         console.log("[Notification] onOpenNotification: ", notify)
-        //alert('This is a new notification from OutfitPic')
     }
 
     get user() {
@@ -210,10 +215,6 @@ class Feed extends Component {
             name: this.state.user.name,
             avatar: this.state.user.avatar
         };
-    }
-
-    setModalVisible(visible) {
-        this.setState({modalVisible: visible});
     }
 
     like(item){   
@@ -233,19 +234,25 @@ class Feed extends Component {
         this.props.navigation.navigate('publicProfile', { profileId: item.authorId, profileOwner: item.name });
     }
 
+    setModalVisible(visible, item) {
+        this.setState({ modalVisible: visible });
+        this.setState({ modalData: item });
+    }
+
+    reportPost(){
+        let userId = Fire.shared.uid;
+        Fire.shared.reportPost(this.state.modalData.id , userId);
+        this.setState({modalVisible: false, modalData: null});
+        return this.onPressSendNotification()
+    }
+
     onPressSendNotification = () => {
         const options = {
             soundName: 'default',
             playSound: true,
             vibrate: true
         }
-        this.localNotify.showNotification(
-            1,
-            'App Notification',
-            'Post Reported',
-            {}, //data
-            options //options
-        )
+        this.localNotify.showNotification( 1, 'App Notification', 'Post Reported', {}, options)
     }
 
     renderFooter = () => {
@@ -265,8 +272,7 @@ class Feed extends Component {
     
     renderPoll = ({item, index}) => {    
         return(   
-            <View style={{flex:1, flexDirection: 'column', justifyContent:'center', backgroundColor: "#FFF", borderRadius: 12, marginVertical: 8}}>
-                <StatusBar backgroundColor='blue' barStyle="dark-content"></StatusBar>
+            <View style={styles.postContainer}>      
                 <View style={styles.feedItem}>
                     <TouchableOpacity onPress={() => this.openPublicProfile(item)}>
                             <Image source={item.avatar
@@ -283,7 +289,7 @@ class Feed extends Component {
                                 </TouchableOpacity>
                                 <Text style={styles.timestamp}>{moment(item.timestamp).fromNow()}</Text>
                             </View> 
-                            <TouchableOpacity onPress={() => this.setModalVisible(true)}>   
+                            <TouchableOpacity onPress={() => this.setModalVisible(true, item)}>   
                                 <Icon name="md-more" size={24} color="#52575D" style={{ marginRight: 5 }} /> 
                             </TouchableOpacity> 
                         </View>
@@ -299,7 +305,7 @@ class Feed extends Component {
                     <TouchableWithoutFeedback onPress={() => {this.setModalVisible(!this.state.modalVisible)}}>
                         <View style={{flex:1, alignItems:'center', justifyContent:'center',marginTop: 22}}>
                             <View style={styles.modal}>
-                                <TouchableOpacity style={{borderBottomWidth: 1,borderBottomColor: "#EBECF4"}} onPress={this.onPressSendNotification}>
+                                <TouchableOpacity style={{borderBottomWidth: 1,borderBottomColor: "#EBECF4"}} onPress={() => this.reportPost()} >
                                     <View style={{ height:50+'%',alignItems:'center', justifyContent:'center', margin:15,}}>
                                         <Text style={[styles.title,{color:'red'}]}>Report</Text>
                                     </View>
@@ -315,17 +321,19 @@ class Feed extends Component {
                     </Modal>
                 </View>
 
-                <View style={{ flex: 1, marginHorizontal:20}}>
-                    <TouchableOpacity onPress={() => this.openPollBoard(item)}>
-                        <Text style={styles.post}>{item.text}</Text>
-                        <FlatList
-                            data={item.images}
-                            renderItem = {this.renderItem}
-                            keyExtractor={(item,index) => index.toString()}
-                            horizontal={true}
-                        />
-                    </TouchableOpacity>
-                    <View style={{ flexDirection: "row" }}>
+                <View style={{ flex: 1, marginHorizontal: 10 }}>
+                    <View style={{flexDirection: 'column'}}>
+                    <Text style={styles.post}>{item.text}</Text>
+                        <TouchableOpacity style={{alignItems:'center'}} onPress={() => this.openPollBoard(item)}>
+                            <FlatList
+                                data={item.images}
+                                renderItem = {this.renderItem}
+                                keyExtractor={(item,index) => index.toString()}
+                                horizontal={true}
+                            />
+                        </TouchableOpacity>
+                    </View>
+                    <View style={{ flexDirection: "row", marginLeft:10  }}>
                         <TouchableOpacity onPress={() => this.like(item)}>
                             <HeartButton uid={this.state.user.id} pollId={item.id} />
                             <Text style={[styles.post,{fontSize:10}]}> {item.likesCount} Likes</Text>
@@ -397,6 +405,14 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: "#E8EDF2",
     },
+    postContainer: {
+        flex:1, 
+        flexDirection: 'column', 
+        justifyContent:'center', 
+        backgroundColor: "#FFF", 
+        borderRadius: 12, 
+        marginVertical: 6,
+    },
     header: {
         flexDirection:'row',
         paddingTop: 50,
@@ -417,7 +433,7 @@ const styles = StyleSheet.create({
     },
     feedFlatlist: {
         marginBottom: 10,
-        marginHorizontal: 16,
+        marginHorizontal: 12,
         marginTop: 10,
     },
     menu: {
@@ -432,7 +448,7 @@ const styles = StyleSheet.create({
     feedItem: {
         backgroundColor: "#FFF",
         borderRadius: 10,
-        padding: 8,
+        padding: 6,
         flexDirection: "row",
     },
     avatar: {
@@ -462,9 +478,8 @@ const styles = StyleSheet.create({
         width: undefined
       },
     mediaImageContainer: {
-        width: 94,
-        //width: 100,
-        height: 110,
+        width: 100,
+        height: 114,
         //height: 120,
         borderRadius: 8,
         overflow: "hidden",
@@ -472,10 +487,12 @@ const styles = StyleSheet.create({
         marginBottom: 5
       },
     coverContainer: {
+        flex:1,
+        width: 100+'%',
         shadowColor: "#5D3F6A",
-        shadowOffset: { height: 5 },
-        shadowRadius: 8,
-        shadowOpacity: 0.2
+        shadowOffset: { height: 8 },
+        shadowRadius: 10,
+        shadowOpacity: 0.4   
     },
     modal:{
         flexDirection:'column',
@@ -492,7 +509,6 @@ const styles = StyleSheet.create({
         fontSize: 16,
         color: "#514E5A",
         fontFamily: "HelveticaNeue",
-        //fontFamily:'Iowan Old Style'
         //fontFamily: 'Baskerville'
     },     
 });

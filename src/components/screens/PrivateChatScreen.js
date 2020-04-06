@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, TouchableOpacity, Platform, KeyboardAvoidingView, SafeAreaView, StyleSheet, Image, ViewPropTypes } from 'react-native';
+import { View, StatusBar, TouchableOpacity, Platform, KeyboardAvoidingView, SafeAreaView, StyleSheet, Image, ViewPropTypes } from 'react-native';
 import Fire from "../../Fire";
 import Icon from 'react-native-ionicons';
 import { GiftedChat, Bubble, Send } from 'react-native-gifted-chat';
@@ -34,7 +34,6 @@ class PrivateChatScreen extends Component {
   }
 
   unsubscribe = null;
-  unsubscribe2 = null;
 
     get user() {
         return {
@@ -46,12 +45,11 @@ class PrivateChatScreen extends Component {
 
     componentDidMount() {
         this.getPhotoPermission();
-    
         const user = this.props.uid || Fire.shared.uid;
         this.unsubscribe = Fire.shared.firestore
             .collection("users")
             .doc(user)
-            .onSnapshot(doc => {
+            .get().then(doc => {
                 this.setState({ user: doc.data()});
             });
         this.listenForMessages(this.messagesRef);      
@@ -104,8 +102,6 @@ class PrivateChatScreen extends Component {
 
   componentWillUnmount() {
       this.messagesRef.off();
-      this.unsubscribe();
-      //this.unsubscribe2();
   }
 
   getPhotoPermission = async () => {
@@ -116,7 +112,7 @@ class PrivateChatScreen extends Component {
             alert("We need permission to use your camera roll if you'd like to include a photo.");
         }
     }
-};
+  };
 
 pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -132,7 +128,6 @@ pickImage = async () => {
 };
 
 renderCustomView = (props) => {
-  //const { image } = this.state;
   const { currentMessage, containerStyle } = this.props
   if (props.currentMessage.image) {
     return (
@@ -148,11 +143,9 @@ renderCustomView = (props) => {
 
 renderSend(props) {
   return (
-      <Send
-          {...props}
-      >
+      <Send {...props}>
           <View style={{marginRight: 10, marginBottom: 10}}>
-            <Icon name="paper-plane" size={25} color="#5a6e55" />
+              <Icon name="paper-plane" size={25} color="#3e394d" />
           </View>
       </Send>
   );
@@ -160,21 +153,11 @@ renderSend(props) {
 
 renderBubble = props => {
   return (
-    <Bubble
-      {...props}
-      wrapperStyle={{
-        left: {
-          //backgroundColor:'#acb6aa',
-          backgroundColor: '#f0f0f0',
-        },
-        right: {
-          backgroundColor:'#5a6e55',
-        }
-      }}
+    <Bubble {...props} wrapperStyle={{ 
+      left: { backgroundColor: '#f0f0f0' }, 
+      right: { backgroundColor:'#3e394d' }}} 
     />
   )} 
-
-
 
   render() {
     const chat = <GiftedChat messages={this.state.messages} onSend={Fire.shared.send} user={this.user} />;
@@ -185,18 +168,11 @@ renderBubble = props => {
             </KeyboardAvoidingView>
         );
     }
-
     return <SafeAreaView style={styles.container}>
+            <StatusBar barStyle="dark-content"></StatusBar>
             <>
                 {this.state.messages.length === 0 && (
-                    <View style={[
-                    StyleSheet.absoluteFill,
-                    {
-                        backgroundColor: 'white',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        bottom: 50
-                    }]}>
+                <View style={[ StyleSheet.absoluteFill, {backgroundColor: 'white', justifyContent: 'center', alignItems: 'center',bottom: 50}]}>
                     <Image 
                         source={{ uri: 'https://i.stack.imgur.com/qLdPt.png' }}
                         style={{
@@ -223,11 +199,10 @@ renderBubble = props => {
                   <Icon name="arrow-round-back"></Icon>
               </TouchableOpacity>
               <TouchableOpacity style={styles.library} onPress={this.pickImage}>
-                    <Icon name="ios-images" size={32} color="#5a6e55"></Icon>
+                    <Icon name="ios-images" size={32} color="#3e394d"></Icon>
                 </TouchableOpacity>       
            </SafeAreaView>;     
-}
-
+    }
 }
 
 const styles = StyleSheet.create({

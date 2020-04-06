@@ -74,7 +74,6 @@ class PollBoard extends Component {
 
     componentWillUnmount() {
       this.unsubscribe();
-      //this.unsuscribe();
     };
 
     setModalVisible(visible,imageKey) {
@@ -119,7 +118,7 @@ class PollBoard extends Component {
         <View style={styles.mediaImageContainer}>
           <TouchableWithoutFeedback key={index} onPress={() => {this.setModalVisible(true,index)}}>
             <ImageBackground source={{ uri: item.url }} style={styles.image} resizeMode="cover">
-                { !liked  
+                { !liked && !expired
                 ? (<View style={{ flexDirection:'row',justifyContent: 'space-between', marginHorizontal: 10, marginTop: 334}}>
                     <TouchableOpacity style={styles.dislikeContainer} onPress={() => this.deleteItem(item)}>
                         <Icon name="md-thumbs-down" size={30} color="white" ></Icon>
@@ -232,7 +231,7 @@ class PollBoard extends Component {
                         onRequestClose={() => {Alert.alert('Modal has been closed.');
                       }}>
                         <View style={styles.modal}>
-                            <TouchableHighlight onPress={() => { this.setModalVisible(!this.state.modalVisible,0)}}>
+                            <TouchableHighlight onPress={() => { this.setModalVisible(!this.state.modalVisible,0) }}>
                               <Icon name="ios-close-circle" size={45} color="#fff" />
                             </TouchableHighlight>
                             
@@ -247,7 +246,7 @@ class PollBoard extends Component {
                       </Modal>
                     </View>
 
-                  </View>
+              </View>
             </SafeAreaView>              
         )
     }
@@ -309,12 +308,14 @@ const styles = StyleSheet.create({
     color: "#3D425C"
   },
   coverContainer: {
+    backgroundColor: '#E8EDF2',
+    borderRadius:25,
     marginTop: 30,
     width: 400,
     height: 400,
     shadowColor: "#5D3F6A",
     shadowOffset: { height: 15 },
-    shadowRadius: 8,
+    shadowRadius: 4,
     shadowOpacity: 0.3
   },
   cover: {
@@ -334,7 +335,9 @@ const styles = StyleSheet.create({
     marginTop: 20,
     shadowColor: "#5D3F6A",
     shadowRadius: 30,
-    shadowOpacity: 0.5
+    shadowOpacity: 0.5,
+    backgroundColor: '#E8EDF2',
+    borderRadius: 40
   },
   avatar: {
     width: 40,

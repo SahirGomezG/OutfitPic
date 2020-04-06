@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { StyleSheet, Text, View, SafeAreaView, Image, ScrollView, TouchableOpacity, FlatList, Modal, TouchableWithoutFeedback } from "react-native";
 import Fire from "../../Fire";
 import Icon from 'react-native-ionicons';
+import moment from "moment";
 
 class PublicProfile extends Component {
 
@@ -78,7 +79,8 @@ class PublicProfile extends Component {
     };
 
     toFollow(){
-        Fire.shared.followUser(this.state.profileId, this.state.profileOwner, this.state.myName, this.state.userProfile.avatar, this.state.myAvatar, this.state.targetToken, this.state.myToken)
+      const { profileId, profileOwner, myName, myAvatar, targetToken, myToken } = this.state;
+        Fire.shared.followUser( profileId, profileOwner, myName, this.state.userProfile.avatar, myAvatar, targetToken, myToken)
           .then(ref => { 
             alert (`You are now following ${this.state.userProfile.name}.`);
           })
@@ -102,8 +104,7 @@ class PublicProfile extends Component {
       const uid2 = user2;
       if (uid1 < uid2){
         return uid1+uid2;  
-        }
-      else {
+      } else {
         return uid2+uid1;
       }
     };
@@ -119,8 +120,8 @@ class PublicProfile extends Component {
 
     emptyComponent = () => {
       return (
-        <View style={{ marginHorizontal: 100, height: 200, width: 180, borderRadius: 20, alignContent: 'center' }}>
-          <Image source={{uri: 'https://lh3.googleusercontent.com/cxgS5VhHlPSCb0Iheq4mYpDHg7laJ_ODQn9x76Pho2nUlZXMLuz7QDNmtyMcQ1BKWTE5AV7N1YeVtMxsrpYX7xsj'}} style={styles.image} resizeMode="cover"/>
+        <View style={{ backgroundColor: '#8E95AB', marginHorizontal: 100, height: 200, width: 180, borderRadius: 20, alignItems: 'center', justifyContent:'center' }}>
+          <Text style={[styles.text, { fontSize: 12, color: "#DFD8C8", fontWeight: "300" }]}>No polls yet.</Text>
         </View>
       )
     }
@@ -131,10 +132,9 @@ class PublicProfile extends Component {
 
     renderItem = ({item,index}) => {
         return (
-              <View style={styles.mediaImageContainer}>
-                  <Image source={{ uri: item.url }} style={styles.image} resizeMode="cover">    
-                  </Image>             
-              </View>
+            <View style={styles.mediaImageContainer}>
+                <Image source={{ uri: item.url }} style={styles.image} resizeMode="cover"></Image>             
+            </View>
         )
     };    
 
@@ -258,7 +258,7 @@ class PublicProfile extends Component {
                         <View style={styles.activityIndicator}></View>
                         <View style={{ width: 250 }}>
                             <Text style={[styles.text, { color: "#41444B", fontWeight: "300" }]}>
-                                Started following <Text style={{ fontWeight: "400" }}>Jake Challeahe</Text> and <Text style={{ fontWeight: "400" }}>Luis Poteer</Text>
+                                Last visit <Text style={{ fontWeight: "400" }}>{moment(userProfile.lastSession).fromNow()}</Text> 
                             </Text>
                         </View>
                     </View>
@@ -267,7 +267,7 @@ class PublicProfile extends Component {
                         <View style={styles.activityIndicator}></View>
                         <View style={{ width: 250 }}>
                             <Text style={[styles.text, { color: "#41444B", fontWeight: "300" }]}>
-                                Started following <Text style={{ fontWeight: "400" }}>Luke Harper</Text>
+                                Started following <Text style={{ fontWeight: "400" }}>{userProfile.lastActivity}</Text>
                             </Text>
                         </View>
                     </View>

@@ -50,23 +50,6 @@ class OutfitPostScreen extends Component {
 
   unsuscribe = null;
 
-  onSelectedImage = url => {
-    let newDataImg = this.state.fileList;
-    var arrLength = newDataImg.length;
-    let item = {
-      id: Date.now(),
-      url: url,
-    };
-
-    if (arrLength <= 2) {
-      newDataImg.push(item);
-      this.setState({fileList: newDataImg});
-      this.setState({count: this.state.fileList.length});
-    } else {
-      alert('Ops, you can only share 3 outfits');
-    }
-  };
-
   componentDidMount() {
     const user = this.props.uid || Fire.shared.uid;
     let currentuserRef = Fire.shared.firestore.collection('users').doc(user);
@@ -90,6 +73,23 @@ class OutfitPostScreen extends Component {
   componentWillUnmount() {
     this.unsubscribe();
   }
+
+  onSelectedImage = url => {
+    let newDataImg = this.state.fileList;
+    var arrLength = newDataImg.length;
+    let item = {
+      id: Date.now(),
+      url: url,
+    };
+
+    if (arrLength <= 2) {
+      newDataImg.push(item);
+      this.setState({fileList: newDataImg});
+      this.setState({count: this.state.fileList.length});
+    } else {
+      alert('Ops, you can only share 3 outfits');
+    }
+  };
 
   pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -209,21 +209,14 @@ class OutfitPostScreen extends Component {
     return (
       <View
         style={{
+          backgroundColor: '#8E95AB',
           marginHorizontal: 80,
           marginTop: 10,
           height: 300,
-          width: 250,
+          width: 280,
           borderRadius: 18,
           alignContent: 'center',
-        }}>
-        <Image
-          source={{
-            uri:
-              'https://lh3.googleusercontent.com/cxgS5VhHlPSCb0Iheq4mYpDHg7laJ_ODQn9x76Pho2nUlZXMLuz7QDNmtyMcQ1BKWTE5AV7N1YeVtMxsrpYX7xsj',
-          }}
-          style={styles.image}
-          resizeMode="cover"
-        />
+        }}>     
       </View>
     );
   };
