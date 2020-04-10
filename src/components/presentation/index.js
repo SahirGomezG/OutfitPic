@@ -4,6 +4,7 @@ import SideBar from './SideBar';
 import StatsElement from './StatsElement';
 import HeartButton from './HeartButton';
 import FollowingButton from './FollowingButton';
-import PasswordForm from './PasswordForm'
+import PasswordForm from './PasswordForm';
+import LikesButton from './LikesButton';
 
-export { SinglePost, AddButton, SideBar, StatsElement, HeartButton, FollowingButton, PasswordForm };
+export { SinglePost, AddButton, SideBar, StatsElement, HeartButton, FollowingButton, PasswordForm, LikesButton };

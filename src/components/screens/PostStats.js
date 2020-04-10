@@ -136,6 +136,7 @@ class PostStats extends Component{
 
     renderGraphItem =({item, index}) => { 
         const percentage = this.state.numParticipants === 0 ? 1 : (item.votes/this.state.numParticipants*100).toFixed(1);
+        const value = percentage.toString();
         return (
             <TouchableWithoutFeedback key={index} onPress={() => {this.openListVoters(index.toString())}}>
                 <View style={styles.mediaGraphContainer}>     
@@ -146,7 +147,7 @@ class PostStats extends Component{
                         color='#b53f45'
                         shadowColor='#c7bacc'
                         bgColor="#fff">
-                            <Text style={{ fontSize: 16, color: "#4F566D",fontFamily: "HelveticaNeue" }}>{percentage} %</Text>
+                            <Text style={{ fontSize: 16, color: "#4F566D",fontFamily: "HelveticaNeue" }}>{value} %</Text>
                     </ProgressCircle>
                     <Icon name="md-people" size={24} color="#4F566D"/>   
                 </View>
@@ -342,6 +343,7 @@ const styles = StyleSheet.create({
         borderRadius: 16
     },
     postsContainer: {
+        //backgroundColor: "#E8EDF2",  
         margin:10,
         alignItems: 'center',
         shadowColor: "#5D3F6A",

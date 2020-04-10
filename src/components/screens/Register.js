@@ -74,10 +74,9 @@ class Register extends Component {
                         <Text style={styles.greeting}>{`Hello!\nSign up to get started.`}</Text>
                         <TouchableOpacity style={styles.avatarPlaceholder} onPress={this.handlePickAvatar}>
                             <Image
-                                  source={this.state.user.avatar
+                                  source ={this.state.user.avatar
                                       ? { uri: this.state.user.avatar }
-                                      : require("../../../assets/add.png")
-                                  }
+                                      : require("../../../assets/add.png")}
                                   style={styles.avatar}
                               />
                         </TouchableOpacity>

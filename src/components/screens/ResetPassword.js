@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, TouchableOpacity, TextInput, Alert, StyleSheet, StatusBar, LayoutAnimation, KeyboardAvoidingView, ImageBackground, TouchableWithoutFeedback, Keyboard} from 'react-native';
+import { View, Text, TouchableOpacity, TextInput, Alert, StyleSheet, StatusBar, LayoutAnimation, KeyboardAvoidingView, Image, TouchableWithoutFeedback, Keyboard} from 'react-native';
 import * as firebase from 'firebase';
 import Icon from 'react-native-ionicons';
 
@@ -35,6 +35,7 @@ class ResetPassword extends Component {
               <StatusBar barStyle="light-content"></StatusBar>
                  
                    <View style={styles.container}>
+                        <Image source={require("../../../assets/logo1.png")} style={styles.logoIcon}/>
                         <View style={{marginTop:10}}>
                             <Text style={styles.logo}>OutfitPic</Text>
                         </View>
@@ -76,6 +77,11 @@ const styles = StyleSheet.create({
         width: 100+'%', 
         flex:1, 
         //backgroundColor:'rgba(0,0,0,0.20)'
+    },
+    logoIcon: {
+        width: 100,
+        height: 100,
+        borderRadius: 55
     },
     greeting: {
         marginTop: 100,

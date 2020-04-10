@@ -16,8 +16,9 @@ class HeartButton extends Component {
     
     componentDidMount(){
         const user = this.props.uid || Fire.shared.uid;
-        const pollId = this.props.pollId;
-        const likedRef = Fire.shared.firestore.collection('outfitPolls').doc(pollId).collection('likes');
+        const pollId = this.props.pollId || '';
+        const pollRef = Fire.shared.firestore.collection('outfitPolls').doc(pollId);
+        const likedRef = pollRef.collection('likes');
         let query = likedRef.where('user._id', '==', user);
         this.unsubscribe = query.onSnapshot(querySnapshot => {
             if (!querySnapshot.empty) {
@@ -25,7 +26,7 @@ class HeartButton extends Component {
             } else { 
                 this.setState({ liked: false })
             }
-        })
+        });  
     }
     
     componentWillUnmount() {
@@ -35,10 +36,10 @@ class HeartButton extends Component {
     render(){
         return (
             <View >
-                {!this.state.liked ? 
-                  (<Icon name="ios-heart-empty" size={20} color="#73788B" style={{ marginRight: 16 }} />) 
-                    : 
-                  (<Icon name="ios-heart" size={20} color="#FF2D42" style={{ marginRight: 16 }} />)}
+                {!this.state.liked 
+                    ? <Icon name="ios-heart-empty" size={20} color="#73788B" style={{ marginRight: 16 }}/>  
+                    : <Icon name="ios-heart" size={20} color="#FF2D42" style={{ marginRight: 16 }} />     
+                }
             </View>
         );
     };
@@ -47,6 +48,11 @@ class HeartButton extends Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+    },
+    numLikes: {
+        marginBottom: 10,
+        fontSize: 14,
+        color: "#838899"
     },
 })
 

@@ -7,6 +7,7 @@ import HeartButton from '../presentation/HeartButton';
 import { Tab, Tabs, Container, TabHeading } from 'native-base';
 import { notificationManager } from '../../NotificationManager';
 import firebase from 'react-native-firebase';
+import LikesButton from "../presentation/LikesButton";
 
 class Feed extends Component {
     static navigationOptions = {
@@ -32,6 +33,7 @@ class Feed extends Component {
             refreshing: false,
             lastVisiblePrivate: null,
             refreshingPrivate: false,
+            canDelete: false,
         }
     };    
 
@@ -67,10 +69,11 @@ class Feed extends Component {
 
         let query1 = pollsRef.where('privatePoll','==', false).orderBy('timestamp','desc').limit(this.state.limit);  
         this.unsubscribe = query1
-            .onSnapshot(snapshot => {
+            .get().then(snapshot => {
                 let lastVisible = snapshot.docs[snapshot.docs.length - 1].data().timestamp;
                 var postsFB = [];
                 snapshot.forEach(doc => { 
+                    var canDelete = user === doc.data().uid ? true : false;
                         postsFB = [({
                             id: doc.id,
                             name: doc.data().user.name,
@@ -80,24 +83,27 @@ class Feed extends Component {
                             images: doc.data().images,
                             blockComments: doc.data().blockComments,
                             authorId: doc.data().uid,
+                            canDelete: canDelete,
                             likesCount: doc.data().likesCount,
                         }), ...postsFB];                   
                 })       
                 this.setState({ globalPosts: postsFB.reverse()});
                 this.setState({ lastVisible: lastVisible })
                 this.setState({ loading: false });
+                console.log(this.state.globalPosts)
             });
 
         let query2 = pollsRef.where('privatePoll','==', true).where('followers', 'array-contains', user).orderBy('timestamp','desc').limit(this.state.limit);      
         this.unsubscribe2 = query2
-            .onSnapshot(snapshot => {
+            .get().then(snapshot => {
                 if (snapshot.empty) { 
                     console.log('No friends posts');
                     this.setState({ lastVisiblePrivate: null, privatePosts: this.state.privatePosts })
                 } else {
                 let lastVisiblePrivate = snapshot.docs[snapshot.docs.length - 1].data().timestamp;
                 var postsFB = [];
-                snapshot.forEach(doc => { 
+                snapshot.forEach(doc => {
+                    var canDelete = user === doc.data().uid ? true : false; 
                         postsFB = [({
                             id: doc.id,
                             name: doc.data().user.name,
@@ -107,6 +113,7 @@ class Feed extends Component {
                             images: doc.data().images,
                             blockComments: doc.data().blockComments,
                             authorId: doc.data().uid,
+                            canDelete: canDelete,
                             likesCount: doc.data().likesCount,
                         }), ...postsFB];                   
                 })       
@@ -118,6 +125,7 @@ class Feed extends Component {
     };
 
     retrieveMore = () => {
+        const user = this.props.uid || Fire.shared.uid;
         const postListSize = this.state.globalPosts.length;
         if ( postListSize <= 12 ) {
             this.setState({ refreshing: true });
@@ -131,6 +139,7 @@ class Feed extends Component {
                         let lastVisible = snapshot.docs[snapshot.docs.length - 1].data().timestamp;
                         var postsFB = [];
                         snapshot.forEach(doc => { 
+                            var canDelete = user === doc.data().uid ? true : false; 
                                 postsFB = [({
                                     id: doc.id,
                                     name: doc.data().user.name,
@@ -140,6 +149,7 @@ class Feed extends Component {
                                     images: doc.data().images,
                                     blockComments: doc.data().blockComments,
                                     authorId: doc.data().uid,
+                                    canDelete: canDelete,
                                     likesCount: doc.data().likesCount,
                                 }), ...postsFB];                   
                         })       
@@ -170,6 +180,7 @@ class Feed extends Component {
                 let lastVisible = snapshot.docs[snapshot.docs.length - 1].data().timestamp;
                 var postsFB = [];
                 snapshot.forEach(doc => { 
+                    var canDelete = user === doc.data().uid ? true : false; 
                         postsFB = [({
                             id: doc.id,
                             name: doc.data().user.name,
@@ -179,6 +190,7 @@ class Feed extends Component {
                             images: doc.data().images,
                             blockComments: doc.data().blockComments,
                             authorId: doc.data().uid,
+                            canDelete: canDelete,
                             likesCount: doc.data().likesCount,
                         }), ...postsFB];                   
                 })       
@@ -193,8 +205,8 @@ class Feed extends Component {
 };
 
     componentWillUnmount() {
-        this.unsubscribe();
-        this.unsubscribe2();
+        //this.unsubscribe();
+        //this.unsubscribe2();
     }
 
     onRegister(token){
@@ -234,6 +246,10 @@ class Feed extends Component {
         this.props.navigation.navigate('publicProfile', { profileId: item.authorId, profileOwner: item.name });
     }
 
+    openLikes(item){
+        this.props.navigation.navigate('likesScreen', { pollId: item.id });
+    }
+
     setModalVisible(visible, item) {
         this.setState({ modalVisible: visible });
         this.setState({ modalData: item });
@@ -244,6 +260,23 @@ class Feed extends Component {
         Fire.shared.reportPost(this.state.modalData.id , userId);
         this.setState({modalVisible: false, modalData: null});
         return this.onPressSendNotification()
+    }
+
+    deletePost(){
+        const user = Fire.shared.uid;
+        let id = this.state.modalData.id;
+        if ( user === this.state.modalData.authorId ){
+            Fire.shared.DeletePost(id)
+            .then(ref => {
+                this.componentDidMount()
+                this.setState({ modalVisible: false, modalData: null});      
+            })
+            .catch(error => {
+                alert(error);
+            });
+        } else {
+            alert ('Not authorized to perfom this action')
+        }
     }
 
     onPressSendNotification = () => {
@@ -303,15 +336,20 @@ class Feed extends Component {
                     visible={this.state.modalVisible}
                     >
                     <TouchableWithoutFeedback onPress={() => {this.setModalVisible(!this.state.modalVisible)}}>
-                        <View style={{flex:1, alignItems:'center', justifyContent:'center',marginTop: 22}}>
+                        <View style={{flex:1, alignItems:'center', justifyContent:'center'}}>
                             <View style={styles.modal}>
-                                <TouchableOpacity style={{borderBottomWidth: 1,borderBottomColor: "#EBECF4"}} onPress={() => this.reportPost()} >
-                                    <View style={{ height:50+'%',alignItems:'center', justifyContent:'center', margin:15,}}>
-                                        <Text style={[styles.title,{color:'red'}]}>Report</Text>
+                                 <TouchableOpacity style={[styles.modalSection,{borderBottomWidth: 1,borderBottomColor: "#EBECF4"}]}  onPress={() => this.deletePost()}>
+                                    <View style={{margin:20}}>
+                                        <Text style={[styles.title,{color:'red'}]}>Delete</Text>
+                                    </View>
+                                </TouchableOpacity> 
+                                <TouchableOpacity style={[styles.modalSection,{borderBottomWidth: 1,borderBottomColor: "#EBECF4"}]} onPress={() => this.reportPost()} >
+                                    <View style={{margin:20}}>
+                                        <Text style={[styles.title,{color:'black'}]}>Report</Text>
                                     </View>
                                 </TouchableOpacity>
-                                <TouchableOpacity onPress={() => { this.setModalVisible(!this.state.modalVisible)}}> 
-                                    <View style={{ height:50+'%',alignItems:'center', justifyContent:'center', margin:15}}>
+                                <TouchableOpacity style={styles.modalSection} onPress={() => { this.setModalVisible(!this.state.modalVisible)}}> 
+                                    <View style={{margin:20}}>
                                         <Text style={styles.title}>Cancel</Text>
                                     </View>
                                 </TouchableOpacity>
@@ -324,7 +362,7 @@ class Feed extends Component {
                 <View style={{ flex: 1, marginHorizontal: 10 }}>
                     <View style={{flexDirection: 'column'}}>
                     <Text style={styles.post}>{item.text}</Text>
-                        <TouchableOpacity style={{alignItems:'center'}} onPress={() => this.openPollBoard(item)}>
+                        <TouchableOpacity style={{alignItems:'center'}} activeOpacity={0.9} onPress={() => this.openPollBoard(item)}>
                             <FlatList
                                 data={item.images}
                                 renderItem = {this.renderItem}
@@ -335,8 +373,7 @@ class Feed extends Component {
                     </View>
                     <View style={{ flexDirection: "row", marginLeft:10  }}>
                         <TouchableOpacity onPress={() => this.like(item)}>
-                            <HeartButton uid={this.state.user.id} pollId={item.id} />
-                            <Text style={[styles.post,{fontSize:10}]}> {item.likesCount} Likes</Text>
+                            <HeartButton uid={this.state.user.id} pollId={item.id} /> 
                         </TouchableOpacity>
                         {!item.blockComments 
                         ? <TouchableOpacity onPress={() => this.openComments(item)}>
@@ -344,6 +381,9 @@ class Feed extends Component {
                           </TouchableOpacity>  
                         : null }  
                     </View>
+                    <TouchableOpacity style={{marginLeft: 10, width:50}} onPress={() => this.openLikes(item)}>
+                        <LikesButton pollId={item.id} /> 
+                    </TouchableOpacity>
                 </View>          
             </View>   
         );
@@ -375,6 +415,7 @@ class Feed extends Component {
                                     onEndReachedThreshold={0}
                                     refreshing={this.state.refreshing}
                                     ListFooterComponent={this.renderFooter}
+                                    onRefresh={() => setTimeout(() => { this.componentDidMount() }, 200) }
                                 ></FlatList>
                             </View>
                         </Tab>
@@ -390,6 +431,7 @@ class Feed extends Component {
                                     onEndReachedThreshold={0}
                                     refreshing={this.state.refreshingPrivate}
                                     ListFooterComponent={this.renderFooter}
+                                    onRefresh={() => setTimeout(() => { this.componentDidMount() }, 200) }
                                 ></FlatList>
                             </View>
                         </Tab>
@@ -497,12 +539,17 @@ const styles = StyleSheet.create({
     modal:{
         flexDirection:'column',
         width: 300, 
-        height: 150,
-        padding: 26,
+        height: 180,
+        padding: 10,
         justifyContent:"center",
         alignItems:'center',
         borderRadius: 12,
         backgroundColor:'#FBFBFB'
+    },
+    modalSection:{
+        width: 100+'%',
+        alignItems:'center', 
+        justifyContent:'center', 
     },
     title: {
         fontWeight: "200",
@@ -515,3 +562,4 @@ const styles = StyleSheet.create({
 
 export default Feed;
 
+// <Text style={[styles.post,{fontSize:10}]}> {item.likesCount} Likes</Text>

@@ -164,6 +164,8 @@ class OutfitPostScreen extends Component {
 
   handleOutfitPost = () => {
     if (this.state.fileList.length != 0) {
+      this.setState({ dialogVisible: false })
+      this.props.navigation.goBack();
       Fire.shared
         .addOutfitPic({
           text: this.state.text.trim(),
@@ -175,8 +177,7 @@ class OutfitPostScreen extends Component {
           followers: this.state.followers,
         })
         .then(ref => {
-          this.setState({text: '', fileList: [], count: 0, privatePoll: false});
-          this.props.navigation.goBack();
+          this.setState({ text: '', fileList: [], count: 0, privatePoll: false });
         })
         .catch(error => {
           alert(error);

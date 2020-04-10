@@ -313,10 +313,6 @@ const styles = StyleSheet.create({
     marginTop: 30,
     width: 400,
     height: 400,
-    shadowColor: "#5D3F6A",
-    shadowOffset: { height: 15 },
-    shadowRadius: 4,
-    shadowOpacity: 0.3
   },
   cover: {
     width: 200,
