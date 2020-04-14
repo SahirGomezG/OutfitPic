@@ -57,10 +57,10 @@ const ProfileStack = createStackNavigator(
 
 const DrawerNavigator = createDrawerNavigator(
   {
-      Home: {
+      Feed: {
           screen: PostStack,
           navigationOptions: {
-              title: "Home",
+              title: "Feed",
               drawerIcon: ({ tintColor }) => <Icon name="home" size={16} color={tintColor} />
           }
       },

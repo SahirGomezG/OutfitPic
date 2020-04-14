@@ -70,7 +70,7 @@ class SideBar extends Component {
             </View>
             
             <TouchableOpacity onPress={this.signOut}> 
-              <View style={{position:"absolute", bottom: -170, right: 30, flexDirection:'row'}}>
+              <View style={{position:"absolute", bottom: -50, right: 30, flexDirection:'row'}}>
                 <Icon name="ios-log-out" size={16}/>       
                 <Text style={{fontSize: 14, fontWeight: '700'}}>    SignOut</Text>
               </View>

@@ -64,16 +64,14 @@ class Register extends Component {
           <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
             <KeyboardAvoidingView style = {{ flex:1, justifyContent:'center', alignItems: 'center', backgroundColor: "#EBECF4"}} behavior="padding" enabled>
               <StatusBar barStyle="light-content"></StatusBar>
+              
                 <ImageBackground
                   source={require("../../../assets/wallpaper.jpg")}
                   style={{ width: '100%', height: '100%', flex: 1}}
                 >
                 <View style={{ alignItems:'center', justifyContent:'center', flex:1, backgroundColor: 'rgba(128,128,128,0.35)'}}>
-
-                    <TouchableOpacity style={styles.back} onPress={() => this.props.navigation.goBack()}>
-                      <Icon name="arrow-round-back" color='white'></Icon>
-                    </TouchableOpacity>
-
+                    
+                    
                     <View style={{  marginTop: 30, alignItems: "center", width: "100%" }}>
                         <Text style={styles.greeting}>{`Hello!\nSign up to get started.`}</Text>
                         <TouchableOpacity style={styles.avatarPlaceholder} onPress={this.handlePickAvatar}>
@@ -139,7 +137,7 @@ class Register extends Component {
 
 const styles = StyleSheet.create({
     greeting: {
-      marginBottom: 110,
+      marginBottom: 80,
       fontSize: 18,
       fontWeight: '200',
       textAlign: "center",

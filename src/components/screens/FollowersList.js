@@ -130,7 +130,7 @@ class FollowersList extends Component {
                   <Tabs tabContainerStyle={{ height: 42 }} tabBarUnderlineStyle = {{backgroundColor: '#8E95AB', height: 3 }}  initialPage={this.state.index} onChangeTab={({ i }) => this.setState({ index: i })}>
                       <Tab heading="Followers" textStyle={{color: '#4F566D', fontWeight: '200'}} activeTextStyle={{color: '#4F566D', fontWeight: '300'}} >
                           <List>
-                              <Header searchBar rounded style={{height: 20, paddingTop:-30}}>
+                              <Header searchBar rounded style={{height: 40, paddingTop:-30}}>
                                   <Item>
                                       <Icon name="ios-search" size={20} />
                                       <Input placeholder="Search" autoCapitalize="none" onChangeText = {text => this.handleSearch(text)} />
@@ -149,7 +149,7 @@ class FollowersList extends Component {
                       </Tab>
                       <Tab heading="Following" textStyle={{color: '#4F566D', fontWeight: '200'}} activeTextStyle={{color: '#4F566D', fontWeight: '300'}} >
                           <List>
-                              <Header searchBar rounded style={{height: 20, paddingTop:-30}}>
+                              <Header searchBar rounded style={{height: 40, paddingTop:-30}}>
                                   <Item>
                                     <Icon name="ios-search" size={20} />
                                      <Input placeholder="Search" autoCapitalize="none" onChangeText = {text => this.handleSearch2(text)} />
@@ -182,7 +182,7 @@ const styles = StyleSheet.create({
     header: {
       flexDirection:'row',
       paddingTop: 50,
-      marginBottom: -42,
+      marginBottom: -25,
       paddingBottom: 20,
       backgroundColor:'#3e394d',
       alignItems: "center",

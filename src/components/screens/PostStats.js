@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {View, Text, StyleSheet, Image, Dimensions, TouchableOpacity, Modal, FlatList, SafeAreaView, TouchableWithoutFeedback, TouchableHighlight} from 'react-native';
+import {View, Text, StyleSheet, Image, Dimensions, TouchableOpacity, Modal, FlatList, SafeAreaView, TouchableWithoutFeedback, TouchableHighlight, ScrollView} from 'react-native';
 import Icon from 'react-native-ionicons';
 import Fire from "../../Fire";
 import {LineChart, ProgressChart, BarChart, PieChart} from "react-native-chart-kit";
@@ -132,7 +132,8 @@ class PostStats extends Component{
        
         return (
             <SafeAreaView style={styles.content}>
-                <View >
+                <ScrollView >
+                    
                 <View style={styles.titleBar}>
                     <TouchableOpacity style={styles.back} onPress={() => this.props.navigation.goBack()}>
                         <Icon name="arrow-round-back"></Icon>
@@ -226,7 +227,7 @@ class PostStats extends Component{
                     </Dialog.Container>
                 </View> 
 
-                </View>
+                </ScrollView>
             </SafeAreaView>
         );
     }

@@ -14,6 +14,7 @@ import {
   Switch,
   FlatList,
   TouchableHighlight,
+  ScrollView,
   Dimensions,
 } from 'react-native';
 import Icon from 'react-native-ionicons';
@@ -213,8 +214,8 @@ class OutfitPostScreen extends Component {
           backgroundColor: '#8E95AB',
           marginHorizontal: 80,
           marginTop: 10,
-          height: 300,
-          width: 280,
+          height: 280,
+          width: 250,
           borderRadius: 18,
           alignContent: 'center',
         }}>     
@@ -305,7 +306,7 @@ class OutfitPostScreen extends Component {
             />
           </View>
 
-          <View style={styles.section}>
+          <ScrollView style={styles.section}>
             <View>
               <Text style={styles.title}>More Options</Text>
             </View>
@@ -509,7 +510,7 @@ class OutfitPostScreen extends Component {
                 </TouchableWithoutFeedback>
               </Modal>
             </View>
-          </View>
+          </ScrollView>
 
           <View style={styles.mediaCount}>
             <Text
@@ -557,7 +558,7 @@ const styles = StyleSheet.create({
     borderBottomColor: '#D8D9DB',
   },
   inputContainer: {
-    margin: 16,
+    margin: 14,
     flexDirection: 'row',
   },
   avatar: {
@@ -584,7 +585,7 @@ const styles = StyleSheet.create({
   },
   mediaImageContainer: {
     width: 250,
-    height: 300,
+    height: 280,
     borderRadius: 12,
     overflow: 'hidden',
     marginHorizontal: 10,

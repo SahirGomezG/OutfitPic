@@ -73,7 +73,7 @@ login() {
                 style={{ width: '100%', height: '100%', flex: 1}}
            >
              <View style={{ alignItems:'center', justifyContent:'center', flex:1, backgroundColor:'rgba(0,0,0,0.20)'}}>
-                <View style={{marginTop:-20}}>
+                <View style={{marginTop:100}}>
                    <Text style={styles.logo}>OutfitPic</Text>
                 </View>
 
@@ -105,18 +105,19 @@ login() {
                 <TouchableOpacity style={styles.button} onPress={this.handleLogin}>
                     <Text style={{color:'#fff', fontWeight:"600", fontSize:15}}>Sign In</Text>
                 </TouchableOpacity> 
+                <View style={{marginBottom:80}}>
+                  <Button  
+                  onPress = {() => { this.props.navigation.navigate('register')}} 
+                  title='New to OutfitPic? Sign Up'
+                  color='#FFF'
+                  />
 
-                <Button  
-                onPress = {() => { this.props.navigation.navigate('register')}} 
-                title='New to OutfitPic? Sign Up'
-                color='#FFF'
-                />
-
-                <Button  
-                onPress = {() => { this.props.navigation.navigate('resetPassword')}} 
-                title='Forgot Password?'
-                color='grey'
-                />
+                  <Button  
+                  onPress = {() => { this.props.navigation.navigate('resetPassword')}} 
+                  title='Forgot Password?'
+                  color='grey'
+                  />
+                </View>
                 
              </View>   
            </ImageBackground>        
@@ -128,7 +129,7 @@ login() {
 
 const styles = StyleSheet.create({
   greeting: {
-    marginTop: 240,
+    marginTop: 200,
     fontSize: 18,
     fontWeight: '200',
     textAlign: "center",

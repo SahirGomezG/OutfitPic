@@ -165,7 +165,7 @@ class Feed extends Component {
     const user = this.props.uid || Fire.shared.uid;
     const postListSize = this.state.privatePosts.length;
     if ( postListSize <= 2 ) {
-        this.setState({ refreshingPrivate: true });
+        //this.setState({ refreshingPrivate: true });
         console.log('Retrieving additional Data');
         // Cloud Firestore: Query (Additional Query)
         let pollsRef = Fire.shared.firestore.collection("outfitPolls");
