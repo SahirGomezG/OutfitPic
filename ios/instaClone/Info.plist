@@ -40,7 +40,7 @@
 	<key>NSCameraUsageDescription</key>
 	<string>Do you allow Outfitpic camera access?</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
+	<string/>
 	<key>NSMainNibFile</key>
 	<string>LaunchScreen</string>
 	<key>NSMicrophoneUsageDescription</key>

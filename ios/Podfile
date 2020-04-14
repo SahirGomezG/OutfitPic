@@ -49,6 +49,9 @@ target 'OutfitPic' do
 
   pod 'RNFirebase', :path => '../node_modules/react-native-firebase/ios'
 
+
+  pod 'react-native-webview', :path => '../node_modules/react-native-webview'
+
   target 'OutfitPicTests' do
     inherit! :search_paths
     # Pods for testing

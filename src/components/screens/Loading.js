@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text, StyleSheet, ActivityIndicator} from 'react-native';
+import { View, Text, StyleSheet, ActivityIndicator, Image} from 'react-native';
 import firebase from 'firebase';
 import Fire from '../../Fire';
 
@@ -19,6 +19,7 @@ class Loading extends Component {
     render() {
         return (
             <View style={ styles.container }>
+                <Image source={require("../../../assets/logo2.png")} style={styles.logoIcon}/>
                 <Text style={styles.header}> Hang tight, loading...</Text>
                 <ActivityIndicator size="large"></ActivityIndicator>
             </View>
@@ -38,6 +39,11 @@ const styles = StyleSheet.create({
         color: "#514E5A",
         marginTop: 35,
         marginBottom: 50,
+    },
+    logoIcon: {
+        width: 160,
+        height: 160,
+        borderRadius: 80
     },
 });
 

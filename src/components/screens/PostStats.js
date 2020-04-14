@@ -9,33 +9,6 @@ import Dialog from "react-native-dialog";
 
 const width = Dimensions.get('window').width;
 
-const chartConfig2 = {
-    backgroundColor: "#4f6273",
-    backgroundGradientFrom: "#45708c",
-    backgroundGradientTo: "#1a2933",
-    decimalPlaces: 0, // optional, defaults to 2dp
-    barPercentage: 1.5,
-    color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-    labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-        style: {
-                borderRadius: 16
-                },
-        propsForDots: {
-                r: "6",
-                strokeWidth: "2",
-                stroke: "#ffa726"
-         }
-    }
-
-const data2 = {
-    labels: ["1", "2", "3"],
-    datasets: [
-      {
-        data: [25, 41, 30]
-      }
-    ]
-  };
-
 class PostStats extends Component{
     static navigationOptions = ({ navigation }) => ({
         //title: 'Stats',
@@ -381,47 +354,3 @@ const styles = StyleSheet.create({
 });
 
 export default PostStats;
-
-/*<BarChart
-                        style={styles.graphStyle}
-                        data={data2}
-                        width={width-15}
-                        height={220}
-                        //yAxisLabel="$"
-                        chartConfig={chartConfig2}
-                        //verticalLabelRotation={30}
-                        fromZero={true}
-                        withInnerLines={true}
-                        showBarTops={true}
-                        absolute={true}
-                        //hideLegend={true}
-                    />*/
-
-                   /* 
-                    <LineChart
-                    data={{
-                    labels: ["January", "February", "March", "April", "May", "June"],
-                    datasets: [
-                        {
-                        data: [
-                            Math.random() * 100,
-                            Math.random() * 100,
-                            Math.random() * 100,
-                            Math.random() * 100,
-                            Math.random() * 100,
-                            Math.random() * 100
-                        ]
-                        }
-                    ]
-                    }}
-                    width={width-20} // from react-native
-                    height={120}
-                    yAxisLabel="$"
-                    yAxisSuffix="k"
-                    yAxisInterval={1} // optional, defaults to 1
-                    chartConfig={chartConfig2}
-                    bezier
-                    style={styles.graphStyle}
-                />
-                  */            
-             

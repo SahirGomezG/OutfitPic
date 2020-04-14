@@ -194,7 +194,10 @@ exports.pushNotificationChat = functions.database
         pushToken = doc.data().pushToken;
         option5 = doc.data().notificationSettings.option5;
         if (option5 === true) {
-          return admin.messaging().sendToDevice(pushToken, payload);
+          return admin
+            .messaging()
+            .sendToDevice(pushToken, payload)
+            .catch(console.error);
         } else {
           return null;
         }
@@ -217,4 +220,3 @@ exports.recentActivity = functions.firestore
       .update({lastActivity: followingName})
       .catch(console.error);
   });
-

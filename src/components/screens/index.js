@@ -19,6 +19,7 @@ import Profile from './Profile';
 import VotersScreen from './VotersScreen';
 import FollowersList from './FollowersList';
 import Likes from './Likes';
+import TermsConditions from './TermsConditions';
 import NotificationsSettings from './NotificationsSettings';
 
-export { Login, ResetPassword, ProfileSettings, Camera, Register, Loading, PostStats, FriendsScreen, PostScreen, Feed, ChatScreen, Rooms, PrivateChatScreen, OutfitPostScreen, PollBoard, Comments, PublicProfile, Profile, VotersScreen, FollowersList, Likes, NotificationsSettings };
+export { Login, ResetPassword, ProfileSettings, Camera, Register, Loading, PostStats, FriendsScreen, PostScreen, Feed, ChatScreen, Rooms, PrivateChatScreen, OutfitPostScreen, PollBoard, Comments, PublicProfile, Profile, VotersScreen, FollowersList, Likes, TermsConditions, NotificationsSettings };

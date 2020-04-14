@@ -8,7 +8,8 @@ import {
   PostStats, 
   Login,
   ResetPassword, 
-  Register, 
+  Register,
+  TermsConditions, 
   FriendsScreen, 
   PostScreen,
   OutfitPostScreen, 
@@ -145,7 +146,8 @@ const IntroStack = createStackNavigator(
     {
       login: Login,
       register: Register,
-      resetPassword: ResetPassword
+      resetPassword: ResetPassword,
+      termsConditions: TermsConditions,
     },
     {
       initialRouteName: 'login',

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, TouchableOpacity, TextInput, Button, StyleSheet, StatusBar, Image, KeyboardAvoidingView, ImageBackground, TouchableWithoutFeedback, Keyboard} from 'react-native';
+import { View, Text, TouchableOpacity, TextInput, Button, StyleSheet, StatusBar, Image, KeyboardAvoidingView, ImageBackground, TouchableWithoutFeedback, Keyboard, Linking} from 'react-native';
 import Icon from 'react-native-ionicons';
 import * as ImagePicker from "expo-image-picker";
 
@@ -55,6 +55,10 @@ class Register extends Component {
     Fire.shared.createUser(this.state.user)
   }
 
+  handleOpeneningWebView = () => {
+    this.props.navigation.navigate('termsConditions');
+  }
+
     render() {
         return (
           <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
@@ -82,9 +86,9 @@ class Register extends Component {
                         </TouchableOpacity>
                     </View>
 
-                  <View style={styles.errorMessage}>
-                    {this.state.errorMessage && <Text style={styles.error}>{this.state.errorMessage}</Text>}
-                  </View>
+                    <View style={styles.errorMessage}>
+                      {this.state.errorMessage && <Text style={styles.error}>{this.state.errorMessage}</Text>}
+                    </View>
                         <TextInput 
                           autoCapitalize="none"
                           onChangeText={ name => this.setState({ user: { ...this.state.user, name } }) }
@@ -112,9 +116,9 @@ class Register extends Component {
                           placeholderTextColor = "grey" 
                           style = {styles.input}/>
 
-                        <View style={{marginBottom:10}}>
+                        <TouchableOpacity style={{marginBottom:10}} onPress={() => Linking.openURL('https://outfitpic.app/terms-conditions') }>
                           <Text style={{fontSize:9, color: '#FFF'}}> {'By clicking "Sign Up", \n you are agreeing to our User Agreement and Privacy Policy'}</Text> 
-                        </View>      
+                        </TouchableOpacity>      
 
                         <TouchableOpacity style={styles.button} onPress={this.handleSignUp}>
                           <Text style={{color:'#fff', fontWeight:"600", fontSize:15}}>Sign Up</Text>

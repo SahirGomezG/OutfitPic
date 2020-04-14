@@ -90,7 +90,6 @@ class Feed extends Component {
                 this.setState({ globalPosts: postsFB.reverse()});
                 this.setState({ lastVisible: lastVisible })
                 this.setState({ loading: false });
-                console.log(this.state.globalPosts)
             });
 
         let query2 = pollsRef.where('privatePoll','==', true).where('followers', 'array-contains', user).orderBy('timestamp','desc').limit(this.state.limit);      

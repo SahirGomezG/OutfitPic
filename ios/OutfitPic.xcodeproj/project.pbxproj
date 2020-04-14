@@ -34,6 +34,7 @@
 		BEB70CD64482E9C5AB6DC959 /* libPods-OutfitPicTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D18F77CD4F2EDE51BDBE635C /* libPods-OutfitPicTests.a */; };
 		BFD46713343845C4965C58CA /* FontAwesome5_Solid.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9DB60FDF55174BAB8E5F556D /* FontAwesome5_Solid.ttf */; };
 		C90290C31B2649CEA1D833B4 /* MaterialIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AD826449585C48D0B4BFA98C /* MaterialIcons.ttf */; };
+		D302FB2A24450CB9005ABE78 /* libreact-native-webview.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D302FB2924450CB9005ABE78 /* libreact-native-webview.a */; };
 		D37EC77B242020ED00B1A2CD /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D37EC77A242020ED00B1A2CD /* HealthKit.framework */; };
 		D3E311CB242A7424000D928B /* libRNFirebase.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D3E311CA242A7424000D928B /* libRNFirebase.a */; };
 		D3E467DB2428FEDC0016F995 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D3E467DA2428FEDC0016F995 /* GoogleService-Info.plist */; };
@@ -111,6 +112,7 @@
 		C190A1B7B6DCD33F48BF3C08 /* Pods-instaCloneTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-instaCloneTests.release.xcconfig"; path = "Target Support Files/Pods-instaCloneTests/Pods-instaCloneTests.release.xcconfig"; sourceTree = "<group>"; };
 		C379A2EFAC1E2D843ECCD4C4 /* Pods-instaClone.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-instaClone.debug.xcconfig"; path = "Target Support Files/Pods-instaClone/Pods-instaClone.debug.xcconfig"; sourceTree = "<group>"; };
 		D18F77CD4F2EDE51BDBE635C /* libPods-OutfitPicTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-OutfitPicTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		D302FB2924450CB9005ABE78 /* libreact-native-webview.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = "libreact-native-webview.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D37EC779242020ED00B1A2CD /* OutfitPic.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = OutfitPic.entitlements; sourceTree = "<group>"; };
 		D37EC77A242020ED00B1A2CD /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
 		D3E311CA242A7424000D928B /* libRNFirebase.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libRNFirebase.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -138,6 +140,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D302FB2A24450CB9005ABE78 /* libreact-native-webview.a in Frameworks */,
 				D3E311CB242A7424000D928B /* libRNFirebase.a in Frameworks */,
 				5714376746CB70EFDA857E96 /* libPods-OutfitPic.a in Frameworks */,
 				D37EC77B242020ED00B1A2CD /* HealthKit.framework in Frameworks */,
@@ -225,6 +228,7 @@
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				D302FB2924450CB9005ABE78 /* libreact-native-webview.a */,
 				D3E311CA242A7424000D928B /* libRNFirebase.a */,
 				D37EC77A242020ED00B1A2CD /* HealthKit.framework */,
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
@@ -783,7 +787,7 @@
 				DEVELOPMENT_TEAM = W66W6Y75YL;
 				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = instaClone/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = "";
 				OTHER_LDFLAGS = (
@@ -810,7 +814,7 @@
 				DEVELOPMENT_TEAM = W66W6Y75YL;
 				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = instaClone/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = "";
 				OTHER_LDFLAGS = (
