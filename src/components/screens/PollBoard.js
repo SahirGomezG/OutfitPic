@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, Image, TouchableHighlight, Keyboard, TouchableWithoutFeedback, FlatList, Dimensions, ImageBackground, Modal } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, Image, TouchableHighlight, Keyboard, TouchableWithoutFeedback, FlatList, Dimensions, ImageBackground, Modal, ScrollView } from "react-native";
 import Icon from 'react-native-ionicons';
 import moment from "moment";
 import Fire from "../../Fire";
@@ -32,7 +32,6 @@ class PollBoard extends Component {
         };
     }  
 
-    unsuscribe = null;
     unsubscribe = null;
 
     componentDidMount() {
@@ -69,7 +68,8 @@ class PollBoard extends Component {
           .then(doc => { 
             if (!doc.exists) {
               this.setState({ liked :false })
-          }});                 
+            }
+          });                 
     };
 
     componentWillUnmount() {
@@ -108,7 +108,7 @@ class PollBoard extends Component {
     };
 
     openComments(){
-      this.props.navigation.navigate('comments', { pollId: this.state.pollId});
+      this.props.navigation.navigate('comments', { pollId: this.state.pollId, profileId: this.state.poll.uid});
     }
 
     renderItem = ({item,index}) => {
@@ -148,7 +148,7 @@ class PollBoard extends Component {
                       <Icon name="arrow-round-back"></Icon>
                   </TouchableOpacity>
 
-                    <View style={{ alignItems: "center", marginTop: 24 }}>
+                    <View style={{ alignItems: "center", marginTop: 5 }}>
                         <Text style={[styles.textLight, { fontSize: 12 }]}>OUTFITPIC    {privatePoll ? (<Icon name="ios-lock" size={15} color="#4F566D" />) : (<Icon name="md-globe" size={15} color="#4F566D" />)}</Text>
                         <View style={{flexDirection: 'row', marginTop:10}}>
                           <Image source={this.state.ownerAvatar
@@ -169,6 +169,8 @@ class PollBoard extends Component {
                           horizontal={true}          
                       />         
                     </View>
+
+                    <ScrollView>
 
                     <View style={{ flexDirection: "row", justifyContent: "center", alignItems: "center", marginTop: 8 }}>
                         <View style={{ alignItems: "center", marginTop: 20}}>
@@ -194,9 +196,10 @@ class PollBoard extends Component {
                          
                     </View>
           
-                    <View>
-                        {blockComments ? (
-                          <View style={{ flexDirection: "row", justifyContent: "center", alignItems: "center", marginTop: 30, margin:25 }}>
+                    <View style={{marginTop:-10}}>
+                        {blockComments 
+                        ? (
+                          <View style={{ flexDirection: "row", justifyContent: "center", alignItems: "center", margin:25 }}>
                               <Image source={this.state.user.avatar
                                 ? { uri: this.state.user.avatar }
                                 : require("../../../assets/default.png")} 
@@ -207,7 +210,7 @@ class PollBoard extends Component {
                               </View>
                           </View>  
                         ) : (
-                          <View style={{ flexDirection: "row", justifyContent: "center", alignItems: "center", marginTop: 30, margin:25 }}>
+                          <View style={{ flexDirection: "row", justifyContent: "center", alignItems: "center", margin:25 }}>
                             <Image source={this.state.user.avatar
                               ? { uri: this.state.user.avatar }
                               : require("../../../assets/default.png")} 
@@ -220,7 +223,8 @@ class PollBoard extends Component {
                             </TouchableOpacity>                   
                           </View>) 
                         } 
-                  </View>
+                    </View>
+                    </ScrollView>
 
                     <View style={{marginTop: 22}}>
                       <Modal

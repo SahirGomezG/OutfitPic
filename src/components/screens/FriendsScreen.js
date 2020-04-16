@@ -4,7 +4,6 @@ import {View, Text, StyleSheet, FlatList, TouchableOpacity} from 'react-native';
 import Fire from "../../Fire";
 import { Container, Header, Item, Input, Icon, Button, List, ListItem, Left, Body, Right, Thumbnail } from 'native-base';
 import _ from 'lodash';
-import { diffClamp } from 'react-native-reanimated';
 
 class FriendsScreen extends Component {
     static navigationOptions = {
@@ -20,6 +19,7 @@ class FriendsScreen extends Component {
             data:[],
             fullData: [],
             query: "",
+            blockers: [],
         }
     }
 
@@ -27,12 +27,18 @@ class FriendsScreen extends Component {
 
     componentDidMount(){
         const user = this.props.uid || Fire.shared.uid;
-        this.unsubscribe = Fire.shared.firestore
-            .collection("users")
+        const usersRef = Fire.shared.firestore.collection("users");
+        const blockedInRef = usersRef.doc(user).collection("blockedIn").doc("--blockedIn--"); // List of users blocking current user
+        blockedInRef.get()
+        .then(doc => { 
+          this.setState({ blockers: doc.data().List });
+        });
+       
+        this.unsubscribe = usersRef
             .onSnapshot(snapshot => {
               var friends = [];
               snapshot.forEach(doc => {
-                if (doc.id != user){
+                if (doc.id != user && !this.state.blockers.includes(doc.id)) {
                   friends = [({
                     id: doc.id,
                     name: doc.data().name,
@@ -108,7 +114,7 @@ class FriendsScreen extends Component {
                 </TouchableOpacity>
 
                 <Body>
-                  <TouchableOpacity underlayColor="#fff" onPress={() => this.openMessages(item)}>
+                  <TouchableOpacity underlayColor="#fff" onPress={() => this.openPublicProfile(item)}>
                     <Text style={styles.nameText}>{item.name}</Text>
                   </TouchableOpacity>
                     <Text style={styles.emailText} note>Joined in {item.joined}</Text>

@@ -250,7 +250,85 @@ class Fire {
 						rej(error);
 				})
       });
-    };  
+    };
+
+    blockedFrom = async ( blockerId, userId ) => {
+        return new Promise((res, rej) => {
+            let userRef = this.firestore.collection('users').doc(userId);
+            let blockedIn = userRef.collection("blockedIn").doc('--blockedIn--');
+            blockedIn.set({ List: firebase.firestore.FieldValue.arrayUnion(blockerId)}, {merge: true} )
+            .then(ref => {
+                res(ref);
+            })
+            .catch(error => {
+                rej(error);
+            });
+        })
+    }
+    
+    blockUser = async ( targetUser ) => {
+        return new Promise((res, rej) => {
+            const decrement = firebase.firestore.FieldValue.increment(-1);
+            let userRef = this.firestore.collection('users').doc(this.uid);
+            let blockedRef = userRef.collection('blocked').doc(targetUser); // New Ref for blocking user
+            let targetUserRef = this.firestore.collection('users').doc(targetUser)
+
+            let followersRef = userRef.collection('followers');
+            let followingsRef = targetUserRef.collection('following');
+            let query = followersRef.where('id','==', targetUser); // Check if the user to block is a current follower
+
+            let followingRef = followingsRef.doc(this.uid);
+            let followerRef = followersRef.doc(targetUser);
+            //const batch = this.firestore.batch();
+            this.blockedFrom(this.uid ,targetUser);
+            query.onSnapshot(querySnapshot => {
+                if (!querySnapshot.empty) {
+                    const batch = this.firestore.batch();
+                    batch.delete( followingRef );
+                    batch.delete( followerRef );
+                    batch.commit()
+                    .then(ref => {
+                        blockedRef.set({ id: targetUser })
+                        userRef.update({ numFollowers: decrement});
+                        targetUserRef.update({ numFollowing: decrement});
+                        
+                        alert('This user will no longer be able to follow you or message you.')
+                        res(ref);
+                    })
+                    .catch(error => {
+                        rej(error);
+                    });
+                } else {
+                    blockedRef.set({ id: targetUser })
+                    .then(ref => {
+                        alert('This user will no be able to follow you or message you in the future.')
+                        res(ref);
+                    })
+                    .catch(error => {
+                        rej(error);
+                    });
+                }
+            })
+        })
+    }
+
+    unBlockUser = async ( targetUser, name ) => {
+        return new Promise((res, rej) => {
+            let userRef = this.firestore.collection('users').doc(this.uid);
+            let targetUserRef = this.firestore.collection('users').doc(targetUser);
+            let blockedRef = userRef.collection('blocked').doc(targetUser);
+            let blockedInRef = targetUserRef.collection("blockedIn").doc('--blockedIn--');
+            blockedRef.delete()
+            .then(ref => {
+                blockedInRef.update({ List: firebase.firestore.FieldValue.arrayRemove(this.uid) });
+                alert(`${name} has been unblocked, this user can follow you and message you`)
+				res(ref);
+            })
+            .catch(error => {
+                rej(error);
+            }); 
+        })
+    }
 
     LikeOutfit = async ( outfitPic, idRef, user ) => {
         return new Promise((res, rej) => {
@@ -307,6 +385,25 @@ class Fire {
             let reportsRef = this.firestore.collection("postsReported").doc(pollId);
             reportsRef.set({ reports: firebase.firestore.FieldValue.arrayUnion(report)}, {merge: true} )
             .then(ref => {
+                res(ref);
+            })
+            .catch(error => {
+                rej(error);
+            });
+        })
+    }
+
+    reportUser = async ( reportedId, userId ) => {
+        let timestamp = new Date();
+        let report = {
+            userId: userId,
+            timestamp: timestamp
+        };
+        return new Promise((res, rej) => {
+            let reportsRef = this.firestore.collection("usersReported").doc(reportedId);
+            reportsRef.set({ reports: firebase.firestore.FieldValue.arrayUnion(report)}, {merge: true} )
+            .then(ref => {
+                alert('User reported')
                 res(ref);
             })
             .catch(error => {

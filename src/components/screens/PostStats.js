@@ -11,7 +11,6 @@ const width = Dimensions.get('window').width;
 
 class PostStats extends Component{
     static navigationOptions = ({ navigation }) => ({
-        //title: 'Stats',
         header: null
       })
 
@@ -62,7 +61,7 @@ class PostStats extends Component{
     }
     
     openComments(){
-        this.props.navigation.navigate('comments', { pollId: this.state.pollId });
+        this.props.navigation.navigate('comments', { pollId: this.state.pollId, profileId: this.state.poll.uid });
     }
 
     openLikes(){

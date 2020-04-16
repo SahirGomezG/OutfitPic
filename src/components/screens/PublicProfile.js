@@ -21,6 +21,8 @@ class PublicProfile extends Component {
             myToken: '',
             userProfile: {},
             following: false,
+            blocked: false,
+            canBlock: false,
             followingNumber: 0,
             followersNumber: 0,
             lastPoll: [],
@@ -31,11 +33,14 @@ class PublicProfile extends Component {
 
     unsubscribe = null;
     unsubscribe2 = null;
+    unsubscribe3 = null;
+    unsubscribe4 = null;
 
     componentDidMount() {
       const user = this.props.uid || Fire.shared.uid;
       const profileId = this.state.profileId;
       let currentuserRef = Fire.shared.firestore.collection("users").doc(user);
+      let profileRef = Fire.shared.firestore.collection('users').doc(profileId);
 
       currentuserRef.get()
         .then(doc => {
@@ -44,26 +49,26 @@ class PublicProfile extends Component {
             this.setState({ myToken: doc.data().pushToken})
       });
 
-      this.unsubscribe = Fire.shared.firestore
-          .collection("users")
-          .doc(profileId)
-          .onSnapshot(doc => {
-              this.setState({ userProfile: doc.data() });
-              this.setState({ followingNumber: doc.data().numFollowing });
-              this.setState({ followersNumber: doc.data().numFollowers });
-              this.setState({ targetToken: doc.data().pushToken})
-          });
+      this.unsubscribe = profileRef
+        .onSnapshot(doc => {
+            this.setState({ userProfile: doc.data() });
+            this.setState({ followingNumber: doc.data().numFollowing });
+            this.setState({ followersNumber: doc.data().numFollowers });
+            this.setState({ targetToken: doc.data().pushToken})
+        });
       const postsRef = Fire.shared.firestore.collection('outfitPolls').where('uid', '==', profileId).orderBy('timestamp','desc').limit(1); 
       let observer1 = postsRef.get()
           .then(snapshot => {
               if(!snapshot.empty) {
                   snapshot.forEach(doc => {
                     this.setState({ lastPoll: doc.data().images})
-                    });
+                  });
               }
           })  
       const followingRef = currentuserRef.collection('following');
-      let query = followingRef.where('id','==',profileId);
+      const blockedRef = profileRef.collection('blocked');
+      const canBlockRef = currentuserRef.collection('blocked');
+      let query = followingRef.where('id','==', profileId);
       this.unsubscribe2 = query.onSnapshot(querySnapshot => {
           if (!querySnapshot.empty) {
               this.setState({ following: true })
@@ -71,23 +76,46 @@ class PublicProfile extends Component {
               this.setState({ following: false })
           }
       });
+      let query3 = blockedRef.where('id','==', user );  // Check is current user has been blocked by this profile
+      this.unsubscribe3 = query3.onSnapshot(querySnapshot => {
+          if (!querySnapshot.empty) {
+            this.setState({ blocked: true })
+          } else { 
+            this.setState({ blocked: false })
+          }
+      })
+      let query4 = canBlockRef.where('id','==', profileId );
+      this.unsubscribe4 = query4.onSnapshot(querySnapshot => {
+          if (!querySnapshot.empty) {
+            this.setState({ canBlock: false })
+          } else { 
+            this.setState({ canBlock: true })
+          }
+      })
     };
 
     componentWillUnmount() {
       this.unsubscribe();
       this.unsubscribe2();
+      this.unsubscribe3();
+      this.unsubscribe4();
     };
 
     toFollow(){
+      const blocked = this.state.blocked;
       const { profileId, profileOwner, myName, myAvatar, targetToken, myToken } = this.state;
+      if ( !blocked ) {
         Fire.shared.followUser( profileId, profileOwner, myName, this.state.userProfile.avatar, myAvatar, targetToken, myToken)
-          .then(ref => { 
+        .then(ref => { 
             alert (`You are now following ${this.state.userProfile.name}.`);
-          })
-          .catch(error => { 
+        })
+        .catch(error => { 
             alert(error)
-          });
-      };
+        });
+      } else {
+        alert (`${this.state.userProfile.name} is no longer open to new followers`)
+      }
+    };
     
     toUnfollow(){
       Fire.shared.toUnfollowUser(this.state.profileId)
@@ -110,13 +138,37 @@ class PublicProfile extends Component {
     };
 
     openDirectMessages(userId) {
+      const blocked = this.state.blocked;
       const chatKey = this.setOnetoOne(userId);
-      this.props.navigation.navigate('privateChat', {chatKey: chatKey, friendName: this.state.profileOwner});
+      if ( !blocked ) {
+          this.props.navigation.navigate('privateChat', {chatKey: chatKey, friendName: this.state.profileOwner});
+      } else {
+          alert('Ops, this user is not available for direct messages.')
+      }
     };
 
     openFollowersList(userId, i) {
       this.props.navigation.push('followersList', {userId: userId, friendName: this.state.profileOwner, tabIndex: i});
     };
+
+    reportUser() {
+      let userId = Fire.shared.uid;
+      let reportedId = this.state.profileId;
+      Fire.shared.reportUser( reportedId , userId);
+      this.setState({ modalVisible: false });
+    }
+
+    blockUser() {
+      let targetUser = this.state.profileId;
+      Fire.shared.blockUser(targetUser, );
+      this.setState({ modalVisible: false });
+    }
+
+    unBlockUser() {
+      let targetUser = this.state.profileId;
+      Fire.shared.unBlockUser(targetUser, this.state.profileOwner);
+      this.setState({ modalVisible: false });
+    }
 
     emptyComponent = () => {
       return (
@@ -139,7 +191,7 @@ class PublicProfile extends Component {
     };    
 
   render() {
-    const {following, followingNumber, followersNumber, lastPoll, userProfile} = this.state;
+    const {following, followingNumber, followersNumber, lastPoll, userProfile, canBlock} = this.state;
   
     return (
         <SafeAreaView style={styles.container}>
@@ -160,15 +212,26 @@ class PublicProfile extends Component {
                     visible={this.state.modalVisible}
                     >
                     <TouchableWithoutFeedback onPress={() => {this.setModalVisible(!this.state.modalVisible)}}>
-                        <View style={{flex:1, alignItems:'center', justifyContent:'center',marginTop: 22}}>
+                        <View style={{flex:1, alignItems:'center', justifyContent:'center'}}>
                             <View style={styles.modal}>
-                              <TouchableOpacity style={{borderBottomWidth: 1,borderBottomColor: "#EBECF4"}}>
-                                <View style={{ height:50+'%',alignItems:'center', justifyContent:'center', margin:15,}}>
+                              { canBlock 
+                              ? <TouchableOpacity style={[styles.modalSection,{borderBottomWidth: 1,borderBottomColor: "#EBECF4"}]} onPress={() => this.blockUser()}>
+                                  <View style={{margin:20}}>
+                                      <Text style={[styles.title,{color:'red'}]}>Block</Text>
+                                  </View>
+                                </TouchableOpacity>
+                              : <TouchableOpacity style={[styles.modalSection,{borderBottomWidth: 1,borderBottomColor: "#EBECF4"}]} onPress={() => this.unBlockUser()} >
+                                  <View style={{margin:20}}>
+                                      <Text style={[styles.title,{color:'red'}]}>Unblock</Text>
+                                  </View>
+                                </TouchableOpacity> }
+                              <TouchableOpacity style={[styles.modalSection,{borderBottomWidth: 1,borderBottomColor: "#EBECF4"}]} onPress={() => this.reportUser()}>
+                                <View style={{margin:20}}>
                                     <Text style={[styles.title,{color:'red'}]}>Report</Text>
                                 </View>
                               </TouchableOpacity>
-                              <TouchableOpacity onPress={() => { this.setModalVisible(!this.state.modalVisible)}}> 
-                                <View style={{ height:50+'%',alignItems:'center', justifyContent:'center', margin:15}}>
+                              <TouchableOpacity style={styles.modalSection} onPress={() => { this.setModalVisible(!this.state.modalVisible)}}> 
+                                <View style={{margin:20}}>
                                     <Text style={styles.title}>Cancel</Text>
                                 </View>
                               </TouchableOpacity>
@@ -417,19 +480,23 @@ const styles = StyleSheet.create({
     modal:{
       flexDirection:'column',
       width: 300, 
-      height: 150,
-      padding: 26,
+      height: 180,
+      padding: 10,
       justifyContent:"center",
       alignItems:'center',
       borderRadius: 12,
       backgroundColor:'#FBFBFB'
-  },
+    },
+    modalSection:{
+      width: 100+'%',
+      alignItems:'center', 
+      justifyContent:'center', 
+    },
     title: {
       fontWeight: "200",
       fontSize: 16,
       color: "#514E5A",
       fontFamily: "HelveticaNeue",
-      //fontFamily:'Iowan Old Style'
       //fontFamily: 'Baskerville'
     },
 });

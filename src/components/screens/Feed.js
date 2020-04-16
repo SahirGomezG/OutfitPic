@@ -22,6 +22,7 @@ class Feed extends Component {
         this.state = {
             //appState: AppState.currentState,
             user: {},
+            blockers: [],
             globalPosts: [], 
             privatePosts: [],
             modalVisible: false,
@@ -54,8 +55,13 @@ class Feed extends Component {
         const user = this.props.uid || Fire.shared.uid;
         let pollsRef = Fire.shared.firestore.collection("outfitPolls");
         let currentuserRef = Fire.shared.firestore.collection("users").doc(user);
-        let lastActiveSession = Date.now();
+        let blockedInRef = currentuserRef.collection("blockedIn").doc("--blockedIn--"); // List of users blocking current user
+        blockedInRef.get()
+        .then(doc => { 
+          this.setState({ blockers: doc.data().List });
+        });
 
+        let lastActiveSession = Date.now();
         currentuserRef.get()
         .then(doc => {
             this.setState({ user: doc.data() });
@@ -73,6 +79,7 @@ class Feed extends Component {
                 let lastVisible = snapshot.docs[snapshot.docs.length - 1].data().timestamp;
                 var postsFB = [];
                 snapshot.forEach(doc => { 
+                    if (!this.state.blockers.includes(doc.data().uid)){
                     var canDelete = user === doc.data().uid ? true : false;
                         postsFB = [({
                             id: doc.id,
@@ -86,7 +93,8 @@ class Feed extends Component {
                             canDelete: canDelete,
                             likesCount: doc.data().likesCount,
                         }), ...postsFB];                   
-                })       
+                    }
+                })            
                 this.setState({ globalPosts: postsFB.reverse()});
                 this.setState({ lastVisible: lastVisible })
                 this.setState({ loading: false });
@@ -102,6 +110,7 @@ class Feed extends Component {
                 let lastVisiblePrivate = snapshot.docs[snapshot.docs.length - 1].data().timestamp;
                 var postsFB = [];
                 snapshot.forEach(doc => {
+                    if (!this.state.blockers.includes(doc.data().uid)){ 
                     var canDelete = user === doc.data().uid ? true : false; 
                         postsFB = [({
                             id: doc.id,
@@ -115,6 +124,7 @@ class Feed extends Component {
                             canDelete: canDelete,
                             likesCount: doc.data().likesCount,
                         }), ...postsFB];                   
+                    }
                 })       
                 this.setState({ privatePosts: (postsFB.reverse()) });
                 this.setState({ lastVisiblePrivate: lastVisiblePrivate })
@@ -137,7 +147,8 @@ class Feed extends Component {
                     .get().then(snapshot => {
                         let lastVisible = snapshot.docs[snapshot.docs.length - 1].data().timestamp;
                         var postsFB = [];
-                        snapshot.forEach(doc => { 
+                        snapshot.forEach(doc => {
+                            if (!this.state.blockers.includes(doc.data().uid)){ 
                             var canDelete = user === doc.data().uid ? true : false; 
                                 postsFB = [({
                                     id: doc.id,
@@ -151,7 +162,8 @@ class Feed extends Component {
                                     canDelete: canDelete,
                                     likesCount: doc.data().likesCount,
                                 }), ...postsFB];                   
-                        })       
+                            }
+                        })           
                         this.setState({ globalPosts: ([...this.state.globalPosts, ...postsFB.reverse()]) });
                         this.setState({ lastVisible: lastVisible })
                         this.setState({ refreshing: false });
@@ -179,6 +191,7 @@ class Feed extends Component {
                 let lastVisible = snapshot.docs[snapshot.docs.length - 1].data().timestamp;
                 var postsFB = [];
                 snapshot.forEach(doc => { 
+                    if (!this.state.blockers.includes(doc.data().uid)){ 
                     var canDelete = user === doc.data().uid ? true : false; 
                         postsFB = [({
                             id: doc.id,
@@ -192,6 +205,7 @@ class Feed extends Component {
                             canDelete: canDelete,
                             likesCount: doc.data().likesCount,
                         }), ...postsFB];                   
+                    }
                 })       
                 this.setState({ privatePosts: ([...this.state.privatePosts, ...postsFB.reverse()]) });
                 this.setState({ lastVisiblePrivate: lastVisible })
@@ -238,7 +252,7 @@ class Feed extends Component {
     }
     
     openComments(item){
-        this.props.navigation.navigate('comments', { pollId: item.id });
+        this.props.navigation.navigate('comments', { pollId: item.id, profileId: item.authorId });
     }
 
     openPublicProfile(item){
@@ -337,14 +351,14 @@ class Feed extends Component {
                     <TouchableWithoutFeedback onPress={() => {this.setModalVisible(!this.state.modalVisible)}}>
                         <View style={{flex:1, alignItems:'center', justifyContent:'center'}}>
                             <View style={styles.modal}>
-                                 <TouchableOpacity style={[styles.modalSection,{borderBottomWidth: 1,borderBottomColor: "#EBECF4"}]}  onPress={() => this.deletePost()}>
+                                <TouchableOpacity style={[styles.modalSection,{borderBottomWidth: 1,borderBottomColor: "#EBECF4"}]}  onPress={() => this.deletePost()}>
                                     <View style={{margin:20}}>
                                         <Text style={[styles.title,{color:'red'}]}>Delete</Text>
                                     </View>
                                 </TouchableOpacity> 
                                 <TouchableOpacity style={[styles.modalSection,{borderBottomWidth: 1,borderBottomColor: "#EBECF4"}]} onPress={() => this.reportPost()} >
                                     <View style={{margin:20}}>
-                                        <Text style={[styles.title,{color:'black'}]}>Report</Text>
+                                        <Text style={[styles.title,{color:'red'}]}>Report</Text>
                                     </View>
                                 </TouchableOpacity>
                                 <TouchableOpacity style={styles.modalSection} onPress={() => { this.setModalVisible(!this.state.modalVisible)}}> 

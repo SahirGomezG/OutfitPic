@@ -29,9 +29,11 @@ class Comments extends Component {
       super(props);
       this.state = {    
           pollId: this.props.navigation.state.params.pollId,  
+          profileId : this.props.navigation.state.params.profileId,
           user: {},
           comments: [],
           newComment: '',
+          blocked: false,
       }
   };  
   
@@ -40,6 +42,9 @@ class Comments extends Component {
 
   componentDidMount() {
     const user = this.props.uid || Fire.shared.uid;
+    const profileId = this.state.profileId;
+    let profileRef = Fire.shared.firestore.collection('users').doc(profileId);
+
     this.unsubscribe = Fire.shared.firestore
           .collection('outfitPolls')
           .doc(this.state.pollId)
@@ -49,12 +54,22 @@ class Comments extends Component {
               .map(doc => ({id: doc.id, ...doc.data()}));
             this.setState({ comments: comments}); 
           });
-    this.unsubscribe2 = Fire.shared.firestore
-          .collection("users")
+    Fire.shared.firestore
+          .collection('users')
           .doc(user)
-          .onSnapshot(doc => {
+          .get().then(doc => {
               this.setState({ user: doc.data() });
-          });       
+          }); 
+
+    const blockedRef = profileRef.collection('blocked');
+    let query2 = blockedRef.where('id','==', user );  // Check is current user has been blocked by this profile
+    this.unsubscribe2 = query2.onSnapshot(querySnapshot => {
+          if (!querySnapshot.empty) {
+            this.setState({ blocked: true })
+          } else { 
+            this.setState({ blocked: false })
+          }
+    })           
   };
 
   componentWillUnmount() {
@@ -71,6 +86,8 @@ class Comments extends Component {
   }
 
   addComment(text){
+    const blocked = this.state.blocked;
+    if ( !blocked ) {
     Fire.shared.addComment(this.state.pollId, text, this.user )
       .then(ref => { 
         this.setState({ newComment: "" })
@@ -78,6 +95,9 @@ class Comments extends Component {
       .catch(error => { 
         alert(error)
       });
+    } else {
+      alert('Unfortunately, you are not allowed to comment on this poll')
+    }
   };
 
   renderRow = (item) => {
