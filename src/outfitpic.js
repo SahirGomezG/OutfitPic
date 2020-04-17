@@ -9,7 +9,7 @@ import {
   Login,
   ResetPassword, 
   Register,
-  TermsConditions, 
+  ActiveChats, 
   FriendsScreen, 
   PostScreen,
   OutfitPostScreen, 
@@ -64,38 +64,45 @@ const DrawerNavigator = createDrawerNavigator(
               drawerIcon: ({ tintColor }) => <Icon name="home" size={16} color={tintColor} />
           }
       },
+      Stats: {
+        screen: Profile,
+        navigationOptions: {
+            title: 'My Polls & Stats',
+            drawerIcon: ({ tintColor }) => <Icon name="contact" size={16} color={tintColor} />
+        }
+      },
       Add: {
           screen: OutfitPostScreen,
           navigationOptions: {
-              title: "Add",
+              title: "Add New Poll",
               drawerIcon: ({ tintColor }) => <Icon name="ios-add-circle" size={16} color={tintColor} />
         }
+      },
+      Chat: {
+          screen: ActiveChats,
+          navigationOptions: {
+              title: 'Chats',
+              drawerIcon: ({ tintColor }) => <Icon name="ios-chatbubbles" size={16} color={tintColor} />
+          }
       },
       Search: {
           screen: FriendsScreen,
           navigationOptions: {
-              title: "Search",
-              drawerIcon: ({ tintColor }) => <Icon name="search" size={16} color={tintColor} />
-          }
-      },
-      Stats: {
-          screen: Profile,
-          navigationOptions: {
-              title: 'My Polls',
-              drawerIcon: ({ tintColor }) => <Icon name="contact" size={16} color={tintColor} />
-          }
+            title: "Search",
+            drawerIcon: ({ tintColor }) => <Icon name="search" size={16} color={tintColor} />
+        }
       },
       Notifications: {
           screen: NotificationsSettings,
           navigationOptions: {
-              title: "Notifications",
+              title: "Notifications Settings",
               drawerIcon: ({ tintColor }) => <Icon name="ios-notifications" size={16} color={tintColor} />
         }
       },
       Settings: {
           screen: ProfileStack,
           navigationOptions: {
-              title: "Settings",
+              title: "Profile Settings",
               drawerIcon: ({ tintColor }) => <Icon name="ios-settings" size={16} color={tintColor} />
           }
       }
@@ -147,7 +154,6 @@ const IntroStack = createStackNavigator(
       login: Login,
       register: Register,
       resetPassword: ResetPassword,
-      termsConditions: TermsConditions,
     },
     {
       initialRouteName: 'login',

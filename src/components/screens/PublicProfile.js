@@ -160,8 +160,10 @@ class PublicProfile extends Component {
 
     blockUser() {
       let targetUser = this.state.profileId;
-      Fire.shared.blockUser(targetUser, );
-      this.setState({ modalVisible: false });
+      if (Fire.shared.uid != targetUser) {
+          Fire.shared.blockUser(targetUser, );
+          this.setState({ modalVisible: false });
+      }
     }
 
     unBlockUser() {

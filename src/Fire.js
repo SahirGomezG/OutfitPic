@@ -130,6 +130,7 @@ class Fire {
                 notificationSettings: notificationSettings,
                 pushToken: '',
             });
+            // https://us-central1-react-native-app1-71a26.cloudfunctions.net/sendWelcomeEmail?dest=sahir@limekee.com
             FCM.getToken()
                 .then(token => { db.update({ pushToken: token })})
                 .catch(error => { 'Error:', error });
@@ -292,7 +293,7 @@ class Fire {
                         userRef.update({ numFollowers: decrement});
                         targetUserRef.update({ numFollowing: decrement});
                         
-                        alert('This user will no longer be able to follow you or message you.')
+                        alert('This user will no longer a follower of yours.')
                         res(ref);
                     })
                     .catch(error => {
@@ -431,7 +432,21 @@ class Fire {
                 }
             })
         });  
-    }       
+    }
+    
+    DeleteChat = async ( chatKey ) => {
+        return new Promise((res, rej) => {
+            let userRef = this.firestore.collection("users").doc(this.uid);
+            let chatRef = userRef.collection("chats").doc(chatKey);       
+            chatRef.delete()
+            .then(ref => {
+				res(ref);
+            })
+            .catch(error => {
+                rej(error);
+            });
+        });
+    }
 
 // -------- Chat Functions --------
 
