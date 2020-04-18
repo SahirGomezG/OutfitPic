@@ -51,12 +51,17 @@ class Register extends Component {
     }
   };
 
-  handleSignUp = () => {
-    Fire.shared.createUser(this.state.user)
+  sendWelcomeEmail = (email) => {
+    const Http = new XMLHttpRequest();
+    const Url = `https://us-central1-react-native-app1-71a26.cloudfunctions.net/sendWelcomeEmail?dest=${email}`;
+    Http.open("GET", Url);
+    Http.send()
+    Http.onreadystatechange = (e) => {console.log(Http.responseText)}
   }
 
-  handleOpeneningWebView = () => {
-    this.props.navigation.navigate('termsConditions');
+  handleSignUp = () => {
+    Fire.shared.createUser(this.state.user);
+    this.sendWelcomeEmail(this.state.user.email);
   }
 
     render() {

@@ -130,14 +130,13 @@ class Fire {
                 notificationSettings: notificationSettings,
                 pushToken: '',
             });
-            // https://us-central1-react-native-app1-71a26.cloudfunctions.net/sendWelcomeEmail?dest=sahir@limekee.com
             FCM.getToken()
                 .then(token => { db.update({ pushToken: token })})
                 .catch(error => { 'Error:', error });
             if (user.avatar) {
                 remoteUri = await this.uploadPhotoAsync(user.avatar, `avatars/${this.uid}`);
                 db.set({ avatar: remoteUri }, { merge: true });
-            }
+            };
         } catch (error) {
             Alert.alert("Ops! ", error.message);
         }
