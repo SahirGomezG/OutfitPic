@@ -65,12 +65,12 @@ class SideBar extends Component {
               </View>  
             </ImageBackground>
 
-            <View style={styles.container} forceInset={{ top: "always", horizontal: "never" }}>
+            <ScrollView style={styles.container} forceInset={{ top: "always", horizontal: "never" }}>
               <DrawerNavigatorItems {...this.props} />
-            </View>
+            </ScrollView>
             
             <TouchableOpacity onPress={this.signOut}> 
-              <View style={{position:"absolute", bottom: -50, right: 30, flexDirection:'row'}}>
+              <View style={{position:"absolute", bottom: -35, right: 30, flexDirection:'row'}}>
                 <Icon name="ios-log-out" size={16}/>       
                 <Text style={{fontSize: 14, fontWeight: '700'}}>    SignOut</Text>
               </View>
