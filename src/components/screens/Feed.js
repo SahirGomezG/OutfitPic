@@ -301,6 +301,16 @@ class Feed extends Component {
         this.localNotify.showNotification( 1, 'App Notification', 'Post Reported', {}, options)
     }
 
+    emptyComponent = () => {
+        return (
+          <View style={[styles.postContainer, {height: 120, paddingHorizontal:-50}]}>
+            <View style={{ margin: 25, alignItems: "center" }}>
+                <Text style={[styles.text, { fontSize: 16, color: "black", fontWeight: "300" }]}>You will see polls of people you follow here when they choose to share in private. Start following other OutfitPic users. </Text>
+            </View> 
+          </View>
+        )
+    }
+
     renderFooter = () => {
         return ( 
             this.state.loading 
@@ -439,6 +449,7 @@ class Feed extends Component {
                                     data={this.state.privatePosts}
                                     renderItem = {this.renderPoll}
                                     keyExtractor={item => item.id}
+                                    ListEmptyComponent={this.emptyComponent}  
                                     showsVerticalScrollIndicator={false}
                                     onEndReached={this.retrieveMorePrivatePosts}
                                     onEndReachedThreshold={0}
@@ -485,6 +496,10 @@ const styles = StyleSheet.create({
         color: "#FFF",
         fontFamily: "HelveticaNeue",
         //fontFamily:'Iowan Old Style'
+    },
+    text: {
+        fontFamily: "HelveticaNeue",
+        color: "#52575D"
     },
     feedFlatlist: {
         marginBottom: 10,

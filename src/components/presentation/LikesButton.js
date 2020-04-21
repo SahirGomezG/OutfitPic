@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
     },
     numLikes: {
         marginBottom: 10,
-        fontSize: 14,
+        fontSize: 13,
         color: "#838899"
     },
 })

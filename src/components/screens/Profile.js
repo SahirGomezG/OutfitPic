@@ -61,6 +61,18 @@ class Profile extends Component {
     this.props.navigation.navigate('profileSettings');
   }
 
+  emptyComponent = () => {
+    return (
+      <View style={[styles.emptyContainer, {height: 120, paddingHorizontal:-50}]}>
+        <View style={{ margin: 25, alignItems: "center" }}>
+          <Text style={[styles.textEmptyContainer, { fontSize: 16, fontWeight: "300" }]}>Hi {this.state.user.name}! </Text>
+          <Text> </Text>
+          <Text style={[styles.textEmptyContainer, { fontSize: 16, fontWeight: "300" }]}>You will see the polls you create here, wait no longer and start sharing your style. </Text>
+        </View> 
+      </View>
+    )
+  }
+
   renderItem = ({item,index}) => {
     return (
       <View style={styles.mediaImageContainer}> 
@@ -118,6 +130,7 @@ class Profile extends Component {
                         data={this.state.posts}
                         renderItem = {this.renderPoll}
                         keyExtractor={item => item.id}
+                        ListEmptyComponent={this.emptyComponent}  
                         showsVerticalScrollIndicator={false}
                     ></FlatList>
             </View>
@@ -236,7 +249,19 @@ class Profile extends Component {
       height: 28,
       alignItems: "center",
       justifyContent: "center"
-    },   
+    },  
+    emptyContainer: {
+      flex:1, 
+      flexDirection: 'column', 
+      justifyContent:'center', 
+      backgroundColor: "#FFF", 
+      borderRadius: 12, 
+      marginVertical: 6,
+    },
+    textEmptyContainer: {
+      fontFamily: "HelveticaNeue",
+      color: "black"
+  }, 
       
   });
    

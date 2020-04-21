@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, TouchableOpacity, TextInput, Button, StyleSheet, StatusBar, Image, KeyboardAvoidingView, ImageBackground, TouchableWithoutFeedback, Keyboard, Linking} from 'react-native';
+import { View, Text, TouchableOpacity, TextInput, Button, StyleSheet, StatusBar, Image, KeyboardAvoidingView, ImageBackground, TouchableWithoutFeedback, Keyboard, Linking, Alert} from 'react-native';
 import Icon from 'react-native-ionicons';
 import * as ImagePicker from "expo-image-picker";
 
@@ -18,7 +18,8 @@ class Register extends Component {
       name: "",
       email: "",
       password: "",
-      avatar: "https://lh3.googleusercontent.com/ZZ2SDZXCutrnPTPyNoBYhBzsuVCQabOfa_scj8RkxH8ZAoq3d8bXca8jsQS6tWEoCy-Se6QyfNn9gepDBw87p6OhkgI",
+      //avatar: "https://lh3.googleusercontent.com/ZZ2SDZXCutrnPTPyNoBYhBzsuVCQabOfa_scj8RkxH8ZAoq3d8bXca8jsQS6tWEoCy-Se6QyfNn9gepDBw87p6OhkgI",
+      avatar: null,
     },
     errorMessage: null
   }
@@ -60,8 +61,12 @@ class Register extends Component {
   }
 
   handleSignUp = () => {
-    Fire.shared.createUser(this.state.user);
-    this.sendWelcomeEmail(this.state.user.email);
+    if (this.state.user.avatar != null ){
+      Fire.shared.createUser(this.state.user);
+      this.sendWelcomeEmail(this.state.user.email);
+    } else {
+      Alert.alert('Hi! Please add a profile picture to register')
+    } 
   }
 
     render() {
