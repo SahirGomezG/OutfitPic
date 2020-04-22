@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, Text, StyleSheet, Image, FlatList, AppState, TouchableWithoutFeedback, TouchableOpacity, StatusBar, Modal, ActivityIndicator } from "react-native";
+import { View, Text, StyleSheet, Image, FlatList, AppState, TouchableWithoutFeedback, TouchableOpacity, StatusBar, Modal, ActivityIndicator, Alert } from "react-native";
 import Fire from "../../Fire";
 import moment from "moment";
 import Icon from 'react-native-ionicons';
@@ -136,7 +136,7 @@ class Feed extends Component {
     retrieveMore = () => {
         const user = this.props.uid || Fire.shared.uid;
         const postListSize = this.state.globalPosts.length;
-        if ( postListSize <= 12 ) {
+        if ( postListSize <= 15 ) {
             this.setState({ refreshing: true });
             //this.setState({ loading: true });
             console.log('Retrieving additional Data');
@@ -169,7 +169,7 @@ class Feed extends Component {
                         this.setState({ refreshing: false });
                     });  
         } else {
-            alert( 'End of feed!')
+            Alert.alert( 'End of feed!')
         }    
     };
 
@@ -213,7 +213,7 @@ class Feed extends Component {
             }
             });  
     } else {
-        alert( 'End of feed!')
+        Alert.alert( 'End of feed!')
     }    
 };
 

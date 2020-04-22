@@ -1,15 +1,17 @@
-//import functions from 'firebase-functions';
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 const nodemailer = require('nodemailer');
 const cors = require('cors')({origin: true});
+const env = functions.config();
+
+const Airtable = require('airtable');
+//api: keyW6sSI6DD8uedjX
+const base = new Airtable({apiKey: env.airtable.key}).base('app7y6N1SbXPG73PR');
 
 // initializes your application
 admin.initializeApp(functions.config().firebase);
 
-/**
- * Here we're using Gmail to send
- */
+// Here we're using Gmail to send
 let transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
@@ -17,6 +19,34 @@ let transporter = nodemailer.createTransport({
     pass: 'nhvtkjzgodzlfwwt',
   },
 });
+
+exports.addToAirtable = functions.firestore
+  .document('users/{uid}')
+  .onCreate((snap, context) => {
+    const data = snap.data();
+    const uid = context.params.uid;
+    const email = snap.data().email;
+    const name = snap.data().name;
+    const avatar = snap.data().avatar;
+    const pushToken = snap.data().pushToken;
+    const date = new Date();
+
+    let airtableData = {
+      id: uid,
+      email: email,
+      name: name,
+      avatar: avatar,
+      joined: date,
+      pushToken: pushToken,
+    };
+    console.log(airtableData);
+    return base('Table 1').create(data, (err, records) => {
+      if (err) {
+        console.error(err);
+        return;
+      }
+    });
+  });
 
 // ------ When someone starts following me: Option 1
 exports.sendNewFollowerNotification = functions.firestore
@@ -168,6 +198,52 @@ exports.sendPushToFollowers = functions.firestore
           .sendToDevice(pushtokens, payload)
           .catch(console.error);
       });
+  });
+
+// ---- When there is a new public post
+
+exports.sendNewPollNotification = functions.firestore
+  .document('outfitPolls/{pollId}')
+  .onCreate((snap, context) => {
+    const postData = snap.data();
+    const author = postData.user.name;
+    const privatePoll = postData.privatePoll;
+    let payload = {
+      notification: {
+        title: 'New OutfitPic Post',
+        body: `Hey! new Poll from ${author}, check it out.`,
+        sound: 'default',
+      },
+    };
+
+    if (privatePoll === false) {
+      return admin
+        .firestore()
+        .collection('users')
+        .limit(40)
+        .get()
+        .then(snapshot => {
+          const tokens = [];
+          snapshot.forEach(user => {
+            const userKey = user.id;
+            const token = user.data().pushToken;
+            const option4 = user.doc.data().notificationSettings.option4;
+            // get other user tokens except the sender and verify user allows the notification
+            if (userKey !== uid && option4 === true) tokens.push(token);
+          });
+          console.log('tokens', tokens);
+          return Promise.all(tokens);
+        })
+        .then(tokens => {
+          const pushtokens = tokens;
+          return admin
+            .messaging()
+            .sendToDevice(pushtokens, payload)
+            .catch(console.error);
+        });
+    } else {
+      return null;
+    }
   });
 
 // ------ When I receive a new private chat message: Option 5

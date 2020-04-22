@@ -173,10 +173,10 @@ class PollBoard extends Component {
                     <ScrollView>
 
                     <View style={{ flexDirection: "row", justifyContent: "center", alignItems: "center", marginTop: 8 }}>
-                        <View style={{ alignItems: "center", marginTop: 20}}>
+                        <View style={{ alignItems: "center", marginTop: 20, width:56+'%'}}>
                           <Text style={[styles.text, { fontSize: 15, fontWeight: "500"}]}>Pick 1 outfit</Text>
                           <Text style={[styles.textDark, { fontSize: 10, fontWeight: "200"}]}>Remember you can't undo your vote.</Text>    
-                          <Text style={[styles.textDark, { fontSize: 16, fontWeight: "500", marginTop: 8  }]}> Event: <Text style={[styles.text,{ fontSize: 15}]}>{this.state.poll.text}</Text></Text>                 
+                          <Text style={[styles.textDark, { fontSize: 16, fontWeight: "500", marginTop: 8  }]}> Event: <Text style={[styles.text,{ fontSize: 15,}]} numberOfLines={2}>{this.state.poll.text}</Text></Text>                 
                         </View>
                         <TouchableOpacity style={styles.playButtonContainer} >
                         <ProgressCircle
