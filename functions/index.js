@@ -14,8 +14,8 @@ admin.initializeApp(functions.config().firebase);
 let transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
-    user: 'sahir@limekee.com',
-    pass: 'nhvtkjzgodzlfwwt',
+    user: env.gmail.user,
+    pass: env.gmail.pass,
   },
 });
 
