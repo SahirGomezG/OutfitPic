@@ -62,5 +62,3 @@ buck-out/
 # Firebase keys in config/index.js
 /src/config/index.js
 
-# Firebae cloud functions
-/functions/index.js
