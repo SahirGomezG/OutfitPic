@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import { View, Text, TouchableOpacity, TextInput, Button, StyleSheet, StatusBar, Image, LayoutAnimation, KeyboardAvoidingView, ImageBackground, TouchableWithoutFeedback, Keyboard, Alert} from 'react-native';
-import config from '../../config';
 import * as firebase from 'firebase';
+import TouchID from 'react-native-touch-id';
+import * as keychain from 'react-native-keychain';
+
 
 class Login extends Component {
   
@@ -16,12 +18,38 @@ class Login extends Component {
   }
 
   handleLogin = () => {
-    const {email,password} = this.state;
-    firebase
-      .auth()
-      .signInWithEmailAndPassword(email,password)
-      .catch(error => this.setState({ errorMessage : error.message }));
-  };
+      const {email,password} = this.state;
+      const username = this.state.email;
+      firebase
+          .auth()
+          .signInWithEmailAndPassword(username,password)
+          .catch(error => this.setState({ errorMessage : error.message }));      
+  }
+
+  handleKeyChain = async () => {
+    const username = this.state.email;
+    const password = this.state.password;
+    // Store the credentials
+    await keychain.setGenericPassword(username, password);
+
+    try {
+      // Retreive the credentials
+      const credentials = await keychain.getGenericPassword();
+      if (credentials) {
+        Alert.alert('Credentials successfully loaded for user ' + credentials.username);
+        firebase
+            .auth()
+            .signInWithEmailAndPassword(credentials.username, credentials.password)
+            .catch(error => this.setState({ errorMessage : error.message }));
+      } else {
+        Alert.alert('No credentials stored')
+      }
+    } catch (error) {
+      console.log('Keychain couldn\'t be accessed!', error);
+    }
+    await keychain.resetGenericPassword()
+  }
+  
 
 /*  
   constructor(){
@@ -90,7 +118,8 @@ login() {
                   placeholder='Email'
                   placeholderTextColor = "grey"
                   autoCorrect={false}
-                  style = {styles.input}/>
+                  style = {styles.input}
+                  textContentType="username"/>
 
                 <TextInput 
                   autoCapitalize="none"
@@ -100,12 +129,13 @@ login() {
                   autoCorrect={false}
                   placeholder='Password'
                   placeholderTextColor = "grey" 
-                  style = {styles.input}/>
+                  style = {styles.input}
+                  textContentType="password"/>
 
                 <TouchableOpacity style={styles.button} onPress={this.handleLogin}>
                     <Text style={{color:'#fff', fontWeight:"600", fontSize:15}}>Sign In</Text>
                 </TouchableOpacity> 
-                <View style={{marginBottom:80}}>
+
                   <Button  
                   onPress = {() => { this.props.navigation.navigate('register')}} 
                   title='New to OutfitPic? Sign Up'
@@ -117,7 +147,6 @@ login() {
                   title='Forgot Password?'
                   color='grey'
                   />
-                </View>
                 
              </View>   
            </ImageBackground>        

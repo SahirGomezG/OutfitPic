@@ -207,6 +207,7 @@ exports.sendNewPollNotification = functions.firestore
   .onCreate((snap, context) => {
     const postData = snap.data();
     const author = postData.user.name;
+    const uid = postData.uid;
     const privatePoll = postData.privatePoll;
     let payload = {
       notification: {
@@ -227,7 +228,7 @@ exports.sendNewPollNotification = functions.firestore
           snapshot.forEach(user => {
             const userKey = user.id;
             const token = user.data().pushToken;
-            const option4 = user.doc.data().notificationSettings.option4;
+            const option4 = user.data().notificationSettings.option4;
             // get other user tokens except the sender and verify user allows the notification
             if (userKey !== uid && option4 === true) tokens.push(token);
           });

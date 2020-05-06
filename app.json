@@ -1,4 +1,6 @@
 {
   "name": "instaClone",
-  "displayName": "OutfitPic"
+  "displayName": "OutfitPic",
+  "bundleIdentifier": "sahir.outfitpic",
+  "associatedDomains": ["webcredentials:outfitpic.app"]
 }

@@ -39,6 +39,8 @@
 	</dict>
 	<key>NSCameraUsageDescription</key>
 	<string>Do you allow Outfitpic camera access?</string>
+	<key>NSFaceIDUsageDescription</key>
+	<string>Enabling Face ID allows you quick and secure access to your account.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Do you allow OutfitPic your location when in use?</string>
 	<key>NSMainNibFile</key>

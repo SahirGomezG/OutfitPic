@@ -112,6 +112,7 @@ class Register extends Component {
                           placeholder='Email'
                           placeholderTextColor = "grey"
                           autoCorrect={false}
+                          textContentType="username"
                           style = {styles.input}/>
                         <TextInput 
                           autoCapitalize="none"
@@ -120,6 +121,7 @@ class Register extends Component {
                           value={this.state.user.password}
                           secureTextEntry 
                           autoCorrect={false}
+                          textContentType="newPassword"
                           placeholder='Password'
                           placeholderTextColor = "grey" 
                           style = {styles.input}/>

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet, Text, View, SafeAreaView, Image, ScrollView, TouchableOpacity, FlatList, Modal, TouchableWithoutFeedback } from "react-native";
+import { StyleSheet, Text, View, SafeAreaView, Image, ScrollView, TouchableOpacity, FlatList, Modal, TouchableWithoutFeedback, Alert } from "react-native";
 import Fire from "../../Fire";
 import Icon from 'react-native-ionicons';
 import moment from "moment";
@@ -107,20 +107,20 @@ class PublicProfile extends Component {
       if ( !blocked ) {
         Fire.shared.followUser( profileId, profileOwner, myName, this.state.userProfile.avatar, myAvatar, targetToken, myToken)
         .then(ref => { 
-            alert (`You are now following ${this.state.userProfile.name}.`);
+            Alert.alert (`You are now following ${this.state.userProfile.name}.`);
         })
         .catch(error => { 
             alert(error)
         });
       } else {
-        alert (`${this.state.userProfile.name} is no longer open to new followers`)
+        Alert.alert (`${this.state.userProfile.name} is no longer open to new followers`)
       }
     };
     
     toUnfollow(){
       Fire.shared.toUnfollowUser(this.state.profileId)
         .then(ref => { 
-          alert (`You are no longer a following of ${this.state.userProfile.name}.`);
+          Alert.alert (`You are no longer a following of ${this.state.userProfile.name}.`);
         })
         .catch(error => { 
           alert(error)
@@ -143,7 +143,7 @@ class PublicProfile extends Component {
       if ( !blocked ) {
           this.props.navigation.navigate('privateChat', {chatKey: chatKey, friendName: this.state.profileOwner});
       } else {
-          alert('Ops, this user is not available for direct messages.')
+          Alert.alert('Ops, this user is not available for direct messages.')
       }
     };
 

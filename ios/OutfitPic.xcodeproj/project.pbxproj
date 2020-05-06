@@ -37,6 +37,7 @@
 		D302FB2A24450CB9005ABE78 /* libreact-native-webview.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D302FB2924450CB9005ABE78 /* libreact-native-webview.a */; };
 		D3E311CB242A7424000D928B /* libRNFirebase.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D3E311CA242A7424000D928B /* libRNFirebase.a */; };
 		D3E467DB2428FEDC0016F995 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D3E467DA2428FEDC0016F995 /* GoogleService-Info.plist */; };
+		D3F9C2992457271E00AEA808 /* AuthenticationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D3F9C2982457271E00AEA808 /* AuthenticationServices.framework */; };
 		D7CF2D22F4044B76A9EA6D89 /* SimpleLineIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 61E05A4297C04CBC8E18A1CF /* SimpleLineIcons.ttf */; };
 		DB8B6A93D1CC4D3097157E82 /* EvilIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0ECC790A461C4448959BEA15 /* EvilIcons.ttf */; };
 		DBD46F70C3C340E29CFFCAA1 /* Entypo.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 32D7231FE00C4121895AE1A8 /* Entypo.ttf */; };
@@ -117,6 +118,7 @@
 		D3E311CA242A7424000D928B /* libRNFirebase.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libRNFirebase.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		D3E467DA2428FEDC0016F995 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		D3E467DC242934C20016F995 /* OutfitPicRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = OutfitPicRelease.entitlements; sourceTree = "<group>"; };
+		D3F9C2982457271E00AEA808 /* AuthenticationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AuthenticationServices.framework; path = System/Library/Frameworks/AuthenticationServices.framework; sourceTree = SDKROOT; };
 		DF6B29A733CC492A9B09C222 /* Feather.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Feather.ttf; path = "../node_modules/native-base/Fonts/Feather.ttf"; sourceTree = "<group>"; };
 		E4F22857E722427DB10449DA /* Roboto_medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Roboto_medium.ttf; path = "../node_modules/native-base/Fonts/Roboto_medium.ttf"; sourceTree = "<group>"; };
 		EAF1F4A72C4146419F7A969E /* rubicon-icon-font.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "rubicon-icon-font.ttf"; path = "../node_modules/native-base/Fonts/rubicon-icon-font.ttf"; sourceTree = "<group>"; };
@@ -139,6 +141,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D3F9C2992457271E00AEA808 /* AuthenticationServices.framework in Frameworks */,
 				D302FB2A24450CB9005ABE78 /* libreact-native-webview.a in Frameworks */,
 				D3E311CB242A7424000D928B /* libRNFirebase.a in Frameworks */,
 				5714376746CB70EFDA857E96 /* libPods-OutfitPic.a in Frameworks */,
@@ -226,6 +229,7 @@
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				D3F9C2982457271E00AEA808 /* AuthenticationServices.framework */,
 				D302FB2924450CB9005ABE78 /* libreact-native-webview.a */,
 				D3E311CA242A7424000D928B /* libRNFirebase.a */,
 				D37EC77A242020ED00B1A2CD /* HealthKit.framework */,
@@ -781,14 +785,14 @@
 				CODE_SIGN_ENTITLEMENTS = OutfitPic.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 7;
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = W66W6Y75YL;
 				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = instaClone/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 1.1.2;
+				MARKETING_VERSION = 1.1.4;
 				MTL_ENABLE_DEBUG_INFO = "";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -810,13 +814,13 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 7;
 				DEVELOPMENT_TEAM = W66W6Y75YL;
 				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = instaClone/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 1.1.2;
+				MARKETING_VERSION = 1.1.4;
 				MTL_ENABLE_DEBUG_INFO = "";
 				OTHER_LDFLAGS = (
 					"$(inherited)",

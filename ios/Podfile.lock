@@ -355,6 +355,8 @@ PODS:
     - React-Core
     - React-RCTImage
     - RSKImageCropper
+  - RNKeychain (6.0.0):
+    - React
   - RNReanimated (1.7.0):
     - React
   - RNScreens (1.0.0-alpha.23):
@@ -362,6 +364,8 @@ PODS:
   - RNSVG (11.0.1):
     - React
   - RSKImageCropper (2.2.3)
+  - TouchID (4.4.1):
+    - React
   - UMBarCodeScannerInterface (5.0.0)
   - UMCameraInterface (5.0.0)
   - UMConstantsInterface (5.0.0)
@@ -426,9 +430,11 @@ DEPENDENCIES:
   - RNFirebase (from `../node_modules/react-native-firebase/ios`)
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler/RNGestureHandler.podspec`)
   - RNImageCropPicker (from `../node_modules/react-native-image-crop-picker`)
+  - RNKeychain (from `../node_modules/react-native-keychain`)
   - RNReanimated (from `../node_modules/react-native-reanimated/RNReanimated.podspec`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - RNSVG (from `../node_modules/react-native-svg`)
+  - TouchID (from `../node_modules/react-native-touch-id`)
   - UMBarCodeScannerInterface (from `../node_modules/unimodules-barcode-scanner-interface/ios`)
   - UMCameraInterface (from `../node_modules/unimodules-camera-interface/ios`)
   - UMConstantsInterface (from `../node_modules/unimodules-constants-interface/ios`)
@@ -552,12 +558,16 @@ EXTERNAL SOURCES:
     :podspec: "../node_modules/react-native-gesture-handler/RNGestureHandler.podspec"
   RNImageCropPicker:
     :path: "../node_modules/react-native-image-crop-picker"
+  RNKeychain:
+    :path: "../node_modules/react-native-keychain"
   RNReanimated:
     :podspec: "../node_modules/react-native-reanimated/RNReanimated.podspec"
   RNScreens:
     :path: "../node_modules/react-native-screens"
   RNSVG:
     :path: "../node_modules/react-native-svg"
+  TouchID:
+    :path: "../node_modules/react-native-touch-id"
   UMBarCodeScannerInterface:
     :path: !ruby/object:Pathname
     path: "../node_modules/unimodules-barcode-scanner-interface/ios"
@@ -657,10 +667,12 @@ SPEC CHECKSUMS:
   RNFirebase: 37daa9a346d070f9f6ee1f3b4aaf4c8e3b1d5d1c
   RNGestureHandler: dde546180bf24af0b5f737c8ad04b6f3fa51609a
   RNImageCropPicker: fcdbbbef2f0ea869c6d9ce39b8e4fd67e94009f4
+  RNKeychain: bf2d7e9a0ae7a073c07770dd2aa6d11c67581733
   RNReanimated: 031fe8d9ea93c2bd689a40f05320ef9d96f74d7f
   RNScreens: f28b48b8345f2f5f39ed6195518291515032a788
   RNSVG: 67f1f12dae2cef6ed59a42cae74a6b8f5a9e7b46
   RSKImageCropper: a446db0e8444a036b34f3c43db01b2373baa4b2a
+  TouchID: ba4c656d849cceabc2e4eef722dea5e55959ecf4
   UMBarCodeScannerInterface: 550e7ffd7a789289260bde3d547be29407e75437
   UMCameraInterface: 51e4568d64e77615557afaad9a3acdaad5d32d9f
   UMConstantsInterface: 23d658b73efc2b8090519b32007c3de725339492
@@ -675,6 +687,6 @@ SPEC CHECKSUMS:
   UMTaskManagerInterface: ee5b1ee1056eb338ff2d521ba79460d8cd0bae7d
   Yoga: d8c572ddec8d05b7dba08e4e5f1924004a177078
 
-PODFILE CHECKSUM: 7a97ee45b027090ad35a10a8dce7b03e1363b180
+PODFILE CHECKSUM: d31e94f9d2f7072fb3a995949ac500ae5f0b6f19
 
 COCOAPODS: 1.8.4
