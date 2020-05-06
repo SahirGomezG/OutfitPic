@@ -5,7 +5,6 @@ const cors = require('cors')({origin: true});
 const env = functions.config();
 
 const Airtable = require('airtable');
-//api: keyW6sSI6DD8uedjX
 const base = new Airtable({apiKey: env.airtable.key}).base('app7y6N1SbXPG73PR');
 
 // initializes your application
