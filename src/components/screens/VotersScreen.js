@@ -1,6 +1,6 @@
 'use strict'
 import React, { Component } from 'react';
-import {View, Text, StyleSheet, FlatList, TouchableOpacity} from 'react-native';
+import {View, Text, StyleSheet, FlatList, TouchableOpacity, StatusBar} from 'react-native';
 import Fire from "../../Fire";
 import { Container, Header, Item, Input, Icon, Button, List, ListItem, Left, Body, Right, Thumbnail } from 'native-base';
 import _ from 'lodash';
@@ -109,7 +109,6 @@ class VotersScreen extends Component {
 
     render() {
         return (
-            
               <Container style={styles.container}>
                 <View style={styles.circle} />
 

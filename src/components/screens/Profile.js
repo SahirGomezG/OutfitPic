@@ -104,7 +104,7 @@ class Profile extends Component {
             <View style={styles.header}>
                     <View style={styles.back}>
                         <TouchableOpacity onPress={this.openProfileSettings}>
-                            <Icon name="ios-brush" size={22} color="#FFF"></Icon>
+                            <Icon name="ios-cog" size={22} color="#FFF"></Icon>
                         </TouchableOpacity>
                     </View>     
                     <Text style={styles.headerTitle}>My Polls</Text> 

@@ -93,6 +93,18 @@ class ActiveChats extends Component {
           });
         this.setState({ query: formatQuery, data });  
     }
+
+    emptyComponent = () => {
+      return (
+        <View style={styles.shadowContainer}>
+          <View style={[styles.emptyContainer, {height: 100, paddingHorizontal:-50}]}>
+            <View style={{ margin: 25, alignItems: "center" }}>
+                <Text style={[styles.emptyText, { fontSize: 16, color: "black", fontWeight: "300" }]}>You don't have any active chats. Start a new conversation today </Text>
+            </View> 
+          </View>
+        </View>
+      )
+    }
   
     renderFooter = () => {
         if (!this.state.loading) return null
@@ -170,6 +182,7 @@ class ActiveChats extends Component {
                         data={this.state.data}
                         renderItem={this._renderItem}
                         keyExtractor={(item,index) => index.toString()}
+                        ListEmptyComponent={this.emptyComponent}  
                         renderFooter={this.renderFooter}
                       />
                     </List>
@@ -182,7 +195,6 @@ class ActiveChats extends Component {
       container: {
         flex: 1,
         backgroundColor: "#E8EDF2",
-        //backgroundColor: "#F4F5F7",
       },
       header: {
         flexDirection:'row',
@@ -252,6 +264,25 @@ class ActiveChats extends Component {
         height: 28,
         alignItems: "center",
         justifyContent: "center"
+      },
+      emptyContainer: {
+        flex:1, 
+        flexDirection: 'column', 
+        justifyContent:'center', 
+        backgroundColor: "#FFF", 
+        borderRadius: 12, 
+        marginVertical: 10,
+      },
+      emptyText: {
+        fontFamily: "HelveticaNeue",
+        color: "#52575D"
+      },
+      shadowContainer: {
+        alignItems: 'center',
+        shadowColor: "#5D3F6A",
+        shadowOffset: { height: 5 },
+        shadowRadius: 8,
+        shadowOpacity: 0.2
       },
   });
 
