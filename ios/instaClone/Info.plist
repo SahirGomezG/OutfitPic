@@ -38,17 +38,17 @@
 		</dict>
 	</dict>
 	<key>NSCameraUsageDescription</key>
-	<string>Do you allow Outfitpic camera access?</string>
+	<string>Enable OutfitPic to access your camera to upload outfit photos taken by your device</string>
 	<key>NSFaceIDUsageDescription</key>
 	<string>Enabling Face ID allows you quick and secure access to your account.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Do you allow OutfitPic your location when in use?</string>
+	<string>This allows us to use your location to find other users around you and Tag location feature</string>
 	<key>NSMainNibFile</key>
 	<string>LaunchScreen</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Do you allow Outfitpic Microphone access? </string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>Outfitpic wants to access your photo library</string>
+	<string>Outfitpic wants to access your photo library to upload photos and save ones you've taken with the app.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Give OutfitPic permission to save photos</string>
 	<key>UIAppFonts</key>
