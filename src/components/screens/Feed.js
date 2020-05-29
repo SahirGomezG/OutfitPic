@@ -136,7 +136,7 @@ class Feed extends Component {
     retrieveMore = () => {
         const user = this.props.uid || Fire.shared.uid;
         const postListSize = this.state.globalPosts.length;
-        if ( postListSize <= 24 ) {
+        if ( postListSize <= 30 ) {
             this.setState({ refreshing: true });
             //this.setState({ loading: true });
             console.log('Retrieving additional Data');

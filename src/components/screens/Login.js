@@ -101,7 +101,7 @@ login() {
                 style={{ width: '100%', height: '100%', flex: 1}}
            >
              <View style={{ alignItems:'center', justifyContent:'center', flex:1, backgroundColor:'rgba(0,0,0,0.20)'}}>
-                <View style={{marginTop:100}}>
+                <View style={{marginTop:40}}>
                    <Text style={styles.logo}>OutfitPic</Text>
                 </View>
 
@@ -158,7 +158,7 @@ login() {
 
 const styles = StyleSheet.create({
   greeting: {
-    marginTop: 200,
+    marginTop: 160,
     fontSize: 18,
     fontWeight: '200',
     textAlign: "center",
@@ -202,7 +202,7 @@ const styles = StyleSheet.create({
   },
   button: {
     marginHorizontal: 30,
-    marginBottom:50,
+    marginBottom:38,
     width: 80+'%',
     backgroundColor: "#E9446A",
     borderRadius: 10,

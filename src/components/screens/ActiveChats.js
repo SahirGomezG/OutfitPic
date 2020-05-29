@@ -199,7 +199,7 @@ class ActiveChats extends Component {
       header: {
         flexDirection:'row',
         paddingTop: 50,
-        marginBottom: -25,
+        marginBottom: -18,
         paddingBottom: 20,
         backgroundColor:'#3e394d',
         alignItems: "center",

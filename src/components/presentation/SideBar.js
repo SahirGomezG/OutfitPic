@@ -62,15 +62,20 @@ class SideBar extends Component {
                   : <Text style={styles.followers}>0 Followers</Text> } 
                   <Icon name="ios-people" size={16} color="rgba(255, 255, 255, 0.8)" />
                 </View>
+               
               </View>  
             </ImageBackground>
 
             <ScrollView style={styles.container} forceInset={{ top: "always", horizontal: "never" }}>
               <DrawerNavigatorItems {...this.props} />
-            </ScrollView>
+              </ScrollView>
+
+              <View style={styles.versionView}>
+                  <Text style={styles.versionText}>Version 1.1.6</Text> 
+              </View>
             
             <TouchableOpacity onPress={this.signOut}> 
-              <View style={{position:"absolute", bottom: -35, right: 30, flexDirection:'row'}}>
+              <View style={styles.logout}>
                 <Icon name="ios-log-out" size={16}/>       
                 <Text style={{fontSize: 14, fontWeight: '700'}}>    SignOut</Text>
               </View>
@@ -107,12 +112,30 @@ const styles = StyleSheet.create({
         fontFamily: "HelveticaNeue",
         fontWeight: "200",
     },
+    versionText: {
+      color: "rgba(255, 255, 255, 0.8)",
+      fontSize: 13,
+      fontFamily: "HelveticaNeue",
+      fontWeight: "200",
+    },
     headerTitle: {
       fontSize: 18,
       fontWeight: "200",
       color: "#FFF",
       fontFamily: "HelveticaNeue",
-  },
+    },
+    logout: {
+      position:"absolute", 
+      bottom: -30, 
+      right: 30, 
+      flexDirection:'row'
+    },
+    versionView: {
+      flexDirection:"row",
+      position:"absolute", 
+      top: 40, 
+      right: 10, 
+    }
 });    
 
 export default SideBar;

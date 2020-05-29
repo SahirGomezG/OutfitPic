@@ -42,7 +42,7 @@ class FollowersList extends Component {
         });
 
         this.unsubscribe = userRef
-            .collection('followers').limit(15)
+            .collection('followers').limit(25)
             .onSnapshot(snapshot => {
               var people = [];
               snapshot.forEach(doc => {
@@ -56,7 +56,7 @@ class FollowersList extends Component {
             });
         
         this.unsubscribe2 = userRef
-            .collection('following').limit(15)
+            .collection('following').limit(25)
             .onSnapshot(snapshot => {
               var people = [];
               snapshot.forEach(doc => {
