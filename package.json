@@ -17,7 +17,7 @@
     "expo-permissions": "^8.0.0",
     "firebase": "^7.2.1",
     "firebase-admin": "^8.9.2",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.19",
     "moment": "^2.24.0",
     "native-base": "^2.13.8",
     "react": "16.9.0",
